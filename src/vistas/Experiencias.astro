@@ -17,18 +17,21 @@ const lista = catalogo(idioma);
 const T = elegir(idioma, {
   es: {
     desc: 'Experiencias turísticas participativas de VÍA en Uruguay: naturaleza, producción local, gastronomía e identidad. Empezamos por Camino de Azahar, en Salto.',
+    seccion: 'Experiencias para vivir',
     comienza: ['VÍA comienza su recorrido con su primera experiencia en ', '.'],
     titulo: 'Elegí cómo vivir Uruguay', intro: 'Cada propuesta es una forma distinta de conocer un lugar: sus paisajes, su producción y las personas que lo hacen único.',
     enlaces: [['Experiencias educativas para instituciones.'], ['Quiénes somos y cómo trabajamos con cada comunidad.'], ['Escribinos para armar tu visita.']],
   },
   pt: {
     desc: 'Experiências turísticas participativas da VÍA no Uruguai: natureza, produção local, gastronomia e identidade. Começamos pelo Camino de Azahar, em Salto.',
+    seccion: 'Experiências para viver',
     comienza: ['A VÍA começa seu percurso com a primeira experiência em ', ', no Uruguai.'],
     titulo: 'Escolha como viver o Uruguai', intro: 'Cada proposta é uma forma diferente de conhecer um lugar: suas paisagens, sua produção e as pessoas que o tornam único.',
     enlaces: [['Experiências educativas para instituições.'], ['Quem somos e como trabalhamos com cada comunidade.'], ['Escreva para nós e montamos sua visita.']],
   },
   en: {
     desc: "VÍA's hands-on travel experiences in Uruguay: nature, local produce, food and identity. We start with Camino de Azahar, in Salto.",
+    seccion: 'Experiences worth living',
     comienza: ['VÍA starts its journey with its first experience in ', ', Uruguay.'],
     titulo: 'Choose how to experience Uruguay', intro: 'Each experience is a different way to get to know a place: its landscapes, its produce and the people who make it unique.',
     enlaces: [['School trips for institutions.'], ['Who we are and how we work with each community.'], ['Write to us to plan your visit.']],
@@ -44,8 +47,11 @@ const T = elegir(idioma, {
   />
 
   <section class="contenedor grid gap-8 py-[clamp(3rem,8vh,5rem)]" aria-labelledby="lista-titulo">
-    <p class="max-w-[50ch] font-display text-2xl text-heading">{T.comienza[0]}<span class="text-primary">Salto</span>{T.comienza[1]}</p>
-    <h2 id="lista-titulo" class="solo-lectores">{t(idioma, 'nav.experiencias')}</h2>
+    <!-- Título de la sección y, debajo, la bajada más chica -->
+    <div class="grid gap-2">
+      <h2 id="lista-titulo" class="text-[clamp(1.7rem,3.2vw,2.7rem)]">{T.seccion}</h2>
+      <p class="max-w-[52ch] text-lg text-muted">{T.comienza[0]}<span class="font-semibold text-primary">Salto</span>{T.comienza[1]}</p>
+    </div>
 
     <div class="grid gap-6 lg:grid-cols-[1.6fr_0.8fr]">
       <div class="lista-exp grid gap-6">
