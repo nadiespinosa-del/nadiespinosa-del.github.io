@@ -1,0 +1,75 @@
+---
+// Contacto de VÍA (tres idiomas): WhatsApp, email y redes. Las reservas se coordinan por WhatsApp.
+import Base from '../layouts/Base.astro';
+import CabeceraPagina from '../components/CabeceraPagina.astro';
+import BotonWhatsApp from '../components/BotonWhatsApp.astro';
+import EnlaceEmail from '../components/EnlaceEmail.astro';
+import Pendiente from '../components/Pendiente.astro';
+import site from '../data/site.json';
+import { catalogo } from '../lib/datos';
+import { elegir, rutas, t, type Idioma } from '../i18n/ui';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const r = rutas[idioma];
+const { instagram, facebook } = site.contacto;
+const T = elegir(idioma, {
+  es: {
+    desc: 'Contacto de VÍA: WhatsApp y email para consultas y reservas de experiencias turísticas en Uruguay.',
+    titulo: 'Hablemos de tu próxima experiencia', intro: 'Te respondemos por WhatsApp o por email para coordinar fechas, grupos y todo lo que necesites.',
+    formas: 'Formas de contacto', waTexto: 'La forma más rápida para consultas y reservas.', waBoton: 'Escribir por WhatsApp',
+    consultar: (n: string) => `Consultar por ${n}`, mensajeExp: (n: string) => `Hola, quiero consultar por ${n}.`,
+    emailTexto: 'Para propuestas de grupos, prensa y alianzas.', emailBoton: 'Escribir un email', verDireccion: 'Ver dirección', asunto: 'Consulta VÍA',
+    redes: 'Redes y atención', horario: 'Horario de atención',
+    pie: ['¿Querés un viaje a medida? ', '. ¿Sos de una institución educativa? ', 'Conocé VÍA Educa', '.'],
+  },
+  pt: {
+    desc: 'Contato da VÍA: WhatsApp e e-mail para dúvidas e reservas de experiências turísticas no Uruguai.',
+    titulo: 'Vamos falar da sua próxima experiência', intro: 'Respondemos pelo WhatsApp ou por e-mail para combinar datas, grupos e tudo o que você precisar.',
+    formas: 'Formas de contato', waTexto: 'O jeito mais rápido para dúvidas e reservas.', waBoton: 'Escrever pelo WhatsApp',
+    consultar: (n: string) => `Perguntar sobre ${n}`, mensajeExp: (n: string) => `Olá, quero informações sobre ${n}.`,
+    emailTexto: 'Para propostas de grupos, imprensa e parcerias.', emailBoton: 'Escrever um e-mail', verDireccion: 'Ver endereço', asunto: 'Contato VÍA',
+    redes: 'Redes e atendimento', horario: 'Horário de atendimento',
+    pie: ['Quer uma viagem sob medida? ', '. Você é de uma instituição de ensino? ', 'Conheça a VÍA Educa', '.'],
+  },
+  en: {
+    desc: 'Contact VÍA: WhatsApp and email for questions and bookings for travel experiences in Uruguay.',
+    titulo: "Let's talk about your next experience", intro: "We'll reply on WhatsApp or by email to arrange dates, groups and anything else you need.",
+    formas: 'Ways to get in touch', waTexto: 'The quickest way to ask questions and book.', waBoton: 'Message us on WhatsApp',
+    consultar: (n: string) => `Ask about ${n}`, mensajeExp: (n: string) => `Hi, I would like to know more about ${n}.`,
+    emailTexto: 'For group proposals, press and partnerships.', emailBoton: 'Send an email', verDireccion: 'Show address', asunto: 'VÍA enquiry',
+    redes: 'Social media and opening hours', horario: 'Opening hours',
+    pie: ['Want a tailor-made trip? ', '. Are you from a school? ', 'Discover VÍA Educa', '.'],
+  },
+});
+---
+<Base titulo={t(idioma, 'nav.contacto')} descripcion={T.desc} idioma={idioma} clave="contacto" encabezadoFlotante>
+  <CabeceraPagina idioma={idioma} antetitulo={t(idioma, 'nav.contacto')} titulo={T.titulo} intro={T.intro} migas={[{ texto: t(idioma, 'nav.contacto') }]} />
+
+  <section class="contenedor grid gap-6 py-[clamp(4rem,12vh,8rem)] md:grid-cols-3" aria-label={T.formas}>
+    <article class="tarjeta grid content-start gap-4 p-8 md:col-span-2">
+      <h2 class="text-3xl">WhatsApp</h2>
+      <p class="font-display text-4xl text-heading">{site.contacto.whatsapp.mostrar}</p>
+      <p class="text-muted">{T.waTexto}</p>
+      <div class="flex flex-wrap gap-3">
+        <BotonWhatsApp idioma={idioma} variante="primario" texto={T.waBoton} mensaje={t(idioma, 'whatsapp.mensajeVia')} />
+        {catalogo(idioma).map((e) => <BotonWhatsApp idioma={idioma} variante="secundario" texto={T.consultar(e.nombre)} mensaje={T.mensajeExp(e.nombre)} />)}
+      </div>
+    </article>
+    <article class="tarjeta grid content-start gap-4 p-8">
+      <h2 class="text-3xl">Email</h2>
+      <p class="text-muted">{T.emailTexto}</p>
+      <EnlaceEmail idioma={idioma} class="btn btn-secundario w-max" texto={T.emailBoton} asunto={T.asunto} />
+      <EnlaceEmail idioma={idioma} mostrarDireccion texto={T.verDireccion} class="text-sm" />
+    </article>
+    <article class="tarjeta grid content-start gap-3 p-8 md:col-span-3">
+      <h2 class="text-2xl">{T.redes}</h2>
+      <ul class="grid gap-2 text-lg">
+        <li>Instagram: {instagram ? <a href={`https://instagram.com/${instagram}`} target="_blank" rel="noopener">@{instagram}</a> : <Pendiente texto="usuario de Instagram" />}</li>
+        <li>Facebook: {facebook ? <a href={facebook} target="_blank" rel="noopener">Facebook</a> : <Pendiente texto="página de Facebook" />}</li>
+        <li>{T.horario}: <Pendiente texto="días y horarios de atención de VÍA" /></li>
+      </ul>
+      <p class="text-sm text-muted">{T.pie[0]}<a href={r.disena}>{t(idioma, 'nav.disena')}</a>{T.pie[1]}<a href={r.grupos}>{T.pie[2]}</a>{T.pie[3]}</p>
+    </article>
+  </section>
+</Base>

@@ -1,0 +1,25 @@
+{
+  "momentos": [
+    {
+      "anio": "1864",
+      "titulo": "Un almácigo en La Amarilla",
+      "texto": "Hacia 1864, Pedro Gallino instala un almácigo de mandarinos en el establecimiento La Amarilla, cerca del actual Obelisco de Rodó. Las semillas llegaron de Río de Janeiro de la mano de José Gonçalvez Amorim.",
+      "fuente": "Museo del Hombre y la Tecnología de Salto; Padrón Favre (2008)",
+      "foto": "Imagen de archivo de una quinta salteña del siglo XIX o grabado de época"
+    },
+    {
+      "anio": "1926",
+      "titulo": "Naranjos en las calles",
+      "texto": "Pedro Benito Solari promueve la plantación de naranjos en las calles de Salto y ofrece árboles para el arbolado urbano. La iniciativa llega después a Belén y Constitución.",
+      "fuente": "Archivo Isidra Solari",
+      "foto": "Fotografía de archivo de una calle de Salto con naranjos"
+    },
+    {
+      "anio": "1972",
+      "titulo": "Diecisiete bóvedas para la fruta",
+      "texto": "Eladio Dieste termina el edificio de Citrícola Salteña S.A.: 17 bóvedas de doble curvatura en cerámica armada cubren 45 metros sin columnas intermedias.",
+      "fuente": "FADU, Universidad de la República",
+      "foto": "Bóvedas de Dieste vistas desde el interior, luz de los lucernarios, plano general"
+    }
+  ]
+}

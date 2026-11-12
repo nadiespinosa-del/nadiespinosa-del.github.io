@@ -1,0 +1,139 @@
+---
+// Formulario de consulta para grupos educativos. Se envía por WhatsApp (sin servicio de formularios aún).
+// Solo pide datos de la persona adulta responsable, nunca de estudiantes.
+import site from '../data/site.json';
+import { elegir, idiomas, type Idioma } from '../i18n/ui';
+import { textosValidacion } from '../i18n/formularios';
+interface Props { idioma?: Idioma; id?: string; /** Versión VÍA Educa (para cualquier destino), sin tarifa de Camino de Azahar. */ general?: boolean }
+const { idioma = 'es', id = 'grupos', general = false } = Astro.props;
+const numero = site.contacto.whatsapp?.numero ?? '';
+const base = elegir(idioma, {
+  es: {
+    ante: 'Grupos y escuelas', titulo: 'Pedí una propuesta para tu grupo', bajada: 'Adaptamos el lenguaje, la duración y los contenidos a la edad y a los objetivos del curso. Los campos con * son obligatorios.',
+    institucion: 'Institución', errInstitucion: 'Escribí el nombre de la institución.', curso: 'Nivel o curso', phCurso: 'Por ejemplo: 2.º año de liceo',
+    estudiantes: 'Cantidad de estudiantes', docentes: 'Docentes y acompañantes', edades: 'Edades', phEdades: 'Por ejemplo: 13 y 14 años',
+    fechas: 'Fechas posibles', phFechas: 'Por ejemplo: segunda quincena de junio', transporte: '¿Tienen transporte propio?', etTransporte: 'Transporte propio', errTransporte: 'Contanos si tienen transporte propio.',
+    si: 'Sí', no: 'No, necesitamos traslado', objetivos: 'Objetivos pedagógicos (opcional)', phObjetivos: 'Por ejemplo: trabajar la historia económica de Salto en Geografía', etObjetivos: 'Objetivos',
+    responsable: 'Persona adulta responsable', etResponsable: 'Responsable', contacto: 'Teléfono o email de contacto', etContacto: 'Contacto',
+    enviar: 'Enviar consulta por WhatsApp', nota: 'Tarifa propuesta para estudiantes: $U 500 por persona.',
+    exito: '¡Gracias! Abrimos WhatsApp con la consulta del grupo.', exito2: 'Solo falta tocar "Enviar" en WhatsApp. Si no se abrió,', exitoEnlace: 'abrí WhatsApp desde acá',
+    intro: 'Hola, quiero consultar por una visita educativa a Camino de Azahar.',
+  },
+  pt: {
+    ante: 'Grupos e escolas', titulo: 'Peça uma proposta para o seu grupo', bajada: 'Adaptamos a linguagem, a duração e os conteúdos à idade e aos objetivos da turma. Os campos com * são obrigatórios.',
+    institucion: 'Instituição', errInstitucion: 'Escreva o nome da instituição.', curso: 'Série ou turma', phCurso: 'Por exemplo: 8º ano',
+    estudiantes: 'Número de estudantes', docentes: 'Professores e acompanhantes', edades: 'Idades', phEdades: 'Por exemplo: 13 e 14 anos',
+    fechas: 'Datas possíveis', phFechas: 'Por exemplo: segunda quinzena de junho', transporte: 'O grupo tem transporte próprio?', etTransporte: 'Transporte próprio', errTransporte: 'Conte-nos se o grupo tem transporte próprio.',
+    si: 'Sim', no: 'Não, precisamos de traslado', objetivos: 'Objetivos pedagógicos (opcional)', phObjetivos: 'Por exemplo: trabalhar a história econômica da região em Geografia', etObjetivos: 'Objetivos',
+    responsable: 'Adulto responsável', etResponsable: 'Responsável', contacto: 'Telefone ou e-mail de contato', etContacto: 'Contato',
+    enviar: 'Enviar pelo WhatsApp', nota: 'Tarifa proposta para estudantes: $U 500 por pessoa.',
+    exito: 'Obrigado! Abrimos o WhatsApp com a mensagem do grupo.', exito2: 'Só falta tocar em "Enviar" no WhatsApp. Se não abriu,', exitoEnlace: 'abra o WhatsApp por aqui',
+    intro: 'Olá, quero informações sobre uma visita educativa ao Camino de Azahar.',
+  },
+  en: {
+    ante: 'Groups and schools', titulo: 'Request a proposal for your group', bajada: 'We adapt the language, length and content to the age and learning goals of the class. Fields marked * are required.',
+    institucion: 'School or organisation', errInstitucion: 'Enter the name of the school or organisation.', curso: 'Year or class', phCurso: 'For example: Year 8',
+    estudiantes: 'Number of students', docentes: 'Teachers and chaperones', edades: 'Ages', phEdades: 'For example: 13 and 14',
+    fechas: 'Possible dates', phFechas: 'For example: second half of June', transporte: 'Does the group have its own transport?', etTransporte: 'Own transport', errTransporte: 'Let us know whether the group has its own transport.',
+    si: 'Yes', no: 'No, we need transport', objetivos: 'Learning goals (optional)', phObjetivos: 'For example: the economic history of the region for Geography', etObjetivos: 'Learning goals',
+    responsable: 'Responsible adult', etResponsable: 'Responsible adult', contacto: 'Phone or email', etContacto: 'Contact',
+    enviar: 'Send on WhatsApp', nota: 'Proposed student price: $U 500 per person.',
+    exito: 'Thank you! We opened WhatsApp with your group request.', exito2: 'Just tap "Send" in WhatsApp. If it didn\'t open,', exitoEnlace: 'open WhatsApp here',
+    intro: 'Hi, I would like to ask about a school visit to Camino de Azahar.',
+  },
+});
+const educa = elegir(idioma, {
+  es: { ante: 'VÍA Educa', titulo: 'Contanos qué quieren trabajar', bajada: 'Con estos datos armamos una primera propuesta: destino, actividades, tiempos, transporte, alojamiento y coordinación. Los campos con * son obligatorios.', nota: 'Te respondemos con una propuesta a medida.', intro: 'Hola, quiero diseñar una experiencia educativa con VÍA.', phObjetivos: 'Por ejemplo: conocer la producción de la región para Geografía' },
+  pt: { ante: 'VÍA Educa', titulo: 'Conte-nos o que querem trabalhar', bajada: 'Com estes dados montamos uma primeira proposta: destino, atividades, tempos, transporte, hospedagem e coordenação. Os campos com * são obrigatórios.', nota: 'Respondemos com uma proposta sob medida.', intro: 'Olá, quero montar uma experiência educativa com a VÍA.', phObjetivos: 'Por exemplo: conhecer a produção da região em Geografia' },
+  en: { ante: 'VÍA Educa', titulo: 'Tell us what you want to work on', bajada: 'With these details we put together a first proposal: destination, activities, timing, transport, accommodation and coordination. Fields marked * are required.', nota: 'We will reply with a tailor-made proposal.', intro: 'Hi, I would like to design a school trip with VÍA.', phObjetivos: 'For example: learning about the region’s production for Geography' },
+});
+const T = general ? { ...base, ...educa } : base;
+const campo = 'campo';
+---
+<form id={id} class="formulario-grupos tarjeta grid gap-6 p-6 sm:p-8" novalidate data-whatsapp={numero} data-textos={JSON.stringify(textosValidacion[idioma])} data-locale={idiomas[idioma].locale} data-intro={T.intro} aria-labelledby={`${id}-titulo`}>
+  <div class="grid gap-1">
+    <p class="antetitulo">{T.ante}</p>
+    <h3 id={`${id}-titulo`} class="text-3xl">{T.titulo}</h3>
+    <p class="text-muted">{T.bajada}</p>
+  </div>
+
+  <div data-resumen-errores tabindex="-1" hidden class="rounded-[var(--ca-radius)] border-2 border-on-err bg-err p-4 text-on-err" role="alert"></div>
+
+  <div class="grid gap-5 md:grid-cols-2">
+    <div class={campo}>
+      <label for={`${id}-institucion`}>{T.institucion} *</label>
+      <input id={`${id}-institucion`} class="control" type="text" required autocomplete="organization" data-etiqueta={T.institucion} data-error={T.errInstitucion} aria-describedby={`${id}-institucion-error`} />
+      <p id={`${id}-institucion-error`} class="error-campo" aria-live="polite"></p>
+    </div>
+    <div class={campo}>
+      <label for={`${id}-curso`}>{T.curso} *</label>
+      <input id={`${id}-curso`} class="control" type="text" required placeholder={T.phCurso} data-etiqueta={T.curso} aria-describedby={`${id}-curso-error`} />
+      <p id={`${id}-curso-error`} class="error-campo" aria-live="polite"></p>
+    </div>
+    <div class={campo}>
+      <label for={`${id}-estudiantes`}>{T.estudiantes} *</label>
+      <input id={`${id}-estudiantes`} class="control" type="number" inputmode="numeric" min="1" required data-etiqueta={T.estudiantes} aria-describedby={`${id}-estudiantes-error`} />
+      <p id={`${id}-estudiantes-error`} class="error-campo" aria-live="polite"></p>
+    </div>
+    <div class={campo}>
+      <label for={`${id}-docentes`}>{T.docentes}</label>
+      <input id={`${id}-docentes`} class="control" type="number" inputmode="numeric" min="0" data-etiqueta={T.docentes} aria-describedby={`${id}-docentes-error`} />
+      <p id={`${id}-docentes-error`} class="error-campo" aria-live="polite"></p>
+    </div>
+    <div class={campo}>
+      <label for={`${id}-edades`}>{T.edades}</label>
+      <input id={`${id}-edades`} class="control" type="text" placeholder={T.phEdades} data-etiqueta={T.edades} />
+    </div>
+    <div class={campo}>
+      <label for={`${id}-fechas`}>{T.fechas} *</label>
+      <input id={`${id}-fechas`} class="control" type="text" required placeholder={T.phFechas} data-etiqueta={T.fechas} aria-describedby={`${id}-fechas-error`} />
+      <p id={`${id}-fechas-error`} class="error-campo" aria-live="polite"></p>
+    </div>
+    <fieldset id={`${id}-transporte`} class="campo md:col-span-2" data-grupo={`${id}-transporte`} data-requerido data-error={T.errTransporte} data-etiqueta={T.etTransporte} aria-describedby={`${id}-transporte-error`}>
+      <legend>{T.transporte} *</legend>
+      <div class="flex flex-wrap gap-6">
+        <label class="flex items-center gap-2 font-normal"><input type="radio" name={`${id}-transporte`} value={T.si} /> {T.si}</label>
+        <label class="flex items-center gap-2 font-normal"><input type="radio" name={`${id}-transporte`} value={T.no} /> {T.no}</label>
+      </div>
+      <p id={`${id}-transporte-error`} class="error-campo" aria-live="polite"></p>
+    </fieldset>
+    <div class="campo md:col-span-2">
+      <label for={`${id}-objetivos`}>{T.objetivos}</label>
+      <textarea id={`${id}-objetivos`} class="control" placeholder={T.phObjetivos} data-etiqueta={T.etObjetivos}></textarea>
+    </div>
+    <div class={campo}>
+      <label for={`${id}-responsable`}>{T.responsable} *</label>
+      <input id={`${id}-responsable`} class="control" type="text" required autocomplete="name" data-etiqueta={T.etResponsable} aria-describedby={`${id}-responsable-error`} />
+      <p id={`${id}-responsable-error`} class="error-campo" aria-live="polite"></p>
+    </div>
+    <div class={campo}>
+      <label for={`${id}-contacto`}>{T.contacto} *</label>
+      <input id={`${id}-contacto`} class="control" type="text" required autocomplete="email" data-etiqueta={T.etContacto} aria-describedby={`${id}-contacto-error`} />
+      <p id={`${id}-contacto-error`} class="error-campo" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <div class="flex flex-wrap items-center gap-4">
+    <button type="submit" class="btn btn-primario">{T.enviar}</button>
+    <p class="text-sm text-muted">{T.nota}</p>
+  </div>
+
+  <div data-exito tabindex="-1" hidden class="rounded-[var(--ca-radius)] border-2 border-on-ok bg-ok p-4 text-on-ok" role="status">
+    <p class="font-semibold">{T.exito}</p>
+    <p>{T.exito2} <a class="font-semibold text-on-ok" href="#" target="_blank" rel="noopener">{T.exitoEnlace}</a>.</p>
+  </div>
+</form>
+
+<script>
+  import { validarCampos, mostrarResumen, armarMensaje, enviarPorWhatsApp, limpiarAlEditar } from '../scripts/formularios';
+  document.querySelectorAll<HTMLFormElement>('form.formulario-grupos').forEach((form) => {
+    limpiarAlEditar(form);
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const errores = validarCampos(form);
+      mostrarResumen(form, errores);
+      if (errores.length) return;
+      enviarPorWhatsApp(form, armarMensaje(form, form.dataset.intro || ''));
+    });
+  });
+</script>

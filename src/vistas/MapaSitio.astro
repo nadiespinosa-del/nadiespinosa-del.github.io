@@ -1,0 +1,33 @@
+---
+// Mapa del sitio de VÍA (tres idiomas): todas las páginas del idioma actual.
+import Base from '../layouts/Base.astro';
+import CabeceraPagina from '../components/CabeceraPagina.astro';
+import { elegir, rutas, t, type Idioma } from '../i18n/ui';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const r = rutas[idioma];
+const T = elegir(idioma, {
+  es: { desc: 'Todas las páginas de VÍA y de sus experiencias.', intro: 'Todas las páginas, en un solo lugar.', legales: 'Legales y ayuda', conFruto: 'Circuito con fruto', interp: 'Modalidad interpretativa', escuelas: 'Escuelas', experiencia: 'La experiencia' },
+  pt: { desc: 'Todas as páginas da VÍA e de suas experiências.', intro: 'Todas as páginas, em um só lugar.', legales: 'Informações legais e ajuda', conFruto: 'Circuito com fruta', interp: 'Modalidade interpretativa', escuelas: 'Escolas', experiencia: 'A experiência' },
+  en: { desc: 'All the pages of VÍA and its experiences.', intro: 'All the pages, in one place.', legales: 'Legal and help', conFruto: 'Harvest season visit', interp: 'Interpretive visit', escuelas: 'Schools', experiencia: 'The experience' },
+});
+const grupos = [
+  { titulo: 'VÍA', enlaces: [[t(idioma, 'nav.inicio'), r.inicio], [t(idioma, 'nav.experiencias'), r.experiencias], [t(idioma, 'nav.grupos'), r.grupos], [t(idioma, 'nav.disena'), r.disena], [t(idioma, 'nav.nosotros'), r.nosotros], [t(idioma, 'nav.contacto'), r.contacto], [t(idioma, 'pie.sostenibilidad'), r.sostenibilidad], [t(idioma, 'pie.prensa'), r.prensa]] },
+  { titulo: 'Camino de Azahar', enlaces: [[T.experiencia, r.azahar], [T.conFruto, r.conFruto], [T.interp, r.interpretativa], [t(idioma, 'nav.naranja'), r.naranja], [t(idioma, 'nav.chacra'), r.chacra], [t(idioma, 'nav.planifica'), r.planifica], [T.escuelas, r.azaharGrupos], [t(idioma, 'pie.sobre'), r.azaharSobre]] },
+  { titulo: T.legales, enlaces: [[t(idioma, 'pie.accesibilidad'), r.accesibilidad], [t(idioma, 'pie.privacidad'), r.privacidad], [t(idioma, 'pie.terminos'), r.terminos]] },
+];
+---
+<Base titulo={t(idioma, 'pie.mapa')} descripcion={T.desc} idioma={idioma} clave="mapa" encabezadoFlotante>
+  <CabeceraPagina idioma={idioma} titulo={t(idioma, 'pie.mapa')} intro={T.intro} migas={[{ texto: t(idioma, 'pie.mapa') }]} />
+  <div class="contenedor grid gap-12 py-[clamp(4rem,12vh,8rem)] md:grid-cols-3">
+    {grupos.map((g) => (
+      <section class="grid content-start gap-4" aria-label={g.titulo}>
+        <h2 class="text-2xl">{g.titulo}</h2>
+        <ul class="grid gap-2 text-lg">
+          {g.enlaces.map(([texto, href]) => <li><a href={href}>{texto}</a></li>)}
+        </ul>
+      </section>
+    ))}
+  </div>
+</Base>

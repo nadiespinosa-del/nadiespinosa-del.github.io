@@ -1,0 +1,40 @@
+---
+// Bloque final "También te puede interesar": tres accesos a otras secciones.
+import Rodaja from './Rodaja.astro';
+import { elegir, type Idioma } from '../i18n/ui';
+interface Enlace { titulo: string; texto: string; href: string }
+interface Props { idioma?: Idioma; enlaces: Enlace[] }
+const { idioma = 'es', enlaces } = Astro.props;
+const T = elegir(idioma, {
+  es: { titulo: 'También te puede interesar', ir: 'Ir a' },
+  pt: { titulo: 'Você também pode gostar', ir: 'Ir para' },
+  en: { titulo: 'You might also like', ir: 'Go to' },
+});
+---
+<section class="grid gap-8" aria-labelledby="tambien-titulo">
+  <h2 id="tambien-titulo" class="text-[clamp(1.8rem,3.4vw,2.8rem)]">{T.titulo}</h2>
+  <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {enlaces.map((e) => (
+      <li>
+        <a href={e.href} class="tambien-tarjeta group relative grid h-full content-between gap-10 overflow-hidden rounded-[var(--ca-radius-lg)] border border-line bg-surface p-7 text-ink no-underline">
+          <Rodaja tamano={160} grosor={1.2} class="pointer-events-none absolute -right-10 -top-10 text-deco opacity-20 transition-transform duration-700 group-hover:rotate-45" />
+          <span class="grid gap-2">
+            <span class="font-display text-[1.4rem] leading-tight text-heading xl:text-2xl">{e.titulo}</span>
+            <span class="text-muted">{e.texto}</span>
+          </span>
+          <span class="font-semibold text-primary">{T.ir} {idioma === 'en' ? e.titulo : e.titulo.toLowerCase()}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .tambien-tarjeta { transition: border-color 300ms ease, transform 300ms cubic-bezier(0.23, 1, 0.32, 1); }
+  @media (hover: hover) and (pointer: fine) {
+    .tambien-tarjeta:hover { border-color: var(--ca-border-strong); transform: translateY(-4px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tambien-tarjeta, .tambien-tarjeta :global(svg) { transition: none; }
+  }
+</style>

@@ -1,0 +1,11 @@
+---
+// Separador de secciones con la rodaja al centro.
+import Rodaja from './Rodaja.astro';
+interface Props { class?: string }
+const { class: clase = '' } = Astro.props;
+---
+<div class={`flex items-center gap-4 text-deco ${clase}`} role="presentation">
+  <span class="h-px flex-1 bg-line-strong"></span>
+  <Rodaja tamano={28} grosor={4} />
+  <span class="h-px flex-1 bg-line-strong"></span>
+</div>

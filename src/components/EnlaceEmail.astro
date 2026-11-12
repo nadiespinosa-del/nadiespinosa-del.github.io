@@ -1,0 +1,36 @@
+---
+// Enlace de email protegido contra robots de spam:
+// la dirección se arma en el navegador y no queda escrita completa en el HTML.
+import site from '../data/site.json';
+import { rutas, t, type Idioma } from '../i18n/ui';
+
+interface Props {
+  idioma?: Idioma;
+  texto?: string;
+  asunto?: string;
+  mostrarDireccion?: boolean;
+  class?: string;
+}
+const { idioma = 'es', texto = t(idioma, 'pie.escribinos'), asunto = 'Camino de Azahar', mostrarDireccion = false, class: clase = '' } = Astro.props;
+const { usuario, dominio } = site.contacto.email ?? { usuario: '', dominio: '' };
+---
+{usuario && (
+  <a
+    href={rutas[idioma].contacto}
+    class={clase}
+    data-email-u={usuario.split('').reverse().join('')}
+    data-email-d={dominio.split('').reverse().join('')}
+    data-email-asunto={asunto}
+    data-email-mostrar={mostrarDireccion ? 'si' : undefined}
+  >{texto}</a>
+)}
+
+<script>
+  document.querySelectorAll<HTMLAnchorElement>('[data-email-u]').forEach((a) => {
+    const u = (a.dataset.emailU || '').split('').reverse().join('');
+    const d = (a.dataset.emailD || '').split('').reverse().join('');
+    const direccion = `${u}@${d}`;
+    a.href = `mailto:${direccion}?subject=${encodeURIComponent(a.dataset.emailAsunto || '')}`;
+    if (a.dataset.emailMostrar) a.textContent = direccion;
+  });
+</script>

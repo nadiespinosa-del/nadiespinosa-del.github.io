@@ -1,0 +1,56 @@
+---
+// Cómo funciona una reserva, paso a paso (flujo definido en el proyecto).
+import { elegir, type Idioma } from '../i18n/ui';
+interface Props { idioma?: Idioma }
+const { idioma = 'es' } = Astro.props;
+const T = elegir(idioma, {
+  es: {
+    titulo: 'Cómo funciona una reserva',
+    bajada: 'Sin vueltas: elegís la fecha, te confirmamos por WhatsApp y llegás sabiendo todo lo que necesitás.',
+    pasos: [
+      { titulo: 'Reservás', texto: 'Por esta página o por WhatsApp. Te enviamos la información de accesibilidad y exigencia física de la visita.' },
+      { titulo: 'Confirmamos', texto: 'La agencia Vía confirma tu lugar y coordina con la chacra.' },
+      { titulo: 'Te recordamos', texto: 'Antes de la visita recibís un recordatorio con indicaciones de llegada y el pronóstico del tiempo.' },
+      { titulo: 'Vivís la visita', texto: 'Cinco etapas en la Chacra La Victoria: recorrido, jugo, degustación e intercambio.' },
+      { titulo: 'Nos contás', texto: 'Al cierre, una encuesta breve de satisfacción nos ayuda a mejorar.' },
+    ],
+  },
+  pt: {
+    titulo: 'Como funciona a reserva',
+    bajada: 'Simples assim: você escolhe a data, confirmamos pelo WhatsApp e você chega sabendo tudo o que precisa.',
+    pasos: [
+      { titulo: 'Você reserva', texto: 'Por esta página ou pelo WhatsApp. Enviamos as informações de acessibilidade e exigência física da visita.' },
+      { titulo: 'Confirmamos', texto: 'A agência Vía confirma sua vaga e organiza tudo com a chácara.' },
+      { titulo: 'Lembramos você', texto: 'Antes da visita, você recebe um lembrete com as indicações de chegada e a previsão do tempo.' },
+      { titulo: 'Você vive a visita', texto: 'Cinco etapas na Chacra La Victoria: percurso, suco, degustação e conversa.' },
+      { titulo: 'Você nos conta', texto: 'No final, uma pesquisa rápida de satisfação nos ajuda a melhorar.' },
+    ],
+  },
+  en: {
+    titulo: 'How booking works',
+    bajada: 'Simple: choose a date, we confirm on WhatsApp, and you arrive knowing everything you need.',
+    pasos: [
+      { titulo: 'You book', texto: 'On this website or on WhatsApp. We send you accessibility and physical effort information for the visit.' },
+      { titulo: 'We confirm', texto: 'The Vía travel agency confirms your spot and coordinates with the farm.' },
+      { titulo: 'We remind you', texto: 'Before your visit you get a reminder with directions and the weather forecast.' },
+      { titulo: 'You enjoy the visit', texto: 'Five stages at Chacra La Victoria: walk, juice, tasting and conversation.' },
+      { titulo: 'You tell us', texto: 'At the end, a short survey helps us keep improving.' },
+    ],
+  },
+});
+---
+<section class="grid gap-10" aria-labelledby="flujo-titulo">
+  <div class="grid gap-3">
+    <h2 id="flujo-titulo" class="max-w-[16ch] text-[clamp(1.6rem,3vw,2.6rem)]">{T.titulo}</h2>
+    <p class="max-w-[52ch] text-lg text-muted">{T.bajada}</p>
+  </div>
+  <ol class="flujo grid gap-px overflow-hidden rounded-[var(--ca-radius-lg)] border border-line bg-line md:grid-cols-5">
+    {T.pasos.map((p, i) => (
+      <li class="revelar grid content-start gap-3 bg-surface p-6" style={`transition-delay:${i * 90}ms`}>
+        <span class="font-display text-5xl leading-none text-deco" aria-hidden="true">{i + 1}</span>
+        <h3 class="font-body text-lg font-semibold text-ink">{p.titulo}</h3>
+        <p class="text-muted">{p.texto}</p>
+      </li>
+    ))}
+  </ol>
+</section>

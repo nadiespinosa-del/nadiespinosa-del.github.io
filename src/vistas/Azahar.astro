@@ -1,0 +1,133 @@
+---
+// Camino de Azahar (tres idiomas): primera experiencia de VÍA (Salto, Chacra La Victoria, Colonia Osimani).
+// Portada inmersiva con identidad propia (tema "azahar") dentro de la estructura general de VÍA.
+import Base from '../layouts/Base.astro';
+import HeroNaranja from '../components/inmersivo/HeroNaranja.astro';
+import NavExperiencia from '../components/NavExperiencia.astro';
+import Manifiesto from '../components/inmersivo/Manifiesto.astro';
+import QueIncluye from '../components/azahar/QueIncluye.astro';
+import SlidesEtapas from '../components/inmersivo/SlidesEtapas.astro';
+import TarjetaModalidad from '../components/TarjetaModalidad.astro';
+import InfoPractica from '../components/azahar/InfoPractica.astro';
+import RuedaAnio from '../components/inmersivo/RuedaAnio.astro';
+import HistoriaApilada from '../components/inmersivo/HistoriaApilada.astro';
+import CitaGrande from '../components/inmersivo/CitaGrande.astro';
+import ListaSalidas from '../components/ListaSalidas.astro';
+import TablaTarifas from '../components/TablaTarifas.astro';
+import FormularioReserva from '../components/FormularioReserva.astro';
+import FlujoReserva from '../components/FlujoReserva.astro';
+import PreguntasFrecuentes from '../components/PreguntasFrecuentes.astro';
+import Llamado from '../components/Llamado.astro';
+import TambienTeInteresa from '../components/TambienTeInteresa.astro';
+import DatosEstructurados from '../components/DatosEstructurados.astro';
+import salidas from '../data/salidas.json';
+import site from '../data/site.json';
+import { experiencia, tarifas } from '../lib/datos';
+import { elegir, rutas, t, type Idioma } from '../i18n/ui';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const r = rutas[idioma];
+const T = elegir(idioma, {
+  es: {
+    meta: 'Camino de Azahar · Experiencias',
+    desc: 'Camino de Azahar, una experiencia de VÍA en Salto: recorré un naranjal en Colonia Osimani, exprimí tu jugo, probá productos locales y descubrí la identidad citrícola salteña.',
+    ld: 'Experiencia turística participativa en la Chacra La Victoria, Colonia Osimani (Salto, Uruguay): recorrido por el naranjal, elaboración de jugo, degustación de productos locales e intercambio con productores.',
+    modalidades: 'Una experiencia para cada época', modalidadesTexto: 'Con fruto en la zafra, interpretativa el resto del año, y una versión para escuelas.',
+    reservar: 'Reservá tu lugar en el naranjal', reservarTexto: 'Fechas y horarios coordinables. Te confirmamos todo por WhatsApp.',
+    escuelas: 'Escuelas', escuelasTitulo: 'Una clase de historia, geografía y ciencias que se puede oler', escuelasTexto: 'Versión educativa para estudiantes de 11 a 15 años. Tarifa propuesta: $U 500 por estudiante.', escuelasBoton: 'Ver la propuesta educativa',
+    enlaces: ['De 1864 a hoy: la historia que vas a escuchar en la chacra.', 'Patricia Real, la Chacra La Victoria y la feria de Colonia Osimani.', 'Otras propuestas de VÍA en Uruguay.'], mas: 'Más experiencias',
+  },
+  pt: {
+    meta: 'Camino de Azahar · Experiências',
+    desc: 'Camino de Azahar, uma experiência da VÍA em Salto, no Uruguai: percorra um laranjal em Colonia Osimani, esprema seu suco, prove produtos locais e descubra a identidade cítrica de Salto.',
+    ld: 'Experiência turística participativa na Chacra La Victoria, Colonia Osimani (Salto, Uruguai): percurso pelo laranjal, preparo de suco, degustação de produtos locais e troca com produtores.',
+    modalidades: 'Uma experiência para cada época', modalidadesTexto: 'Com fruta na safra, interpretativa no resto do ano, e uma versão para escolas.',
+    reservar: 'Reserve seu lugar no laranjal', reservarTexto: 'Datas e horários a combinar. Confirmamos tudo pelo WhatsApp.',
+    escuelas: 'Escolas', escuelasTitulo: 'Uma aula de história, geografia e ciências que dá para sentir o cheiro', escuelasTexto: 'Versão educativa para estudantes de 11 a 15 anos. Tarifa proposta: $U 500 por estudante.', escuelasBoton: 'Ver a proposta educativa',
+    enlaces: ['De 1864 até hoje: a história que você vai ouvir na chácara.', 'Patricia Real, a Chacra La Victoria e a feira de Colonia Osimani.', 'Outras propostas da VÍA no Uruguai.'], mas: 'Mais experiências',
+  },
+  en: {
+    meta: 'Camino de Azahar · Experiences',
+    desc: 'Camino de Azahar, a VÍA experience in Salto, Uruguay: walk through an orange grove in Colonia Osimani, squeeze your own juice, taste local produce and discover Salto\'s citrus identity.',
+    ld: 'A hands-on experience at Chacra La Victoria, Colonia Osimani (Salto, Uruguay): a walk through the orange grove, juice-making, tasting local produce and meeting growers.',
+    modalidades: 'An experience for every season', modalidadesTexto: 'With fruit during the harvest, interpretive the rest of the year, and a version for schools.',
+    reservar: 'Book your place in the orange grove', reservarTexto: 'Flexible dates and times. We confirm everything on WhatsApp.',
+    escuelas: 'Schools', escuelasTitulo: 'A history, geography and science lesson you can smell', escuelasTexto: 'School version for students aged 11 to 15. Proposed price: $U 500 per student.', escuelasBoton: 'See the school visit',
+    enlaces: ['From 1864 to today: the story you will hear at the farm.', 'Patricia Real, Chacra La Victoria and the Colonia Osimani market.', 'Other VÍA experiences in Uruguay.'], mas: 'More experiences',
+  },
+});
+const viajeLd = {
+  '@context': 'https://schema.org',
+  '@type': 'TouristTrip',
+  name: 'Camino de Azahar',
+  description: T.ld,
+  inLanguage: idioma,
+  provider: { '@type': 'TravelAgency', name: 'VÍA', url: new URL(r.inicio, site.dominio).href },
+  itinerary: { '@type': 'ItemList', itemListElement: experiencia(idioma).etapas.map((e, i) => ({ '@type': 'ListItem', position: i + 1, name: e.titulo, description: e.texto })) },
+  offers: tarifas(idioma).map((tf) => ({ '@type': 'Offer', name: tf.nombre, price: tf.precio, priceCurrency: 'UYU' })),
+};
+---
+<Base
+  titulo={T.meta}
+  descripcion={T.desc}
+  idioma={idioma}
+  clave="azahar"
+  tema="azahar"
+  encabezadoFlotante
+  cta={{ texto: t(idioma, 'nav.reservar'), href: '#reservar' }}
+  whatsappFlotante={t(idioma, 'whatsapp.mensajeReserva')}
+>
+  <HeroNaranja idioma={idioma} />
+  <NavExperiencia idioma={idioma} actual={r.azahar} />
+  <Manifiesto idioma={idioma} />
+  <!-- La historia (1864 → 1926 → 1972) va pegada a la presentación: es el camino que llevó a la naranja a ser lo que es hoy en Salto -->
+  <HistoriaApilada idioma={idioma} />
+  <QueIncluye idioma={idioma} />
+  <SlidesEtapas idioma={idioma} />
+
+  <section class="contenedor grid gap-10 py-[clamp(5rem,12vh,8rem)]" aria-labelledby="modalidades-titulo">
+    <div class="grid gap-3">
+      <h2 id="modalidades-titulo" class="max-w-[18ch] text-[clamp(1.6rem,3vw,2.6rem)]">{T.modalidades}</h2>
+      <p class="max-w-[52ch] text-lg text-muted">{T.modalidadesTexto}</p>
+    </div>
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {experiencia(idioma).modalidades.map((m) => <TarjetaModalidad idioma={idioma} modalidad={m} />)}
+    </div>
+  </section>
+
+  <InfoPractica idioma={idioma} />
+  <RuedaAnio idioma={idioma} />
+  <CitaGrande idioma={idioma} />
+
+  <section id="reservar" class="relative bg-surface-2 py-[clamp(5rem,12vh,9rem)]" aria-labelledby="reservar-titulo">
+    <div class="contenedor grid gap-12">
+      <div class="grid gap-4">
+        <h2 id="reservar-titulo" class="max-w-[14ch] text-[clamp(1.8rem,3.4vw,3.1rem)] leading-[0.98]">{T.reservar}</h2>
+        <p class="max-w-[52ch] text-lg text-muted">{T.reservarTexto}</p>
+      </div>
+      <div class="grid items-start gap-10 lg:grid-cols-[0.9fr_1.1fr]">
+        <div class="grid gap-8">
+          <ListaSalidas idioma={idioma} salidas={salidas} limite={4} />
+          <TablaTarifas idioma={idioma} />
+        </div>
+        <FormularioReserva idioma={idioma} salidas={salidas} id="reserva" />
+      </div>
+    </div>
+  </section>
+
+  <div class="contenedor grid gap-24 py-[clamp(4rem,12vh,8rem)]">
+    <FlujoReserva idioma={idioma} />
+    <PreguntasFrecuentes idioma={idioma} temas={['experiencia']} />
+    <Llamado antetitulo={T.escuelas} titulo={T.escuelasTitulo} texto={T.escuelasTexto} boton={{ texto: T.escuelasBoton, href: r.azaharGrupos }} />
+    <TambienTeInteresa
+      idioma={idioma}
+      enlaces={[
+        { titulo: t(idioma, 'nav.naranja'), texto: T.enlaces[0], href: r.naranja },
+        { titulo: t(idioma, 'nav.chacra'), texto: T.enlaces[1], href: r.chacra },
+        { titulo: T.mas, texto: T.enlaces[2], href: r.experiencias },
+      ]}
+    />
+  </div>
+  <DatosEstructurados datos={viajeLd} />
+</Base>

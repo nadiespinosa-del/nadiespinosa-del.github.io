@@ -1,0 +1,124 @@
+---
+// Plantilla de ficha de experiencia (una modalidad): galería, datos, qué hacés, reserva y preguntas.
+import Base from '../layouts/Base.astro';
+import CabeceraPagina from './CabeceraPagina.astro';
+import Imagen from './Imagen.astro';
+import Pendiente from './Pendiente.astro';
+import TablaTarifas from './TablaTarifas.astro';
+import AvisoAccesibilidad from './AvisoAccesibilidad.astro';
+import ListaSalidas from './ListaSalidas.astro';
+import FormularioReserva from './FormularioReserva.astro';
+import PreguntasFrecuentes from './PreguntasFrecuentes.astro';
+import TambienTeInteresa from './TambienTeInteresa.astro';
+import IndicadorTemporada from './IndicadorTemporada.astro';
+import experiencia from '../data/experiencia.json';
+import salidas from '../data/salidas.json';
+import site from '../data/site.json';
+import { formatoDuracion } from '../lib/util';
+import { rutas } from '../i18n/ui';
+
+interface Props {
+  id: 'con-fruto' | 'interpretativa';
+  titulo: string;
+  intro: string;
+  descripcion: string;
+  queHaces: string[];
+  galeria: string[];
+  otra: { titulo: string; texto: string; href: string };
+}
+const { id, titulo, intro, descripcion, queHaces, galeria, otra } = Astro.props;
+const modalidad = experiencia.modalidades.find((m) => m.id === id)!;
+const salidasModalidad = salidas.filter((s: { modalidad: string }) => s.modalidad === id);
+const datos = [
+  { etiqueta: 'Duración', valor: formatoDuracion(site.duracionMinutos) },
+  { etiqueta: 'Temporada', valor: modalidad.meses },
+  { etiqueta: 'Grupo', valor: `De ${site.cupo.minimo} a ${site.cupo.maximo} personas (salidas programadas)` },
+  { etiqueta: 'Idioma de la guía', valor: 'Español' },
+  { etiqueta: 'Punto de encuentro', valor: 'Chacra La Victoria, Colonia Osimani (Salto)' },
+  { etiqueta: 'Exigencia física', valor: 'Básica: caminar durante parte del recorrido' },
+  { etiqueta: 'Con lluvia', valor: 'Se reprograma sin costo o se hace la parte interpretativa bajo techo' },
+];
+---
+<Base titulo={`${titulo} · Camino de Azahar`} descripcion={descripcion} encabezadoFlotante whatsappFlotante={`Hola, quiero reservar Camino de Azahar (${modalidad.titulo.toLowerCase()}).`}>
+  <CabeceraPagina
+    antetitulo={modalidad.meses}
+    titulo={titulo}
+    intro={intro}
+    migas={[{ texto: 'La experiencia', href: rutas.es.experiencia }, { texto: modalidad.titulo }]}
+    imagen={{ toma: galeria[0], alt: modalidad.resumen }}
+  >
+    <div class="flex flex-wrap items-center gap-3">
+      <IndicadorTemporada />
+      <a href="#reservar" class="btn btn-luz">Reservá esta modalidad</a>
+    </div>
+  </CabeceraPagina>
+
+  <section class="contenedor py-[clamp(3rem,8vh,6rem)]" aria-label="Galería">
+    <div class="galeria grid grid-cols-2 gap-3 md:grid-cols-4 md:grid-rows-2">
+      {galeria.slice(1).map((toma, i) => (
+        <div class={i === 0 ? 'col-span-2 row-span-2' : ''}>
+          <Imagen proporcion="1/1" toma={toma} alt={toma} revelar />
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="contenedor grid gap-12 pb-[clamp(4rem,10vh,7rem)] lg:grid-cols-[1.1fr_0.9fr]" aria-labelledby="que-haces">
+    <div class="grid content-start gap-6">
+      <h2 id="que-haces" class="text-[clamp(1.7rem,3.4vw,2.8rem)]">Qué vas a hacer</h2>
+      <ul class="grid gap-4">
+        {queHaces.map((linea) => (
+          <li class="revelar flex gap-4 border-b border-line pb-4 text-lg">
+            <span class="mt-1.5 h-3 w-3 shrink-0 rounded-full bg-deco" aria-hidden="true"></span>
+            <span>{linea}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <aside class="tarjeta grid content-start gap-4 p-7" aria-labelledby="datos-titulo">
+      <h2 id="datos-titulo" class="font-body text-xl font-semibold text-ink">Datos de la visita</h2>
+      <dl class="grid gap-3">
+        {datos.map((d) => (
+          <div class="grid gap-0.5 border-b border-line pb-3 last:border-0">
+            <dt class="text-sm text-muted">{d.etiqueta}</dt>
+            <dd class="font-semibold">{d.valor}</dd>
+          </div>
+        ))}
+        <div class="grid gap-0.5 border-b border-line pb-3">
+          <dt class="text-sm text-muted">Política de cancelación</dt>
+          <dd><Pendiente texto="política de cancelación" /></dd>
+        </div>
+        <div class="grid gap-0.5">
+          <dt class="text-sm text-muted">Qué llevar</dt>
+          <dd>Ropa cómoda y calzado cerrado para caminar por la chacra. <Pendiente texto="recomendaciones de la chacra" /></dd>
+        </div>
+      </dl>
+    </aside>
+  </section>
+
+  <section class="contenedor grid gap-10 pb-[clamp(4rem,10vh,7rem)] lg:grid-cols-2">
+    <TablaTarifas />
+    <AvisoAccesibilidad id={`aviso-${id}`} />
+  </section>
+
+  <section id="reservar" class="bg-surface-2 py-[clamp(5rem,12vh,9rem)]" aria-labelledby="reservar-titulo">
+    <div class="contenedor grid items-start gap-10 lg:grid-cols-[0.9fr_1.1fr]">
+      <div class="grid gap-6">
+        <h2 id="reservar-titulo" class="text-[clamp(1.6rem,3.1vw,2.6rem)] leading-[0.98]">Reservá tu lugar</h2>
+        <ListaSalidas salidas={salidasModalidad} />
+      </div>
+      <FormularioReserva salidas={salidasModalidad} id="reserva" />
+    </div>
+  </section>
+
+  <div class="contenedor grid gap-24 py-[clamp(4rem,12vh,8rem)]">
+    <PreguntasFrecuentes temas={['experiencia']} />
+    <TambienTeInteresa
+      enlaces={[
+        otra,
+        { titulo: 'La chacra y la comunidad', texto: 'Patricia Real, la Chacra La Victoria y la feria de Colonia Osimani.', href: rutas.es.chacra },
+        { titulo: 'Planificá tu visita', texto: 'Cómo llegar, clima, temporada y qué llevar.', href: rutas.es.planifica },
+      ]}
+    />
+  </div>
+</Base>

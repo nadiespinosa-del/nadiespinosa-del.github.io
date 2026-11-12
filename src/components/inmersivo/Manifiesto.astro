@@ -1,0 +1,89 @@
+---
+// Manifiesto: un párrafo editorial grande cuyas palabras se "encienden" a medida que se lee.
+import { elegir, type Idioma } from '../../i18n/ui';
+import { foto } from '../../lib/fotos';
+interface Props { idioma?: Idioma }
+const { idioma = 'es' } = Astro.props;
+const T = elegir(idioma, {
+  es: { titulo: 'Qué es Camino de Azahar', texto: 'En Salto, la naranja es más que una fruta: es paisaje, memoria y trabajo. Camino de Azahar te lleva a una chacra en funcionamiento para que la recorras con las manos en la fruta.', apoyo: 'Desde que Pedro Gallino plantó un almácigo de mandarinos en La Amarilla, hacia 1864, el azahar forma parte de la historia del departamento. Esta visita la cuenta desde adentro.', fuente: 'Fuente: Museo del Hombre y la Tecnología de Salto.' },
+  pt: { titulo: 'O que é o Camino de Azahar', texto: 'Em Salto, a laranja é mais do que uma fruta: é paisagem, memória e trabalho. O Camino de Azahar leva você a uma chácara em funcionamento para percorrê-la com as mãos na fruta.', apoyo: 'Desde que Pedro Gallino plantou uma sementeira de tangerineiras em La Amarilla, por volta de 1864, a flor de laranjeira (o azahar) faz parte da história do departamento. Esta visita a conta por dentro.', fuente: 'Fonte: Museo del Hombre y la Tecnología de Salto.' },
+  en: { titulo: 'What Camino de Azahar is', texto: 'In Salto, the orange is more than a fruit: it is landscape, memory and work. Camino de Azahar takes you to a working farm to explore it with your hands on the fruit.', apoyo: "Ever since Pedro Gallino planted a seedbed of mandarin trees at La Amarilla around 1864, orange blossom (azahar, in Spanish) has been part of the region's story. This visit tells it from the inside.", fuente: 'Source: Museo del Hombre y la Tecnología de Salto.' },
+});
+const fondo = foto('filas-naranjos', idioma);
+const poster = foto('mandarino-cargado', idioma);
+const V = elegir(idioma, {
+  es: { video: 'Video del naranjal de la Chacra La Victoria: mandarinos cargados de fruta', pausar: 'Pausar el video', reproducir: 'Reproducir el video' },
+  pt: { video: 'Vídeo do laranjal da Chacra La Victoria: tangerineiras carregadas de frutas', pausar: 'Pausar o vídeo', reproducir: 'Reproduzir o vídeo' },
+  en: { video: 'Video of the Chacra La Victoria grove: mandarin trees full of fruit', pausar: 'Pause the video', reproducir: 'Play the video' },
+});
+---
+<section id="manifiesto" class="manifiesto relative isolate overflow-hidden bg-bg py-[clamp(6rem,16vh,12rem)]" aria-labelledby="manifiesto-titulo">
+  <!-- Naranjal de la chacra, difuminado detrás del texto (decorativo) -->
+  <img src={fondo.src} alt="" aria-hidden="true" loading="lazy" decoding="async" class="manifiesto-fondo absolute inset-0 -z-20 h-full w-full object-cover" />
+  <div class="manifiesto-velo absolute inset-0 -z-10" aria-hidden="true"></div>
+  <div class="contenedor grid items-center gap-12 lg:grid-cols-[1.35fr_0.65fr]">
+    <div class="grid gap-10">
+      <h2 id="manifiesto-titulo" class="solo-lectores">{T.titulo}</h2>
+      <p class="manifiesto-texto max-w-[22ch] font-display text-[clamp(1.6rem,3.6vw,3.1rem)] leading-[1.08] text-heading">{T.texto}</p>
+      <div class="grid gap-2 md:ml-[30%] md:max-w-[44ch]">
+        <p class="text-lg text-muted">{T.apoyo}</p>
+        <p class="text-sm text-muted">{T.fuente}</p>
+      </div>
+    </div>
+    <!-- Video propio del naranjal (vertical, sin sonido, en loop) con botón de pausa -->
+    <figure class="manifiesto-video relative mx-auto w-full max-w-[20rem] overflow-hidden rounded-[var(--ca-radius-lg)] shadow-card">
+      <video class="block aspect-[9/16] w-full object-cover" src="/videos/camino-de-azahar.mp4" poster={poster.src} muted loop playsinline preload="metadata" aria-label={V.video}></video>
+      <button type="button" class="video-boton absolute bottom-3 right-3 flex h-11 w-11 items-center justify-center rounded-full bg-[#10231a]/70 text-[#fbf2e1] backdrop-blur" aria-pressed="false" data-pausar={V.pausar} data-reproducir={V.reproducir} aria-label={V.reproducir}>
+        <svg class="icono-play" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z" /></svg>
+        <svg class="icono-pausa hidden" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z" /></svg>
+      </button>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .manifiesto-fondo { filter: blur(10px) saturate(1.1); transform: scale(1.12); opacity: 0.55; }
+  /* Velo crema: deja ver el naranjal como una textura cálida sin restarle contraste al texto */
+  .manifiesto-velo {
+    background:
+      linear-gradient(90deg, var(--ca-bg) 0%, color-mix(in srgb, var(--ca-bg) 82%, transparent) 55%, color-mix(in srgb, var(--ca-bg) 55%, transparent) 100%),
+      linear-gradient(180deg, var(--ca-bg) 0%, transparent 18%, transparent 82%, var(--ca-bg) 100%);
+  }
+</style>
+
+<script>
+  // Video: se reproduce solo cuando está en pantalla (y nunca solo si se pidió reducir movimiento)
+  const figura = document.querySelector<HTMLElement>('.manifiesto-video');
+  const video = figura?.querySelector('video');
+  const boton = figura?.querySelector<HTMLButtonElement>('.video-boton');
+  if (video && boton) {
+    const sinMovimiento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let pausadoPorUsuario = sinMovimiento;
+    const actualizar = () => {
+      const sonando = !video.paused;
+      boton.setAttribute('aria-pressed', String(sonando));
+      boton.setAttribute('aria-label', sonando ? boton.dataset.pausar! : boton.dataset.reproducir!);
+      boton.querySelector('.icono-play')?.classList.toggle('hidden', sonando);
+      boton.querySelector('.icono-pausa')?.classList.toggle('hidden', !sonando);
+    };
+    video.addEventListener('play', actualizar);
+    video.addEventListener('pause', actualizar);
+    boton.addEventListener('click', () => {
+      if (video.paused) { pausadoPorUsuario = false; video.play().catch(() => {}); }
+      else { pausadoPorUsuario = true; video.pause(); }
+    });
+    new IntersectionObserver(([e]) => {
+      if (e.isIntersecting && !pausadoPorUsuario) video.play().catch(() => {});
+      else if (!e.isIntersecting) video.pause();
+    }, { threshold: 0.3 }).observe(video);
+  }
+</script>
+
+<script>
+  import { gsap, SplitText, reducido } from '../../scripts/movimiento';
+  const texto = document.querySelector<HTMLElement>('.manifiesto-texto');
+  if (texto && !reducido) {
+    const partido = SplitText.create(texto, { type: 'words' });
+    gsap.fromTo(partido.words, { opacity: 0.14 }, { opacity: 1, ease: 'none', stagger: 0.08, scrollTrigger: { trigger: texto, start: 'top 78%', end: 'bottom 45%', scrub: true } });
+  }
+</script>

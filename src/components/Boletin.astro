@@ -1,0 +1,72 @@
+---
+// Suscripción al boletín de temporada.
+// El servicio de envío todavía no está definido: el formulario valida, pero no guarda datos,
+// y lo dice con claridad. Cuando haya servicio (con doble opt-in), se conecta en el script.
+import Rodaja from './Rodaja.astro';
+import { elegir, type Idioma } from '../i18n/ui';
+import { textosValidacion } from '../i18n/formularios';
+interface Props { idioma?: Idioma; id?: string; general?: boolean }
+const { idioma = 'es', id = 'boletin', general = false } = Astro.props;
+const base = elegir(idioma, {
+  es: { ante: 'Boletín de temporada', titulo: 'Te avisamos cuando empiece la zafra y cuando florezca el azahar', bajada: 'Dos o tres correos por año, solo con lo importante: nuevas salidas y el mejor momento para venir.', email: 'Tu email', errEmail: 'Escribí tu email.', ph: 'nombre@correo.com', idioma: 'Idioma', perfil: 'Me interesa como…', visitante: 'Visitante', docente: 'Docente', agencia: 'Agencia o alojamiento', boton: 'Suscribirme', exito: 'Gracias por tu interés. El boletín todavía no está activo: tu email no se guardó. Muy pronto vas a poder suscribirte desde acá.' },
+  pt: { ante: 'Boletim da temporada', titulo: 'Avisamos quando começar a safra e quando as laranjeiras florescerem', bajada: 'Dois ou três e-mails por ano, só com o essencial: novas saídas e a melhor época para vir.', email: 'Seu e-mail', errEmail: 'Escreva seu e-mail.', ph: 'nome@email.com', idioma: 'Idioma', perfil: 'Tenho interesse como…', visitante: 'Visitante', docente: 'Professor(a)', agencia: 'Agência ou hospedagem', boton: 'Quero receber', exito: 'Obrigado pelo interesse. O boletim ainda não está ativo: seu e-mail não foi salvo. Em breve você poderá se inscrever por aqui.' },
+  en: { ante: 'Seasonal newsletter', titulo: "We'll tell you when the harvest starts and when the orange blossom opens", bajada: 'Two or three emails a year, only what matters: new departures and the best time to come.', email: 'Your email', errEmail: 'Enter your email.', ph: 'name@email.com', idioma: 'Language', perfil: "I'm interested as a…", visitante: 'Visitor', docente: 'Teacher', agencia: 'Travel agency or accommodation', boton: 'Subscribe', exito: "Thanks for your interest. The newsletter isn't active yet: your email was not saved. You'll be able to subscribe here soon." },
+});
+// Versión general de VÍA (inicio): novedades de todas las experiencias
+const textoGeneral = elegir(idioma, {
+  es: { ante: 'Novedades de VÍA', titulo: 'Enterate primero de las nuevas experiencias', bajada: 'Pocos correos, solo con lo importante: nuevas propuestas, fechas y temporadas en Uruguay.' },
+  pt: { ante: 'Novidades da VÍA', titulo: 'Saiba antes das novas experiências', bajada: 'Poucos e-mails, só com o essencial: novas propostas, datas e temporadas no Uruguai.' },
+  en: { ante: 'VÍA news', titulo: 'Be the first to hear about new experiences', bajada: 'Only a few emails, with what matters: new experiences, dates and seasons in Uruguay.' },
+});
+const T = general ? { ...base, ...textoGeneral } : base;
+---
+<section class="on-deep relative overflow-hidden rounded-[var(--ca-radius-lg)] bg-deep text-on-deep" aria-labelledby={`${id}-titulo`}>
+  <Rodaja tamano={320} grosor={1.2} class="pointer-events-none absolute -right-20 -top-20 text-highlight opacity-15" />
+  <form class="formulario-boletin relative grid gap-6 p-6 sm:p-10 lg:grid-cols-[1fr_1.1fr] lg:items-end" novalidate data-textos={JSON.stringify(textosValidacion[idioma])}>
+    <div class="grid gap-3">
+      <p class="antetitulo !text-highlight">{T.ante}</p>
+      <h3 id={`${id}-titulo`} class="text-3xl !text-on-deep">{T.titulo}</h3>
+      <p class="text-on-deep-muted">{T.bajada}</p>
+    </div>
+    <div class="grid gap-4">
+      <div data-resumen-errores tabindex="-1" hidden class="rounded-[var(--ca-radius)] bg-err p-4 text-on-err" role="alert"></div>
+      <div class="grid gap-4 sm:grid-cols-[1fr_auto]">
+        <div class="campo">
+          <label for={`${id}-email`} class="!text-on-deep">{T.email} *</label>
+          <input id={`${id}-email`} type="email" class="control" required autocomplete="email" placeholder={T.ph} data-error={T.errEmail} aria-describedby={`${id}-email-error`} />
+          <p id={`${id}-email-error`} class="error-campo !text-highlight" aria-live="polite"></p>
+        </div>
+        <div class="campo">
+          <label for={`${id}-idioma`} class="!text-on-deep">{T.idioma}</label>
+          <select id={`${id}-idioma`} class="control">
+            <option selected={idioma === 'es'}>Español</option><option selected={idioma === 'pt'}>Português</option><option selected={idioma === 'en'}>English</option>
+          </select>
+        </div>
+      </div>
+      <fieldset class="flex flex-wrap gap-x-6 gap-y-2">
+        <legend class="mb-2 font-semibold">{T.perfil}</legend>
+        <label class="flex items-center gap-2"><input type="radio" name={`${id}-perfil`} value="visitante" checked /> {T.visitante}</label>
+        <label class="flex items-center gap-2"><input type="radio" name={`${id}-perfil`} value="docente" /> {T.docente}</label>
+        <label class="flex items-center gap-2"><input type="radio" name={`${id}-perfil`} value="agencia" /> {T.agencia}</label>
+      </fieldset>
+      <div><button type="submit" class="btn btn-luz">{T.boton}</button></div>
+      <p data-exito tabindex="-1" hidden role="status" class="rounded-[var(--ca-radius)] bg-on-deep p-4 font-semibold text-deep">{T.exito}</p>
+    </div>
+  </form>
+</section>
+
+<script>
+  import { validarCampos, mostrarResumen, limpiarAlEditar } from '../scripts/formularios';
+  document.querySelectorAll<HTMLFormElement>('form.formulario-boletin').forEach((form) => {
+    limpiarAlEditar(form);
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const errores = validarCampos(form);
+      mostrarResumen(form, errores);
+      if (errores.length) return;
+      // Pendiente: conectar el servicio de boletín con doble opt-in. Hasta entonces no se envían datos.
+      const exito = form.querySelector<HTMLElement>('[data-exito]');
+      if (exito) { exito.hidden = false; exito.focus(); }
+    });
+  });
+</script>

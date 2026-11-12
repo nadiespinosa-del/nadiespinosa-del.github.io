@@ -1,0 +1,25 @@
+{
+  "momentos": [
+    {
+      "anio": "1864",
+      "titulo": "A seedbed at La Amarilla",
+      "texto": "Around 1864, Pedro Gallino planted a seedbed of mandarin trees at the La Amarilla estate, near today's Rodó Obelisk. The seeds had been brought from Rio de Janeiro by José Gonçalvez Amorim.",
+      "fuente": "Museo del Hombre y la Tecnología de Salto; Padrón Favre (2008)",
+      "foto": "Imagen de archivo de una quinta salteña del siglo XIX o grabado de época"
+    },
+    {
+      "anio": "1926",
+      "titulo": "Orange trees in the streets",
+      "texto": "Pedro Benito Solari championed planting orange trees along the streets of Salto, offering trees for the city. The idea later spread to the towns of Belén and Constitución.",
+      "fuente": "Archivo Isidra Solari",
+      "foto": "Fotografía de archivo de una calle de Salto con naranjos"
+    },
+    {
+      "anio": "1972",
+      "titulo": "Seventeen vaults for the fruit",
+      "texto": "The Citrícola Salteña packing house, designed by engineer Eladio Dieste, is completed: 17 double-curvature vaults of reinforced brick span 45 metres with no columns in between.",
+      "fuente": "FADU, Universidad de la República",
+      "foto": "Bóvedas de Dieste vistas desde el interior, luz de los lucernarios, plano general"
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+---
+// Próximas salidas programadas (cupo de 10 a 25 personas). Las familias se suman a una salida.
+// Los datos vienen de src/data/salidas.json. Formato de cada salida:
+// { "fecha": "2027-05-15", "hora": "09:30", "modalidad": "con-fruto", "lugaresLibres": 18, "estado": "abierta" }
+// estado: "abierta" | "a-confirmar"  (la etiqueta "Últimos lugares" o "Completa" se calcula sola)
+import BotonWhatsApp from './BotonWhatsApp.astro';
+import site from '../data/site.json';
+import { experiencia } from '../lib/datos';
+import { fechaLarga } from '../lib/util';
+import { elegir, type Idioma } from '../i18n/ui';
+
+interface Salida { fecha: string; hora?: string; modalidad: string; lugaresLibres: number; estado?: string }
+interface Props { idioma?: Idioma; salidas: Salida[]; limite?: number; ejemplo?: boolean }
+const { idioma = 'es', salidas, limite = 6, ejemplo = false } = Astro.props;
+const hoy = new Date().toISOString().slice(0, 10);
+const proximas = salidas.filter((s) => ejemplo || s.fecha >= hoy).sort((a, b) => a.fecha.localeCompare(b.fecha)).slice(0, limite);
+const nombreModalidad = (id: string) => experiencia(idioma).modalidades.find((m) => m.id === id)?.titulo ?? id;
+const T = elegir(idioma, {
+  es: {
+    confirmar: 'Fecha a confirmar', completa: 'Completa', ultimos: (n: number) => `Últimos ${n} lugares`, libres: (n: number) => `${n} lugares libres`,
+    proximas: 'Fechas y horarios', vacioTitulo: 'Fechas coordinables',
+    vacioTexto: `Las fechas y los horarios se coordinan al reservar, según la organización de la experiencia y la actividad productiva de la chacra. Las salidas son de ${site.cupo.minimo} a ${site.cupo.maximo} personas: si venís en familia, te sumás a un grupo.`,
+    avisame: 'Coordinar una fecha', avisameMsj: 'Hola, quiero coordinar una fecha para Camino de Azahar.',
+    liberar: 'Avisame si se libera un lugar', liberarMsj: (f: string) => `Hola, la salida del ${f} está completa. ¿Me avisan si se libera un lugar?`,
+    reservar: 'Reservar esta salida', hs: 'h',
+  },
+  pt: {
+    confirmar: 'Data a confirmar', completa: 'Esgotada', ultimos: (n: number) => `Últimas ${n} vagas`, libres: (n: number) => `${n} vagas disponíveis`,
+    proximas: 'Próximas saídas', vacioTitulo: 'Estamos montando o calendário',
+    vacioTexto: `Ainda não há datas publicadas. Escreva para nós e avisamos assim que abrirmos a próxima saída. As saídas são de ${site.cupo.minimo} a ${site.cupo.maximo} pessoas: se você vem em família, entra em um grupo.`,
+    avisame: 'Quero saber das próximas datas', avisameMsj: 'Olá, quero ser avisado quando houver datas para o Camino de Azahar.',
+    liberar: 'Avise-me se abrir uma vaga', liberarMsj: (f: string) => `Olá, a saída de ${f} está esgotada. Podem me avisar se abrir uma vaga?`,
+    reservar: 'Reservar esta saída', hs: 'h',
+  },
+  en: {
+    confirmar: 'Date to be confirmed', completa: 'Full', ultimos: (n: number) => `Last ${n} spots`, libres: (n: number) => `${n} spots left`,
+    proximas: 'Upcoming departures', vacioTitulo: "We're putting the calendar together",
+    vacioTexto: `No dates have been published yet. Message us and we'll let you know as soon as the next departure opens. Groups are ${site.cupo.minimo} to ${site.cupo.maximo} people: families and couples join a group.`,
+    avisame: 'Tell me about upcoming dates', avisameMsj: 'Hi, please let me know when there are dates for Camino de Azahar.',
+    liberar: 'Let me know if a spot opens', liberarMsj: (f: string) => `Hi, the departure on ${f} is full. Could you let me know if a spot opens up?`,
+    reservar: 'Book this departure', hs: '',
+  },
+});
+function estadoDe(s: Salida) {
+  if (s.estado === 'a-confirmar') return { clase: 'chip-warn', texto: T.confirmar };
+  if (s.lugaresLibres <= 0) return { clase: 'chip-err', texto: T.completa };
+  if (s.lugaresLibres <= 5) return { clase: 'chip-warn', texto: T.ultimos(s.lugaresLibres) };
+  return { clase: 'chip-ok', texto: T.libres(s.lugaresLibres) };
+}
+---
+{proximas.length === 0 ? (
+  <div class="tarjeta grid justify-items-start gap-3 p-8">
+    <p class="antetitulo">{T.proximas}</p>
+    <h3 class="text-2xl">{T.vacioTitulo}</h3>
+    <p class="medida text-muted">{T.vacioTexto}</p>
+    <BotonWhatsApp idioma={idioma} variante="primario" texto={T.avisame} mensaje={T.avisameMsj} />
+  </div>
+) : (
+  <ul class="grid gap-3">
+    {proximas.map((s) => {
+      const estado = estadoDe(s);
+      const completa = s.lugaresLibres <= 0;
+      const fechaTexto = fechaLarga(s.fecha, idioma);
+      return (
+        <li class="tarjeta grid items-center gap-4 p-5 sm:grid-cols-[1fr_auto]">
+          <div class="grid gap-1.5">
+            <p class="font-display text-xl text-heading">{fechaTexto}</p>
+            <p class="text-muted">{s.hora ? `${s.hora}${T.hs ? ` ${T.hs}` : ''} · ` : ''}{nombreModalidad(s.modalidad)}</p>
+            <p><span class={`chip ${estado.clase}`}>{estado.texto}</span></p>
+          </div>
+          {completa ? (
+            <BotonWhatsApp idioma={idioma} variante="secundario" texto={T.liberar} mensaje={T.liberarMsj(fechaTexto)} />
+          ) : (
+            <a href="#reserva" class="btn btn-primario" data-elegir-salida={s.fecha}>{T.reservar}</a>
+          )}
+        </li>
+      );
+    })}
+  </ul>
+)}

@@ -1,0 +1,71 @@
+---
+// Pronóstico de 5 días para Salto (Open-Meteo, servicio abierto sin clave ni datos personales).
+// Estados: cargando, con datos y error. Recuerda la política de lluvia.
+import { elegir, idiomas, type Idioma } from '../i18n/ui';
+interface Props { idioma?: Idioma }
+const { idioma = 'es' } = Astro.props;
+const T = elegir(idioma, {
+  es: { titulo: 'El tiempo en Salto, próximos 5 días', fuente: 'Fuente: Open-Meteo', error: 'No pudimos cargar el pronóstico ahora. Igual te lo mandamos en el recordatorio antes de tu visita.', lluvia: 'Si llueve el día de tu salida, se reprograma sin costo o se hace la parte interpretativa bajo techo.', prob: 'Lluvia', estados: ['Despejado', 'Parcialmente nublado', 'Niebla', 'Tormenta', 'Lluvia', 'Nublado'] },
+  pt: { titulo: 'O tempo em Salto, próximos 5 dias', fuente: 'Fonte: Open-Meteo', error: 'Não foi possível carregar a previsão agora. De qualquer forma, enviamos no lembrete antes da sua visita.', lluvia: 'Se chover no dia da sua saída, a visita é remarcada sem custo ou a parte interpretativa é feita em local coberto.', prob: 'Chuva', estados: ['Céu limpo', 'Parcialmente nublado', 'Neblina', 'Tempestade', 'Chuva', 'Nublado'] },
+  en: { titulo: 'Weather in Salto, next 5 days', fuente: 'Source: Open-Meteo', error: "We couldn't load the forecast right now. We'll include it in the reminder before your visit.", lluvia: 'If it rains on the day of your visit, we reschedule free of charge or hold the interpretive part indoors.', prob: 'Rain', estados: ['Clear', 'Partly cloudy', 'Fog', 'Thunderstorm', 'Rain', 'Cloudy'] },
+});
+---
+<section class="clima-salto tarjeta grid gap-5 p-6" aria-labelledby="clima-titulo" aria-live="polite" data-locale={idiomas[idioma].locale} data-estados={JSON.stringify(T.estados)} data-prob={T.prob}>
+  <div class="flex flex-wrap items-baseline justify-between gap-2">
+    <h3 id="clima-titulo" class="font-body text-lg font-semibold text-ink">{T.titulo}</h3>
+    <p class="text-xs text-muted">{T.fuente}</p>
+  </div>
+  <ul class="clima-lista grid grid-cols-5 gap-2">
+    {[0, 1, 2, 3, 4].map(() => (
+      <li class="clima-dia grid animate-pulse justify-items-center gap-1 rounded-[var(--ca-radius)] bg-surface-2 p-3 text-center">
+        <span class="h-4 w-10 rounded bg-line"></span>
+        <span class="h-8 w-8 rounded-full bg-line"></span>
+        <span class="h-4 w-12 rounded bg-line"></span>
+      </li>
+    ))}
+  </ul>
+  <p class="clima-error hidden text-sm text-muted">{T.error}</p>
+  <p class="text-sm text-muted">{T.lluvia}</p>
+</section>
+
+<script>
+  const seccion = document.querySelector<HTMLElement>('.clima-salto');
+  const lista = seccion?.querySelector<HTMLElement>('.clima-lista');
+  // Íconos de trazo fino propios (sin emojis)
+  const svg = (contenido: string) =>
+    `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${contenido}</svg>`;
+  const sol = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>';
+  const nube = '<path d="M7 18h10a4 4 0 0 0 0-8 6 6 0 0 0-11.5 1.5A3.5 3.5 0 0 0 7 18z"/>';
+  if (seccion && lista) {
+    const locale = seccion.dataset.locale || 'es-UY';
+    const estados: string[] = JSON.parse(seccion.dataset.estados || '[]');
+    const icono = (codigo: number) => {
+      if (codigo === 0) return { s: svg(sol), t: estados[0] };
+      if (codigo <= 3) return { s: svg('<path d="M8 4v1M4.2 5.6l.7.7M3 10h1"/><path d="M6.5 11a3.5 3.5 0 0 1 6.3-2"/>' + nube), t: estados[1] };
+      if (codigo <= 48) return { s: svg('<path d="M4 10h16M4 14h16M6 18h12M7 6h10"/>'), t: estados[2] };
+      if (codigo >= 95) return { s: svg(nube + '<path d="M12 18l-2 3h3l-2 3"/>'), t: estados[3] };
+      if (codigo >= 51) return { s: svg('<path d="M7 15h10a4 4 0 0 0 0-8 6 6 0 0 0-11.5 1.5A3.5 3.5 0 0 0 7 15z"/><path d="M8 18l-1 3M12 18l-1 3M16 18l-1 3"/>'), t: estados[4] };
+      return { s: svg(nube), t: estados[5] };
+    };
+    fetch('https://api.open-meteo.com/v1/forecast?latitude=-31.39&longitude=-57.96&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=America%2FMontevideo&forecast_days=5')
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((d) => {
+        lista.innerHTML = d.daily.time
+          .map((fecha: string, i: number) => {
+            const dia = new Date(`${fecha}T12:00:00`).toLocaleDateString(locale, { weekday: 'short' }).replace('.', '');
+            const ic = icono(d.daily.weather_code[i]);
+            return `<li class="grid justify-items-center gap-1 rounded-[var(--ca-radius)] bg-surface-2 p-3 text-center">
+              <span class="text-sm font-semibold capitalize">${dia}</span>
+              <span class="text-heading" role="img" aria-label="${ic.t}">${ic.s}</span>
+              <span class="text-sm"><strong>${Math.round(d.daily.temperature_2m_max[i])}°</strong> <span class="text-muted">${Math.round(d.daily.temperature_2m_min[i])}°</span></span>
+              <span class="text-xs text-muted">${seccion.dataset.prob} ${d.daily.precipitation_probability_max[i] ?? 0}%</span>
+            </li>`;
+          })
+          .join('');
+      })
+      .catch(() => {
+        lista.classList.add('hidden');
+        seccion.querySelector('.clima-error')?.classList.remove('hidden');
+      });
+  }
+</script>

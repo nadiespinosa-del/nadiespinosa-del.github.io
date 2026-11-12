@@ -1,0 +1,32 @@
+---
+// Navegación propia de Camino de Azahar dentro de VÍA: queda fija bajo el encabezado general.
+// Otras experiencias pueden tener su propia barra con la misma estructura.
+import Rodaja from './Rodaja.astro';
+import { rutas, rutaReservar, type Idioma } from '../i18n/ui';
+interface Props { idioma?: Idioma; actual: string }
+const { idioma = 'es', actual } = Astro.props;
+const r = rutas[idioma];
+const enlaces = [
+  { href: r.azahar, texto: 'La experiencia' },
+  { href: r.naranja, texto: 'La naranja en Salto' },
+  { href: r.chacra, texto: 'La chacra' },
+  { href: r.planifica, texto: 'Planificá tu visita' },
+  { href: r.azaharGrupos, texto: 'Escuelas' },
+];
+---
+<nav class="nav-experiencia sticky top-[72px] z-30 border-b border-line bg-surface/95 backdrop-blur" aria-label="Camino de Azahar">
+  <div class="contenedor flex items-center gap-4 overflow-x-auto py-2 [scrollbar-width:none]">
+    <a href={r.azahar} class="flex shrink-0 items-center gap-2 font-display text-lg italic text-heading no-underline">
+      <Rodaja tamano={24} grosor={5} class="text-deco" /> Camino de Azahar
+    </a>
+    <span class="h-5 w-px shrink-0 bg-line-strong" aria-hidden="true"></span>
+    <ul class="flex shrink-0 items-center gap-1">
+      {enlaces.map((e) => (
+        <li>
+          <a href={e.href} class="block whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-semibold text-muted no-underline hover:bg-surface-2 hover:text-heading aria-[current=page]:bg-surface-2 aria-[current=page]:text-heading" aria-current={actual === e.href ? 'page' : undefined}>{e.texto}</a>
+        </li>
+      ))}
+    </ul>
+    <a href={rutaReservar(idioma)} class="btn btn-primario btn-pequeno ml-auto hidden shrink-0 md:inline-flex">Reservar</a>
+  </div>
+</nav>

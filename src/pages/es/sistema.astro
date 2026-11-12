@@ -1,0 +1,331 @@
+---
+// Página del sistema de diseño (Etapa 2): todos los componentes y sus estados.
+// Es una página interna de trabajo: no se indexa en buscadores.
+import Base from '../../layouts/Base.astro';
+import Rodaja from '../../components/Rodaja.astro';
+import Separador from '../../components/Separador.astro';
+import Pendiente from '../../components/Pendiente.astro';
+import Imagen from '../../components/Imagen.astro';
+import IndicadorTemporada from '../../components/IndicadorTemporada.astro';
+import LineaEtapas from '../../components/LineaEtapas.astro';
+import TarjetaModalidad from '../../components/TarjetaModalidad.astro';
+import TablaTarifas from '../../components/TablaTarifas.astro';
+import AvisoAccesibilidad from '../../components/AvisoAccesibilidad.astro';
+import ListaSalidas from '../../components/ListaSalidas.astro';
+import BotonWhatsApp from '../../components/BotonWhatsApp.astro';
+import EnlaceEmail from '../../components/EnlaceEmail.astro';
+import FormularioReserva from '../../components/FormularioReserva.astro';
+import FormularioGrupos from '../../components/FormularioGrupos.astro';
+import RetratoPersona from '../../components/RetratoPersona.astro';
+import LineaHistoria from '../../components/LineaHistoria.astro';
+import CalendarioTemporada from '../../components/CalendarioTemporada.astro';
+import Boletin from '../../components/Boletin.astro';
+import Llamado from '../../components/Llamado.astro';
+import experiencia from '../../data/experiencia.json';
+import salidasReales from '../../data/salidas.json';
+
+// Salidas de EJEMPLO solo para mostrar los estados en esta página (no son fechas reales).
+const salidasEjemplo = [
+  { fecha: '2027-05-15', hora: '09:30', modalidad: 'con-fruto', lugaresLibres: 18, estado: 'abierta' },
+  { fecha: '2027-05-22', hora: '09:30', modalidad: 'con-fruto', lugaresLibres: 3, estado: 'abierta' },
+  { fecha: '2027-05-29', hora: '15:00', modalidad: 'con-fruto', lugaresLibres: 0, estado: 'abierta' },
+  { fecha: '2027-06-05', modalidad: 'educativa', lugaresLibres: 25, estado: 'a-confirmar' },
+];
+
+const colores = [
+  { nombre: 'Naranja maduro', rol: 'Primario: botones y acentos', hex: '#B54E17', var: '--ca-naranja', texto: 'Blanco encima: 5,2:1 (AA)', claro: false },
+  { nombre: 'Verde hoja', rol: 'Profundo: secciones de prestigio y titulares', hex: '#1F3A2B', var: '--ca-verde', texto: 'Sobre crema: 11,3:1 (AAA)', claro: false },
+  { nombre: 'Crema de azahar', rol: 'Neutro claro: fondo general', hex: '#FAF4E8', var: '--ca-crema', texto: 'Base del sitio', claro: true },
+  { nombre: 'Tierra del litoral', rol: 'Acentos secundarios y antetítulos', hex: '#9C4A2F', var: '--ca-tierra', texto: 'Sobre crema: 5,6:1 (AA)', claro: false },
+  { nombre: 'Luz dorada', rol: 'Destacados y botón sobre verde (nunca texto)', hex: '#F2C14E', var: '--ca-dorado', texto: 'Tinta encima: 10,1:1', claro: true },
+  { nombre: 'Tinta cálida', rol: 'Texto principal', hex: '#231C16', var: '--ca-tinta', texto: 'Sobre crema: 15,4:1 (AAA)', claro: false },
+  { nombre: 'Naranja vivo', rol: 'Solo decorativo: rodajas, números, comillas', hex: '#E07A2E', var: '--ca-naranja-vivo', texto: 'No usar para texto en modo claro', claro: false },
+];
+
+const escala = [
+  { clase: 'text-4xl', etiqueta: 'Display · h1', texto: 'Salto se descubre por la naranja' },
+  { clase: 'text-3xl', etiqueta: 'h2', texto: 'Cinco etapas, una tarde' },
+  { clase: 'text-2xl', etiqueta: 'h3 destacado', texto: 'Diecisiete bóvedas para la fruta' },
+  { clase: 'text-xl', etiqueta: 'h3', texto: 'Elaboración de jugo' },
+];
+
+const indice = [
+  ['colores', 'Colores'], ['tipografia', 'Tipografía'], ['botones', 'Botones'], ['insignias', 'Insignias y temporada'],
+  ['recursos', 'Recursos gráficos'], ['imagenes', 'Imágenes pendientes'], ['etapas', 'Etapas'], ['modalidades', 'Tarjetas'],
+  ['tarifas', 'Tarifas'], ['accesibilidad', 'Accesibilidad'], ['salidas', 'Salidas'], ['contacto', 'Contacto'],
+  ['reserva-demo', 'Formulario de reserva'], ['grupos-demo', 'Formulario de grupos'], ['persona', 'Persona'],
+  ['historia', 'Historia'], ['calendario', 'Calendario'], ['llamado', 'Llamado'], ['boletin-demo', 'Boletín'],
+];
+---
+<Base
+  titulo="Sistema de diseño"
+  descripcion="Sistema de diseño de Camino de Azahar: colores, tipografía, componentes y estados."
+  noIndexar
+  whatsappFlotante="Hola, quiero reservar Camino de Azahar."
+>
+  <section class="contenedor grid gap-6 py-16 sm:py-24">
+    <p class="antetitulo">Etapa 2 · Dirección A «Luz de quinta»</p>
+    <h1 class="max-w-[16ch]">Sistema de diseño</h1>
+    <p class="medida text-lg text-muted">
+      Todos los componentes del sitio con sus estados, para revisar y aprobar antes de construir la Home.
+      Los recuadros punteados son contenido pendiente; las salidas de esta página son de ejemplo.
+    </p>
+    <nav aria-label="Secciones de esta página" class="mt-2">
+      <ul class="flex flex-wrap gap-2">
+        {indice.map(([id, texto]) => <li><a href={`#${id}`} class="chip no-underline hover:border-line-strong">{texto}</a></li>)}
+      </ul>
+    </nav>
+  </section>
+
+  <div class="contenedor grid gap-24 pb-24">
+    <!-- Colores -->
+    <section id="colores" class="grid gap-8 scroll-mt-28">
+      <div class="grid gap-2"><p class="antetitulo">01</p><h2>Colores</h2>
+        <p class="medida text-muted">Contrastes verificados con WCAG 2.2. El modo oscuro («noche en la quinta») se activa solo según la preferencia del dispositivo.</p></div>
+      <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {colores.map((c) => (
+          <li class="tarjeta overflow-hidden">
+            <div class={`h-28 ${c.claro ? 'border-b border-line' : ''}`} style={`background:${c.hex}`}></div>
+            <div class="grid gap-1 p-4">
+              <p class="font-semibold">{c.nombre}</p>
+              <p class="text-sm text-muted">{c.rol}</p>
+              <p class="font-mono text-xs">{c.hex} · var({c.var})</p>
+              <p class="text-xs text-muted">{c.texto}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <Separador />
+
+    <!-- Tipografía -->
+    <section id="tipografia" class="grid gap-8 scroll-mt-28">
+      <div class="grid gap-2"><p class="antetitulo">02</p><h2>Tipografía</h2>
+        <p class="medida text-muted">Fraunces para titulares (serif editorial con eje óptico) y Source Sans 3 para el texto. Ambas alojadas en el propio sitio, con soporte completo para español, portugués e inglés.</p></div>
+      <div class="grid gap-6">
+        {escala.map((e) => (
+          <div class="grid gap-1 border-b border-line pb-6">
+            <p class="text-xs text-muted">{e.etiqueta} · {e.clase}</p>
+            <p class={`font-display ${e.clase} leading-[1.1] text-heading`}>{e.texto}</p>
+          </div>
+        ))}
+        <div class="grid gap-1 border-b border-line pb-6">
+          <p class="text-xs text-muted">Cita · Fraunces itálica</p>
+          <p class="font-display text-2xl italic text-heading">«…tocar, arrancar, oler (…) y apreciar el aroma del azahar (…) es muy importante…»</p>
+        </div>
+        <div class="grid gap-3 md:grid-cols-2">
+          <div><p class="text-xs text-muted">Texto base · Source Sans 3 · 17–18 px · interlineado 1,65</p>
+            <p class="medida">La propuesta no se limita a mostrar los cultivos: busca que el visitante descubra las historias, los conocimientos y las personas que hay detrás de cada naranja. <Pendiente tipo="TEXTO PROVISORIO" texto="párrafo de muestra" /></p></div>
+          <div class="grid content-start gap-2"><p class="text-xs text-muted">Antetítulo · Texto secundario · Enlace</p>
+            <p class="antetitulo">Colonia Osimani · Salto</p>
+            <p class="text-muted">Texto secundario para datos de apoyo.</p>
+            <p><a href="#tipografia">Un enlace dentro del texto</a></p></div>
+        </div>
+      </div>
+    </section>
+
+    <Separador />
+
+    <!-- Botones -->
+    <section id="botones" class="grid gap-8 scroll-mt-28">
+      <div class="grid gap-2"><p class="antetitulo">03</p><h2>Botones</h2>
+        <p class="medida text-muted">Un solo botón primario por bloque. Área táctil mínima de 44–48 px. Probá pasar el mouse y navegar con Tab para ver el foco.</p></div>
+      <div class="grid gap-6 lg:grid-cols-2">
+        <div class="tarjeta grid gap-4 p-6">
+          <p class="text-sm font-semibold text-muted">Sobre fondo claro</p>
+          <div class="flex flex-wrap items-center gap-3">
+            <a href="#botones" class="btn btn-primario">Viví la experiencia</a>
+            <a href="#botones" class="btn btn-secundario">Conocé la historia</a>
+            <a href="#botones" class="btn btn-fantasma">Ver más →</a>
+          </div>
+          <div class="flex flex-wrap items-center gap-3">
+            <button type="button" class="btn btn-primario btn-pequeno">Pequeño</button>
+            <button type="button" class="btn btn-primario" aria-busy="true">
+              <span class="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" aria-hidden="true"></span>
+              Enviando…
+            </button>
+          </div>
+        </div>
+        <div class="on-deep grid content-start gap-4 rounded-[var(--ca-radius-lg)] bg-deep p-6">
+          <p class="text-sm font-semibold text-on-deep-muted">Sobre verde profundo</p>
+          <div class="flex flex-wrap items-center gap-3">
+            <a href="#botones" class="btn btn-luz">Reservá tu lugar</a>
+            <a href="#botones" class="btn btn-contorno-claro">Pedí una propuesta</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <Separador />
+
+    <!-- Insignias -->
+    <section id="insignias" class="grid gap-8 scroll-mt-28">
+      <div class="grid gap-2"><p class="antetitulo">04</p><h2>Insignias y temporada</h2>
+        <p class="medida text-muted">El indicador de la portada cambia solo según el mes: de mayo a noviembre, zafra; de diciembre a abril, modalidad interpretativa.</p></div>
+      <div class="grid gap-4">
+        <div class="flex flex-wrap items-center gap-3">
+          <IndicadorTemporada />
+          <span class="text-sm text-muted">← automático (mes actual)</span>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <IndicadorTemporada fijo="fruto" />
+          <IndicadorTemporada fijo="interpretativa" />
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <span class="chip chip-ok">18 lugares libres</span>
+          <span class="chip chip-warn">Últimos 3 lugares</span>
+          <span class="chip chip-err">Completa</span>
+          <span class="chip chip-warn">Fecha a confirmar</span>
+          <span class="chip">2 h 50 min</span>
+          <span class="chip">10 a 25 personas</span>
+        </div>
+        <p>Dato pendiente dentro de un texto: la chacra queda en <Pendiente texto="dirección y coordenadas de la Chacra La Victoria" />.</p>
+      </div>
+    </section>
+
+    <Separador />
+
+    <!-- Recursos gráficos -->
+    <section id="recursos" class="grid gap-8 scroll-mt-28">
+      <div class="grid gap-2"><p class="antetitulo">05</p><h2>Recursos gráficos</h2>
+        <p class="medida text-muted">La rodaja de naranja en trazo fino es la firma de la marca: aparece en el logotipo provisorio, los separadores y los fondos. Las imágenes se revelan con una máscara circular, como una rodaja que se abre.</p></div>
+      <div class="flex flex-wrap items-center gap-8 text-deco">
+        <Rodaja tamano={120} grosor={1.6} />
+        <Rodaja tamano={72} grosor={2.4} class="text-accent" />
+        <Rodaja tamano={44} grosor={4} class="text-heading" />
+        <div class="flex items-center gap-2.5 text-heading">
+          <Rodaja tamano={34} grosor={4} class="text-deco" />
+          <span class="font-display text-[1.35rem] italic">Camino de Azahar</span>
+        </div>
+      </div>
+      <p class="text-sm text-muted">Logotipo provisorio en texto. <Pendiente tipo="ARCHIVO" texto="logo vectorial en SVG (versión horizontal, monocroma clara y oscura, isotipo)" /></p>
+    </section>
+
+    <Separador />
+
+    <!-- Imágenes -->
+    <section id="imagenes" class="grid gap-8 scroll-mt-28">
+      <div class="grid gap-2"><p class="antetitulo">06</p><h2>Imágenes pendientes</h2>
+        <p class="medida text-muted">Cada marco tiene proporción fija y describe la toma que hace falta: sirve como guía para la sesión de fotos.</p></div>
+      <div class="grid gap-4 sm:grid-cols-[2fr_1fr]">
+        <Imagen proporcion="16/9" toma="Naranjal de la Chacra La Victoria al amanecer, filas en perspectiva" src="/fotos/camino-de-azahar/atardecer-filas.jpg" alt="Atardecer entre dos filas de naranjos de la chacra" revelar />
+        <Imagen proporcion="4/5" toma="Macro de flor de azahar con gotas de rocío" alt="Flor de azahar con gotas de rocío" encuadre="Macro" momento="Mañana temprano" revelar />
+      </div>
+    </section>
+
+    <Separador />
+
+    <section id="etapas" class="grid gap-8 scroll-mt-28">
+      <div class="grid gap-2"><p class="antetitulo">07</p><h2>Las cinco etapas</h2></div>
+      <LineaEtapas />
+    </section>
+
+    <Separador />
+
+    <section id="modalidades" class="grid gap-8 scroll-mt-28">
+      <div class="grid gap-2"><p class="antetitulo">08</p><h2>Tarjetas de modalidad</h2></div>
+      <div class="grid gap-6 md:grid-cols-3">
+        {experiencia.modalidades.map((m) => <TarjetaModalidad modalidad={m} />)}
+      </div>
+    </section>
+
+    <Separador />
+
+    <section id="tarifas" class="grid gap-8 scroll-mt-28">
+      <div class="grid gap-2"><p class="antetitulo">09</p><h2>Tarifas</h2>
+        <p class="medida text-muted">Siempre con la leyenda «Tarifa propuesta, a confirmar al reservar». Los montos se editan en src/data/site.json.</p></div>
+      <div class="max-w-2xl"><TablaTarifas /></div>
+    </section>
+
+    <Separador />
+
+    <section id="accesibilidad" class="grid gap-8 scroll-mt-28">
+      <div class="grid gap-2"><p class="antetitulo">10</p><h2>Aviso de accesibilidad</h2></div>
+      <div class="grid gap-6 lg:grid-cols-2">
+        <AvisoAccesibilidad id="aviso-compacto" />
+        <AvisoAccesibilidad id="aviso-completo" variante="completo" />
+      </div>
+    </section>
+
+    <Separador />
+
+    <section id="salidas" class="grid gap-8 scroll-mt-28">
+      <div class="grid gap-2"><p class="antetitulo">11</p><h2>Próximas salidas</h2>
+        <p class="medida text-muted">Izquierda: estados posibles con fechas de ejemplo. Derecha: lo que se ve hoy con el archivo real (todavía sin fechas).</p></div>
+      <div class="grid gap-6 lg:grid-cols-2">
+        <div class="grid gap-3"><p class="text-sm font-semibold text-muted">Ejemplo de estados (fechas ficticias)</p><ListaSalidas salidas={salidasEjemplo} ejemplo /></div>
+        <div class="grid content-start gap-3"><p class="text-sm font-semibold text-muted">Estado actual (sin salidas cargadas)</p><ListaSalidas salidas={salidasReales} /></div>
+      </div>
+    </section>
+
+    <Separador />
+
+    <section id="contacto" class="grid gap-8 scroll-mt-28">
+      <div class="grid gap-2"><p class="antetitulo">12</p><h2>Contacto</h2>
+        <p class="medida text-muted">WhatsApp con mensaje prellenado y email protegido contra spam. En móvil, el botón de reserva queda fijo abajo en las fichas.</p></div>
+      <div class="flex flex-wrap items-center gap-3">
+        <BotonWhatsApp variante="primario" texto="Reservar por WhatsApp" mensaje="Hola, quiero reservar Camino de Azahar." />
+        <BotonWhatsApp variante="secundario" />
+        <EnlaceEmail class="btn btn-fantasma" texto="Escribinos por email" />
+        <EnlaceEmail mostrarDireccion texto="Ver email" />
+      </div>
+    </section>
+
+    <Separador />
+
+    <section id="reserva-demo" class="grid gap-8 scroll-mt-28">
+      <div class="grid gap-2"><p class="antetitulo">13</p><h2>Formulario de reserva</h2>
+        <p class="medida text-muted">Probá enviarlo vacío para ver los errores. Con los datos completos, abre WhatsApp con el mensaje armado.</p></div>
+      <div class="max-w-3xl"><FormularioReserva salidas={salidasReales} id="reserva" /></div>
+    </section>
+
+    <section id="grupos-demo" class="grid gap-8 scroll-mt-28">
+      <div class="grid gap-2"><p class="antetitulo">14</p><h2>Formulario para grupos</h2></div>
+      <div class="max-w-3xl"><FormularioGrupos /></div>
+    </section>
+
+    <Separador />
+
+    <section id="persona" class="grid gap-8 scroll-mt-28">
+      <div class="grid gap-2"><p class="antetitulo">15</p><h2>Retrato y cita</h2></div>
+      <RetratoPersona
+        nombre="Patricia Real"
+        rol="Encargada de la Chacra La Victoria"
+        cita="…tocar, arrancar, oler (…) y apreciar el aroma del azahar (…) es muy importante…"
+        fuente="Entrevista para el proyecto Camino de Azahar, 2026"
+        foto="Patricia Real entre los naranjos, mirada a cámara, hora dorada"
+      />
+    </section>
+
+    <Separador />
+
+    <section id="historia" class="grid gap-8 scroll-mt-28">
+      <div class="grid gap-2"><p class="antetitulo">16</p><h2>Historia en tres momentos</h2></div>
+      <LineaHistoria />
+    </section>
+
+    <Separador />
+
+    <section id="calendario" class="grid gap-8 scroll-mt-28">
+      <div class="grid gap-2"><p class="antetitulo">17</p><h2>Calendario de temporada</h2></div>
+      <CalendarioTemporada />
+    </section>
+
+    <section id="llamado" class="grid gap-8 scroll-mt-28">
+      <div class="grid gap-2"><p class="antetitulo">18</p><h2>Llamado a la acción</h2></div>
+      <Llamado
+        antetitulo="Grupos y escuelas"
+        titulo="Una clase de historia, geografía y ciencias que se puede oler"
+        texto="Para estudiantes de 11 a 15 años. Tarifa propuesta: $U 500 por estudiante."
+        boton={{ texto: 'Pedí una propuesta', href: '#grupos-demo' }}
+        secundario={{ texto: 'Ver la experiencia', href: '#etapas' }}
+      />
+    </section>
+
+    <section id="boletin-demo" class="grid gap-8 scroll-mt-28">
+      <div class="grid gap-2"><p class="antetitulo">19</p><h2>Boletín de temporada</h2></div>
+      <Boletin />
+    </section>
+  </div>
+</Base>

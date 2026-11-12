@@ -1,0 +1,189 @@
+---
+// Planificá tu visita (tres idiomas): temporada, cómo llegar, mapa, clima, combinaciones, consejos y preguntas.
+import Base from '../layouts/Base.astro';
+import CabeceraPagina from '../components/CabeceraPagina.astro';
+import NavExperiencia from '../components/NavExperiencia.astro';
+import RuedaAnio from '../components/inmersivo/RuedaAnio.astro';
+import MapaDestino from '../components/MapaDestino.astro';
+import ClimaSalto from '../components/ClimaSalto.astro';
+import AvisoAccesibilidad from '../components/AvisoAccesibilidad.astro';
+import Pendiente from '../components/Pendiente.astro';
+import Imagen from '../components/Imagen.astro';
+import PreguntasFrecuentes from '../components/PreguntasFrecuentes.astro';
+import TambienTeInteresa from '../components/TambienTeInteresa.astro';
+import { foto, fotoArchivo, type ClaveFoto } from '../lib/fotos';
+import { elegir, rutas, rutaReservar, t, type Idioma } from '../i18n/ui';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const r = rutas[idioma];
+// Descripciones de fotos pendientes (notas para el equipo, en español)
+// Fotos propias para combinar la visita: la Plaza 33 (Salto patrimonial) y el río Uruguay (las dos orillas)
+const fotosCombinar: (ClaveFoto | null)[] = [null, 'plaza-33', 'rio-uruguay-atardecer'];
+// Las termas, con una foto de época de las Termas del Arapey (Biblioteca Nacional de Uruguay)
+const termas = fotoArchivo('termas-arapey-1960', idioma);
+const tomas = ['Piscina termal al atardecer con vapor, plano general', 'Calle de Salto con naranjos en la vereda, mañana, plano general', 'Represa de Salto Grande sobre el río Uruguay, plano general, atardecer'];
+const T = elegir(idioma, {
+  es: {
+    meta: 'Planificá tu visita · Camino de Azahar',
+    desc: 'Temporada, cómo llegar a Colonia Osimani, mapa, pronóstico del tiempo en Salto, cómo combinar la visita con las termas y preguntas frecuentes.',
+    titulo: 'Todo listo para venir', intro: 'Cuándo venir, cómo llegar, qué llevar y cómo sumar la visita a tu estadía en Salto.',
+    enPagina: 'En esta página', indice: [['#temporada', 'Temporada'], ['#llegar', 'Cómo llegar'], ['#clima', 'Clima'], ['#combinar', 'Combiná tu estadía'], ['#consejos', 'Consejos']],
+    momentosEt: 'El mejor momento según lo que buscás',
+    momentos: [['Si querés cosechar', 'Vení entre mayo y noviembre, en plena zafra. La cosecha se hace cuando las condiciones del día lo permiten.'], ['Si te interesa la historia', 'Cualquier época del año: la historia de la citricultura salteña está en todas las visitas.'], ['Si querés oler el azahar', 'Durante la floración del naranjo.']],
+    llegar: 'Cómo llegar', llegarTexto: 'La visita es en la Chacra La Victoria, en Colonia Osimani, en el departamento de Salto. Al reservar te enviamos las indicaciones exactas de llegada.',
+    desdeSalto: 'Desde la ciudad de Salto:', desdeTermas: 'Desde las termas:', desdeConcordia: 'Desde Concordia (Argentina):', concordia: 'se cruza por la represa de Salto Grande, que une las dos ciudades.', traslado: 'Traslado:',
+    clima: 'Clima',
+    combinar: 'Combiná tu estadía', combinarTexto: 'Camino de Azahar no compite con las termas: las complementa. Tres ideas para armar tu día.',
+    combinaciones: [['Naranjal y termas', 'Una mañana en la chacra y la tarde en las termas del Daymán o del Arapey: la visita complementa la estadía termal.'], ['Salto patrimonial', 'Después de la visita, recorré la ciudad: los naranjos de sus calles y las bóvedas de Dieste en avenida Paraguay y Ferreira.'], ['Las dos orillas del citrus', 'Cruzá por Salto Grande hacia Concordia, la otra capital citrícola del río Uruguay, sede de la Fiesta Nacional de la Citricultura.']],
+    consejos: 'Consejos prácticos',
+    consejosLista: [['Ropa y calzado:', 'cómodos y cerrados, para caminar entre los árboles.'], ['Sol y lluvia:', 'mirá el pronóstico; si llueve, reprogramamos sin costo.'], ['Necesidades especiales:', 'contanos al reservar para adaptar lo que sea posible.']],
+    recomendaciones: 'Recomendaciones de la chacra:', dormir: 'Dónde dormir y comer', dormirTexto: 'Alojamientos y restaurantes aliados de Camino de Azahar:',
+    experiencia: 'La experiencia', escuelas: 'Grupos y escuelas',
+    enlaces: ['Las cinco etapas y las próximas salidas.', 'Chacra La Victoria y la feria de Colonia Osimani.', 'Propuesta para liceos, UTU y viajes de fin de año.'],
+  },
+  pt: {
+    meta: 'Planeje sua visita · Camino de Azahar',
+    desc: 'Temporada, como chegar a Colonia Osimani, mapa, previsão do tempo em Salto, como combinar a visita com as termas e perguntas frequentes.',
+    titulo: 'Tudo pronto para vir', intro: 'Quando vir, como chegar, o que levar e como incluir a visita na sua estadia em Salto.',
+    enPagina: 'Nesta página', indice: [['#temporada', 'Temporada'], ['#llegar', 'Como chegar'], ['#clima', 'Clima'], ['#combinar', 'Combine sua estadia'], ['#consejos', 'Dicas']],
+    momentosEt: 'O melhor momento conforme o que você procura',
+    momentos: [['Se você quer colher', 'Venha entre maio e novembro, em plena safra. A colheita acontece quando as condições do dia permitem.'], ['Se você se interessa por história', 'Em qualquer época do ano: a história da citricultura de Salto está em todas as visitas.'], ['Se você quer sentir o perfume da flor de laranjeira', 'Durante a floração da laranjeira.']],
+    llegar: 'Como chegar', llegarTexto: 'A visita é na Chacra La Victoria, em Colonia Osimani, no departamento de Salto (Uruguai). Na reserva, enviamos as indicações exatas para chegar.',
+    desdeSalto: 'Da cidade de Salto:', desdeTermas: 'Das termas:', desdeConcordia: 'De Concordia (Argentina):', concordia: 'atravesse pela represa de Salto Grande, que une as duas cidades.', traslado: 'Traslado:',
+    clima: 'Clima',
+    combinar: 'Combine sua estadia', combinarTexto: 'O Camino de Azahar não compete com as termas: as complementa. Três ideias para montar o seu dia.',
+    combinaciones: [['Laranjal e termas', 'Uma manhã na chácara e a tarde nas termas de Daymán ou de Arapey: a visita complementa a estadia termal.'], ['Salto patrimonial', 'Depois da visita, percorra a cidade: as laranjeiras das ruas e as abóbadas de Dieste na avenida Paraguay com Ferreira.'], ['As duas margens dos citros', 'Atravesse por Salto Grande até Concordia, a outra capital cítrica do rio Uruguai, sede da Festa Nacional da Citricultura argentina.']],
+    consejos: 'Dicas práticas',
+    consejosLista: [['Roupa e calçado:', 'confortáveis e fechados, para caminhar entre as árvores.'], ['Sol e chuva:', 'confira a previsão; se chover, remarcamos sem custo.'], ['Necessidades especiais:', 'conte-nos na reserva para adaptarmos o que for possível.']],
+    recomendaciones: 'Recomendações da chácara:', dormir: 'Onde dormir e comer', dormirTexto: 'Hospedagens e restaurantes parceiros do Camino de Azahar:',
+    experiencia: 'A experiência', escuelas: 'Grupos e escolas',
+    enlaces: ['As cinco etapas e as próximas saídas.', 'A Chacra La Victoria e a feira de Colonia Osimani.', 'Proposta para escolas e viagens de formatura.'],
+  },
+  en: {
+    meta: 'Plan your visit · Camino de Azahar',
+    desc: 'Season, getting to Colonia Osimani, map, weather forecast for Salto, how to combine the visit with the hot springs, and frequently asked questions.',
+    titulo: 'All set for your visit', intro: 'When to come, how to get there, what to bring and how to fit the visit into your stay in Salto.',
+    enPagina: 'On this page', indice: [['#temporada', 'Season'], ['#llegar', 'Getting there'], ['#clima', 'Weather'], ['#combinar', 'Plan your stay'], ['#consejos', 'Tips']],
+    momentosEt: 'The best time, depending on what you are looking for',
+    momentos: [['If you want to pick fruit', 'Come between May and November, at the height of the harvest. Picking happens when conditions on the day allow.'], ['If you are into history', 'Any time of year: the history of citrus farming in Salto is part of every visit.'], ['If you want to smell the orange blossom', 'During the orange trees\' flowering season.']],
+    llegar: 'Getting there', llegarTexto: 'The visit takes place at Chacra La Victoria, in Colonia Osimani, in the Salto department of Uruguay. When you book, we send you exact directions.',
+    desdeSalto: 'From Salto city:', desdeTermas: 'From the hot springs:', desdeConcordia: 'From Concordia (Argentina):', concordia: 'cross over the Salto Grande dam, which links the two cities.', traslado: 'Transfer:',
+    clima: 'Weather',
+    combinar: 'Plan your stay', combinarTexto: 'Camino de Azahar does not compete with the hot springs: it complements them. Three ideas for your day.',
+    combinaciones: [['Orange grove and hot springs', 'A morning at the farm and the afternoon at the Daymán or Arapey hot springs: the visit rounds off a spa stay.'], ['Heritage Salto', 'After the visit, explore the city: its orange-lined streets and Dieste\'s vaults on Paraguay and Ferreira avenues.'], ['Both banks of citrus country', 'Cross at Salto Grande to Concordia, the other citrus capital on the Uruguay River and home to Argentina\'s National Citrus Festival.']],
+    consejos: 'Practical tips',
+    consejosLista: [['Clothes and shoes:', 'comfortable and closed, for walking among the trees.'], ['Sun and rain:', 'check the forecast; if it rains, we reschedule free of charge.'], ['Special needs:', 'let us know when you book so we can adapt what we can.']],
+    recomendaciones: "The farm's recommendations:", dormir: 'Where to stay and eat', dormirTexto: 'Camino de Azahar partner accommodation and restaurants:',
+    experiencia: 'The experience', escuelas: 'Groups and schools',
+    enlaces: ['The five stages and upcoming departures.', 'Chacra La Victoria and the Colonia Osimani market.', 'School trips and end-of-year trips.'],
+  },
+});
+---
+<Base
+  titulo={T.meta}
+  descripcion={T.desc}
+  idioma={idioma}
+  encabezadoFlotante tema="azahar" clave="planifica" cta={{ texto: t(idioma, 'nav.reservar'), href: rutaReservar(idioma) }}
+>
+  <CabeceraPagina
+    idioma={idioma}
+    antetitulo={t(idioma, 'nav.planifica')}
+    titulo={T.titulo}
+    intro={T.intro}
+    migas={[{ texto: t(idioma, 'nav.experiencias'), href: r.experiencias }, { texto: 'Camino de Azahar', href: r.azahar }, { texto: t(idioma, 'nav.planifica') }]}
+    imagen={{ toma: 'Camino rural de tierra entre naranjales en Colonia Osimani, mañana, plano general', ...foto('atardecer-filas', idioma) }}
+  >
+    <nav aria-label={T.enPagina}>
+      <ul class="flex flex-wrap gap-2">
+        {T.indice.map(([href, texto]) => (
+          <li><a href={href} class="inline-block rounded-full border border-white/25 px-4 py-1.5 text-sm text-[#fbf2e1] no-underline hover:bg-white/10">{texto}</a></li>
+        ))}
+      </ul>
+    </nav>
+  </CabeceraPagina>
+  <NavExperiencia idioma={idioma} actual={Astro.url.pathname} />
+
+  <RuedaAnio idioma={idioma} />
+
+  <section class="contenedor grid gap-6 py-[clamp(4rem,10vh,7rem)] md:grid-cols-3" aria-label={T.momentosEt}>
+    {T.momentos.map(([titulo, texto], i) => (
+      <article class="revelar grid content-start gap-3 border-t-2 border-deco pt-6">
+        <h2 class="font-display text-2xl">{titulo}</h2>
+        <p class="text-lg text-muted">{texto} {i === 2 && <Pendiente tipo="CALENDARIO_A_CONFIRMAR" texto="meses de floración en la chacra" />}</p>
+      </article>
+    ))}
+  </section>
+
+  <section id="llegar" class="contenedor grid gap-10 pb-[clamp(4rem,10vh,7rem)]" aria-labelledby="llegar-titulo">
+    <div class="grid gap-6 lg:grid-cols-2">
+      <h2 id="llegar-titulo" class="max-w-[12ch] text-[clamp(1.6rem,3.4vw,2.9rem)] leading-[0.98]">{T.llegar}</h2>
+      <div class="grid gap-4 text-lg text-muted">
+        <p>{T.llegarTexto}</p>
+        <ul class="grid gap-3">
+          <li><strong class="text-ink">{T.desdeSalto}</strong> <Pendiente texto="distancia, ruta y tiempo de viaje hasta la chacra" /></li>
+          <li><strong class="text-ink">{T.desdeTermas}</strong> <Pendiente texto="tiempo de viaje desde Daymán y Arapey" /></li>
+          <li><strong class="text-ink">{T.desdeConcordia}</strong> {T.concordia}</li>
+          <li><strong class="text-ink">{T.traslado}</strong> <Pendiente texto="si la visita incluye traslado y desde dónde" /></li>
+        </ul>
+      </div>
+    </div>
+    <MapaDestino idioma={idioma} />
+  </section>
+
+  <section id="clima" class="bg-surface-2 py-[clamp(4rem,10vh,7rem)]" aria-label={T.clima}>
+    <div class="contenedor grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
+      <ClimaSalto idioma={idioma} />
+      <AvisoAccesibilidad idioma={idioma} variante="completo" id="aviso-planifica" />
+    </div>
+  </section>
+
+  <section id="combinar" class="contenedor grid gap-10 py-[clamp(4rem,12vh,8rem)]" aria-labelledby="combinar-titulo">
+    <div class="grid gap-3">
+      <h2 id="combinar-titulo" class="max-w-[16ch] text-[clamp(1.6rem,3.4vw,2.9rem)] leading-[0.98]">{T.combinar}</h2>
+      <p class="max-w-[56ch] text-lg text-muted">{T.combinarTexto}</p>
+    </div>
+    <ul class="grid gap-8 md:grid-cols-3">
+      {T.combinaciones.map(([titulo, texto], i) => (
+        <li class="revelar grid content-start gap-4" style={`transition-delay:${i * 100}ms`}>
+          {fotosCombinar[i] ? (
+            <Imagen proporcion="4/5" toma={tomas[i]} {...foto(fotosCombinar[i]!, idioma)} />
+          ) : (
+            <figure class="grid gap-2">
+              <Imagen proporcion="4/5" toma={tomas[i]} src={termas.src} alt={termas.alt} />
+              <figcaption class="text-xs text-muted">{termas.credito}</figcaption>
+            </figure>
+          )}
+          <h3 class="text-2xl">{titulo}</h3>
+          <p class="text-muted">{texto}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section id="consejos" class="contenedor grid gap-10 pb-[clamp(4rem,12vh,8rem)] lg:grid-cols-2" aria-labelledby="consejos-titulo">
+    <div class="grid content-start gap-6">
+      <h2 id="consejos-titulo" class="text-[clamp(1.7rem,3.2vw,2.7rem)]">{T.consejos}</h2>
+      <ul class="grid gap-4 text-lg">
+        {T.consejosLista.map(([titulo, texto]) => <li class="border-b border-line pb-4"><strong>{titulo}</strong> {texto}</li>)}
+        <li><strong>{T.recomendaciones}</strong> <Pendiente texto="qué llevar según la época" /></li>
+      </ul>
+    </div>
+    <div class="grid content-start gap-6">
+      <h2 class="text-[clamp(1.7rem,3.2vw,2.7rem)]">{T.dormir}</h2>
+      <p class="text-lg text-muted">{T.dormirTexto} <Pendiente texto="lista de alojamientos y gastronomía con convenio" /></p>
+    </div>
+  </section>
+
+  <div class="contenedor grid gap-24 pb-[clamp(4rem,12vh,8rem)]">
+    <PreguntasFrecuentes idioma={idioma} temas={['planifica']} />
+    <TambienTeInteresa
+      idioma={idioma}
+      enlaces={[
+        { titulo: T.experiencia, texto: T.enlaces[0], href: r.azahar },
+        { titulo: t(idioma, 'nav.chacra'), texto: T.enlaces[1], href: r.chacra },
+        { titulo: T.escuelas, texto: T.enlaces[2], href: r.azaharGrupos },
+      ]}
+    />
+  </div>
+</Base>

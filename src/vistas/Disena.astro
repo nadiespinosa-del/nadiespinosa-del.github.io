@@ -1,0 +1,197 @@
+---
+// Diseñá tu experiencia (tres idiomas): los servicios y un formulario de viaje a medida.
+// El formulario arma un mensaje y lo abre en WhatsApp (sin servicio de formularios aún).
+import Base from '../layouts/Base.astro';
+import CabeceraPagina from '../components/CabeceraPagina.astro';
+import Servicios from '../components/Servicios.astro';
+import TambienTeInteresa from '../components/TambienTeInteresa.astro';
+import site from '../data/site.json';
+import { elegir, idiomas, rutas, t, type Idioma } from '../i18n/ui';
+import { textosValidacion } from '../i18n/formularios';
+import { foto } from '../lib/fotos';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const r = rutas[idioma];
+const numero = site.contacto.whatsapp?.numero ?? '';
+const id = 'disena';
+const T = elegir(idioma, {
+  es: {
+    desc: 'Contanos qué querés vivir y armamos tu viaje a medida: alojamiento, transporte, coordinación, guías, gastronomía, actividades e itinerario.',
+    titulo: 'Vos traés las ganas. Nosotros nos ocupamos del resto.', intro: 'Contanos qué querés vivir, con quién y cuándo. Armamos una propuesta a medida y coordinamos cada parte del viaje.',
+    fotoAlt: 'Grupo planificando un viaje', cta: 'Contanos tu idea',
+    ante: 'Tu viaje a medida', formTitulo: 'Contanos qué querés vivir', bajada: 'Con estos datos te mandamos una primera propuesta. Los campos con * son obligatorios.',
+    idea: '¿Qué te gustaría vivir?', ideaPh: 'Por ejemplo: un fin de semana en el campo, con comida casera y alguna actividad al aire libre', ideaEt: 'Idea', ideaErr: 'Contanos en pocas palabras qué te gustaría vivir.',
+    destino: 'Destino o zona', destinoPh: 'Por ejemplo: Salto, o «sorprendanme»', destinoEt: 'Destino',
+    fechas: 'Fechas posibles', fechasPh: 'Por ejemplo: un fin de semana de julio', fechasEt: 'Fechas',
+    personas: '¿Cuántas personas?', personasEt: 'Personas', grupo: 'Tipo de grupo', grupoEt: 'Grupo', elegi: 'Elegí una opción',
+    tipos: ['Familia o amigos', 'Pareja', 'Empresa', 'Institución educativa', 'Otro grupo'],
+    servicios: '¿De qué nos ocupamos?', serviciosEt: 'Servicios',
+    opciones: ['Alojamiento', 'Transporte', 'Coordinación', 'Guías', 'Gastronomía', 'Actividades y entradas', 'Itinerario a medida'],
+    nombre: 'Tu nombre', nombreEt: 'Nombre', contacto: 'Teléfono o email', contactoEt: 'Contacto',
+    enviar: 'Enviar por WhatsApp', nota: 'Te respondemos con una propuesta a medida.',
+    exito: '¡Gracias! Abrimos WhatsApp con tu idea de viaje.', exito2: 'Solo falta tocar «Enviar» en WhatsApp. Si no se abrió,', exitoEnlace: 'abrí WhatsApp desde acá',
+    intro2: 'Hola, quiero diseñar una experiencia con VÍA.',
+    enlaces: ['Propuestas listas para sumarte.', 'Viajes educativos para instituciones.', 'Otras formas de escribirnos.'],
+  },
+  pt: {
+    desc: 'Conte o que você quer viver e montamos sua viagem sob medida: hospedagem, transporte, coordenação, guias, gastronomia, atividades e roteiro.',
+    titulo: 'Você traz a vontade. Nós cuidamos do resto.', intro: 'Conte o que você quer viver, com quem e quando. Montamos uma proposta sob medida e coordenamos cada parte da viagem.',
+    fotoAlt: 'Grupo planejando uma viagem', cta: 'Conte sua ideia',
+    ante: 'Sua viagem sob medida', formTitulo: 'Conte o que você quer viver', bajada: 'Com estes dados enviamos uma primeira proposta. Os campos com * são obrigatórios.',
+    idea: 'O que você gostaria de viver?', ideaPh: 'Por exemplo: um fim de semana no campo, com comida caseira e alguma atividade ao ar livre', ideaEt: 'Ideia', ideaErr: 'Conte em poucas palavras o que você gostaria de viver.',
+    destino: 'Destino ou região', destinoPh: 'Por exemplo: Salto, ou "surpreendam-me"', destinoEt: 'Destino',
+    fechas: 'Datas possíveis', fechasPh: 'Por exemplo: um fim de semana de julho', fechasEt: 'Datas',
+    personas: 'Quantas pessoas?', personasEt: 'Pessoas', grupo: 'Tipo de grupo', grupoEt: 'Grupo', elegi: 'Escolha uma opção',
+    tipos: ['Família ou amigos', 'Casal', 'Empresa', 'Instituição de ensino', 'Outro grupo'],
+    servicios: 'Do que cuidamos?', serviciosEt: 'Serviços',
+    opciones: ['Hospedagem', 'Transporte', 'Coordenação', 'Guias', 'Gastronomia', 'Atividades e ingressos', 'Roteiro sob medida'],
+    nombre: 'Seu nome', nombreEt: 'Nome', contacto: 'Telefone ou e-mail', contactoEt: 'Contato',
+    enviar: 'Enviar pelo WhatsApp', nota: 'Respondemos com uma proposta sob medida.',
+    exito: 'Obrigado! Abrimos o WhatsApp com a sua ideia de viagem.', exito2: 'Só falta tocar em "Enviar" no WhatsApp. Se não abriu,', exitoEnlace: 'abra o WhatsApp por aqui',
+    intro2: 'Olá, quero montar uma experiência com a VÍA.',
+    enlaces: ['Propostas prontas para você participar.', 'Viagens educativas para instituições.', 'Outras formas de falar conosco.'],
+  },
+  en: {
+    desc: 'Tell us what you want to experience and we will plan your tailor-made trip: accommodation, transport, coordination, guides, food, activities and itinerary.',
+    titulo: 'You bring the curiosity. We take care of the rest.', intro: 'Tell us what you want to experience, who with and when. We put together a tailor-made proposal and coordinate every part of the trip.',
+    fotoAlt: 'A group planning a trip', cta: 'Tell us your idea',
+    ante: 'Your tailor-made trip', formTitulo: 'Tell us what you want to experience', bajada: 'With these details we will send you a first proposal. Fields marked * are required.',
+    idea: 'What would you like to experience?', ideaPh: 'For example: a weekend in the countryside, with home cooking and some outdoor activities', ideaEt: 'Idea', ideaErr: 'Tell us briefly what you would like to experience.',
+    destino: 'Destination or area', destinoPh: 'For example: Salto, or "surprise me"', destinoEt: 'Destination',
+    fechas: 'Possible dates', fechasPh: 'For example: a weekend in July', fechasEt: 'Dates',
+    personas: 'How many people?', personasEt: 'People', grupo: 'Type of group', grupoEt: 'Group', elegi: 'Choose an option',
+    tipos: ['Family or friends', 'Couple', 'Company', 'School', 'Other group'],
+    servicios: 'What should we take care of?', serviciosEt: 'Services',
+    opciones: ['Accommodation', 'Transport', 'Coordination', 'Guides', 'Food', 'Activities and tickets', 'Tailor-made itinerary'],
+    nombre: 'Your name', nombreEt: 'Name', contacto: 'Phone or email', contactoEt: 'Contact',
+    enviar: 'Send on WhatsApp', nota: "We'll reply with a tailor-made proposal.",
+    exito: 'Thank you! We opened WhatsApp with your trip idea.', exito2: 'Just tap "Send" in WhatsApp. If it didn\'t open,', exitoEnlace: 'open WhatsApp here',
+    intro2: 'Hi, I would like to design an experience with VÍA.',
+    enlaces: ['Ready-made experiences you can join.', 'School trips for institutions.', 'Other ways to reach us.'],
+  },
+});
+---
+<Base titulo={t(idioma, 'nav.disena')} descripcion={T.desc} idioma={idioma} clave="disena" encabezadoFlotante cta={{ texto: t(idioma, 'nav.verExperiencias'), href: r.experiencias }}>
+  <CabeceraPagina
+    idioma={idioma}
+    antetitulo={t(idioma, 'nav.disena')}
+    titulo={T.titulo}
+    intro={T.intro}
+    migas={[{ texto: t(idioma, 'nav.disena') }]}
+    imagen={{ toma: 'Recorrida por el naranjal', ...foto('recorrida-espaldas', idioma) }}
+  >
+    <div class="flex flex-wrap gap-3"><a href="#viaje" class="btn btn-luz">{T.cta}</a></div>
+  </CabeceraPagina>
+
+  <div class="contenedor py-[clamp(4rem,12vh,8rem)]">
+    <Servicios idioma={idioma} boton={false} />
+  </div>
+
+  <section id="viaje" class="bg-surface-2 py-[clamp(5rem,12vh,9rem)]" aria-labelledby={`${id}-titulo`}>
+    <div class="contenedor max-w-4xl">
+      <form id={id} class="formulario-disena tarjeta grid gap-6 p-6 sm:p-8" novalidate data-whatsapp={numero} data-textos={JSON.stringify(textosValidacion[idioma])} data-locale={idiomas[idioma].locale} data-intro={T.intro2} data-servicios={T.serviciosEt}>
+        <div class="grid gap-1">
+          <p class="antetitulo">{T.ante}</p>
+          <h2 id={`${id}-titulo`} class="text-3xl">{T.formTitulo}</h2>
+          <p class="text-muted">{T.bajada}</p>
+        </div>
+
+        <div data-resumen-errores tabindex="-1" hidden class="rounded-[var(--ca-radius)] border-2 border-on-err bg-err p-4 text-on-err" role="alert"></div>
+
+        <div class="grid gap-5 md:grid-cols-2">
+          <div class="campo md:col-span-2">
+            <label for={`${id}-idea`}>{T.idea} *</label>
+            <textarea id={`${id}-idea`} class="control" required placeholder={T.ideaPh} data-etiqueta={T.ideaEt} data-error={T.ideaErr} aria-describedby={`${id}-idea-error`}></textarea>
+            <p id={`${id}-idea-error`} class="error-campo" aria-live="polite"></p>
+          </div>
+          <div class="campo">
+            <label for={`${id}-destino`}>{T.destino}</label>
+            <input id={`${id}-destino`} class="control" type="text" placeholder={T.destinoPh} data-etiqueta={T.destinoEt} />
+          </div>
+          <div class="campo">
+            <label for={`${id}-fechas`}>{T.fechas} *</label>
+            <input id={`${id}-fechas`} class="control" type="text" required placeholder={T.fechasPh} data-etiqueta={T.fechasEt} aria-describedby={`${id}-fechas-error`} />
+            <p id={`${id}-fechas-error`} class="error-campo" aria-live="polite"></p>
+          </div>
+          <div class="campo">
+            <label for={`${id}-personas`}>{T.personas} *</label>
+            <input id={`${id}-personas`} class="control" type="number" inputmode="numeric" min="1" required data-etiqueta={T.personasEt} aria-describedby={`${id}-personas-error`} />
+            <p id={`${id}-personas-error`} class="error-campo" aria-live="polite"></p>
+          </div>
+          <div class="campo">
+            <label for={`${id}-grupo`}>{T.grupo}</label>
+            <select id={`${id}-grupo`} class="control" data-etiqueta={T.grupoEt}>
+              <option value="">{T.elegi}</option>
+              {T.tipos.map((g) => <option>{g}</option>)}
+            </select>
+          </div>
+          <fieldset class="campo md:col-span-2">
+            <legend>{T.servicios}</legend>
+            <div class="grid gap-2 sm:grid-cols-2">
+              {T.opciones.map((o) => (
+                <label class="opcion-servicio flex items-center gap-3 rounded-[var(--ca-radius)] border border-line bg-surface px-4 py-3 font-normal">
+                  <input type="checkbox" name="servicios" value={o} class="h-5 w-5 accent-[var(--ca-primary)]" /> {o}
+                </label>
+              ))}
+            </div>
+          </fieldset>
+          <div class="campo">
+            <label for={`${id}-nombre`}>{T.nombre} *</label>
+            <input id={`${id}-nombre`} class="control" type="text" required autocomplete="name" data-etiqueta={T.nombreEt} aria-describedby={`${id}-nombre-error`} />
+            <p id={`${id}-nombre-error`} class="error-campo" aria-live="polite"></p>
+          </div>
+          <div class="campo">
+            <label for={`${id}-contacto`}>{T.contacto} *</label>
+            <input id={`${id}-contacto`} class="control" type="text" required autocomplete="email" data-etiqueta={T.contactoEt} aria-describedby={`${id}-contacto-error`} />
+            <p id={`${id}-contacto-error`} class="error-campo" aria-live="polite"></p>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-4">
+          <button type="submit" class="btn btn-primario">{T.enviar}</button>
+          <p class="text-sm text-muted">{T.nota}</p>
+        </div>
+
+        <div data-exito tabindex="-1" hidden class="rounded-[var(--ca-radius)] border-2 border-on-ok bg-ok p-4 text-on-ok" role="status">
+          <p class="font-semibold">{T.exito}</p>
+          <p>{T.exito2} <a class="font-semibold text-on-ok" href="#" target="_blank" rel="noopener">{T.exitoEnlace}</a>.</p>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <div class="contenedor py-[clamp(4rem,12vh,8rem)]">
+    <TambienTeInteresa
+      idioma={idioma}
+      enlaces={[
+        { titulo: t(idioma, 'nav.experiencias'), texto: T.enlaces[0], href: r.experiencias },
+        { titulo: t(idioma, 'nav.grupos'), texto: T.enlaces[1], href: r.grupos },
+        { titulo: t(idioma, 'nav.contacto'), texto: T.enlaces[2], href: r.contacto },
+      ]}
+    />
+  </div>
+</Base>
+
+<style>
+  .opcion-servicio { cursor: pointer; transition: border-color 150ms ease, background-color 150ms ease; }
+  .opcion-servicio:has(input:checked) { border-color: var(--ca-primary); background: var(--ca-surface-2); }
+</style>
+
+<script>
+  import { validarCampos, mostrarResumen, armarMensaje, enviarPorWhatsApp, limpiarAlEditar } from '../scripts/formularios';
+  const form = document.querySelector<HTMLFormElement>('form.formulario-disena');
+  if (form) {
+    limpiarAlEditar(form);
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const errores = validarCampos(form);
+      mostrarResumen(form, errores);
+      if (errores.length) return;
+      const servicios = Array.from(form.querySelectorAll<HTMLInputElement>('input[name="servicios"]:checked')).map((c) => c.value);
+      let mensaje = armarMensaje(form, form.dataset.intro || '');
+      if (servicios.length) mensaje += `\n• ${form.dataset.servicios}: ${servicios.join(', ')}`;
+      enviarPorWhatsApp(form, mensaje);
+    });
+  }
+</script>

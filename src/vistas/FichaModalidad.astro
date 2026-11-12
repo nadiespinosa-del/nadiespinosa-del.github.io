@@ -1,0 +1,141 @@
+---
+// Ficha de experiencia (una modalidad) en los tres idiomas: galería, datos, qué hacés, reserva y preguntas.
+import Base from '../layouts/Base.astro';
+import CabeceraPagina from '../components/CabeceraPagina.astro';
+import Imagen from '../components/Imagen.astro';
+import Pendiente from '../components/Pendiente.astro';
+import TablaTarifas from '../components/TablaTarifas.astro';
+import AvisoAccesibilidad from '../components/AvisoAccesibilidad.astro';
+import ListaSalidas from '../components/ListaSalidas.astro';
+import FormularioReserva from '../components/FormularioReserva.astro';
+import PreguntasFrecuentes from '../components/PreguntasFrecuentes.astro';
+import TambienTeInteresa from '../components/TambienTeInteresa.astro';
+import NavExperiencia from '../components/NavExperiencia.astro';
+import IndicadorTemporada from '../components/IndicadorTemporada.astro';
+import salidas from '../data/salidas.json';
+import site from '../data/site.json';
+import { experiencia } from '../lib/datos';
+import { formatoDuracion } from '../lib/util';
+import { elegir, rutas, rutaReservar, t, type Idioma } from '../i18n/ui';
+import { foto, type ClaveFoto } from '../lib/fotos';
+
+interface Props { idioma: Idioma; id: 'con-fruto' | 'interpretativa' }
+const { idioma, id } = Astro.props;
+const r = rutas[idioma];
+const modalidad = experiencia(idioma).modalidades.find((m) => m.id === id)!;
+const salidasModalidad = salidas.filter((s: { modalidad: string }) => s.modalidad === id);
+const dur = formatoDuracion(site.duracionMinutos);
+
+// Descripciones de las fotos pendientes (notas para el equipo, en español)
+const galerias = {
+  'con-fruto': ['Naranjal cargado de fruta madura en plena zafra, hora dorada, plano general', 'Manos tomando una naranja del árbol, primer plano, luz lateral', 'Cajón de cosecha lleno de naranjas recién cortadas, cenital', 'Visitante exprimiendo una naranja en la estación de elaboración, plano medio', 'Vaso de jugo recién exprimido sobre una mesa de madera, macro', 'Grupo recorriendo una fila de naranjos con la encargada, plano general'],
+  interpretativa: ['Filas de naranjos verdes al atardecer, plano general, luz rasante', 'Detalle de hojas y brotes nuevos del naranjo, macro, mañana', 'Encargada mostrando el injerto de un árbol joven, plano medio', 'Frascos de mermelada de naranja a contraluz, bodegón', 'Mesa de degustación bajo los árboles, plano general', 'Grupo conversando en ronda entre los naranjos, plano medio, atardecer'],
+};
+const galeria = galerias[id];
+// Fotos reales de la chacra: la primera va en la cabecera, el resto en la galería
+const fotosGaleria: Record<typeof id, ClaveFoto[]> = {
+  'con-fruto': ['arbol-desde-abajo', 'mandarinos-contraluz', 'mano-naranjas', 'hilera-mandarinas', 'recorrida-perro', 'mandarino-cargado'],
+  interpretativa: ['arbol-c7', 'sol-naranjal', 'mesa-degustacion', 'feria-frascos', 'recorrida-espaldas', 'maquina-seleccion'],
+};
+const reales = fotosGaleria[id].map((clave) => foto(clave, idioma));
+
+const contenido = {
+  'con-fruto': elegir(idioma, {
+    es: { titulo: 'Circuito con fruto', intro: 'En plena zafra el naranjal está cargado: recorrés las filas, reconocés los árboles y sus frutos, cosechás cuando las condiciones lo permiten y exprimís tu propio jugo.', desc: `Visita a la Chacra La Victoria en plena zafra (mayo a noviembre): recorrido por el naranjal, cosecha cuando las condiciones lo permiten, elaboración de jugo y degustación. ${dur}.`, haces: ['Recorrés el naranjal en funcionamiento y reconocés los árboles, sus frutos y las tareas del cultivo.', 'Cosechás y seleccionás fruta cuando las condiciones del día lo permiten.', 'Exprimís tu propio jugo de naranja en la estación de elaboración.', 'Probás mermeladas, budines y otras preparaciones de emprendedores locales.', 'Escuchás a Patricia Real, encargada de la chacra, sobre la historia del lugar y los cambios en la forma de producir.'] },
+    pt: { titulo: 'Circuito com fruta', intro: 'Em plena safra o laranjal está carregado: você percorre as fileiras, reconhece as árvores e os frutos, colhe quando as condições permitem e espreme o próprio suco.', desc: `Visita à Chacra La Victoria em plena safra (maio a novembro): percurso pelo laranjal, colheita quando as condições permitem, preparo de suco e degustação. ${dur}.`, haces: ['Você percorre o laranjal em funcionamento e conhece as árvores, os frutos e as tarefas do cultivo.', 'Colhe e seleciona frutas quando as condições do dia permitem.', 'Espreme o próprio suco de laranja na estação de preparo.', 'Prova geleias, bolos e outras preparações de empreendedores locais.', 'Ouve Patricia Real, responsável pela chácara, contar a história do lugar e as mudanças na forma de produzir.'] },
+    en: { titulo: 'Harvest season visit', intro: 'At the height of the harvest the grove is heavy with fruit: you walk the rows, get to know the trees, pick oranges when conditions allow and squeeze your own juice.', desc: `Visit Chacra La Victoria at the height of the harvest (May to November): a walk through the orange grove, picking when conditions allow, juice-making and tasting. ${dur}.`, haces: ['Walk through a working orange grove and learn about the trees, the fruit and the farm work.', 'Pick and sort fruit when conditions on the day allow.', 'Squeeze your own orange juice at the juice station.', 'Taste marmalades, cakes and other treats made by local producers.', 'Hear Patricia Real, who runs the farm, talk about its history and how growing has changed.'] },
+  }),
+  interpretativa: elegir(idioma, {
+    es: { titulo: 'Modalidad interpretativa', intro: 'Fuera de la zafra, la quinta cuenta otra historia: el ciclo del naranjo, el cuidado de los árboles y lo que pasa después de la cosecha. Y la naranja sigue en la mesa.', desc: `Visita a la Chacra La Victoria fuera de la zafra (diciembre a abril): ciclo productivo del naranjo, historia de la citricultura salteña, elaboración y degustación con fruta de productores locales. ${dur}.`, haces: ['Recorrés la quinta y conocés las etapas del ciclo productivo del naranjo y el cuidado de los árboles.', 'Descubrís las tareas de mantenimiento que siguen a la cosecha.', 'Elaborás y degustás productos de naranja con fruta de productores locales.', 'Conversás sobre el lugar de la citricultura en la identidad, la economía y el turismo de Salto.', 'Conocés la muestra de productos de emprendedores de la Feria de Colonia Osimani y Llerena.'] },
+    pt: { titulo: 'Modalidade interpretativa', intro: 'Fora da safra, o pomar conta outra história: o ciclo da laranjeira, o cuidado das árvores e o que acontece depois da colheita. E a laranja continua na mesa.', desc: `Visita à Chacra La Victoria fora da safra (dezembro a abril): ciclo produtivo da laranjeira, história da citricultura de Salto, preparo e degustação com frutas de produtores locais. ${dur}.`, haces: ['Você percorre o pomar e conhece as etapas do ciclo da laranjeira e o cuidado das árvores.', 'Descobre as tarefas de manutenção que vêm depois da colheita.', 'Prepara e prova produtos de laranja com frutas de produtores locais.', 'Conversa sobre o lugar da citricultura na identidade, na economia e no turismo de Salto.', 'Conhece a mostra de produtos de empreendedores da Feira de Colonia Osimani e Llerena.'] },
+    en: { titulo: 'Interpretive visit', intro: "Outside the harvest, the grove tells a different story: the life cycle of the orange tree, how the trees are cared for and what happens after picking. And oranges are still on the table.", desc: `Visit Chacra La Victoria outside the harvest (December to April): the orange tree's life cycle, the history of citrus farming in Salto, juice-making and tasting with fruit from local growers. ${dur}.`, haces: ["Walk the grove and learn the stages of the orange tree's life cycle and how the trees are cared for.", 'Discover the maintenance work that follows the harvest.', 'Make and taste orange products with fruit from local growers.', "Talk about the place of citrus farming in Salto's identity, economy and tourism.", 'Browse products from makers of the Colonia Osimani and Llerena local market.'] },
+  }),
+}[id];
+
+const T = elegir(idioma, {
+  es: { meta: 'La experiencia', reservarMod: 'Reservá esta modalidad', galeria: 'Galería', queHaces: 'Qué vas a hacer', datosTitulo: 'Datos de la visita', duracion: 'Duración', temporada: 'Temporada', grupo: 'Grupo', grupoV: `De ${site.cupo.minimo} a ${site.cupo.maximo} personas (salidas programadas)`, idiomaG: 'Idioma de la guía', idiomaV: 'Español', encuentro: 'Punto de encuentro', exigencia: 'Exigencia física', exigenciaV: 'Básica: caminar durante parte del recorrido', lluvia: 'Con lluvia', lluviaV: 'Se reprograma sin costo o se hace la parte interpretativa bajo techo', cancelacion: 'Política de cancelación', llevar: 'Qué llevar', llevarV: 'Ropa cómoda y calzado cerrado para caminar por la chacra.', reservar: 'Reservá tu lugar', otra: id === 'con-fruto' ? { titulo: 'Modalidad interpretativa', texto: 'De diciembre a abril: el ciclo del naranjo, su historia y sus sabores.', href: r.interpretativa } : { titulo: 'Circuito con fruto', texto: 'De mayo a noviembre: el naranjal en plena zafra.', href: r.conFruto }, chacra: { titulo: 'La chacra y la comunidad', texto: 'Patricia Real, la Chacra La Victoria y la feria de Colonia Osimani.', href: r.chacra }, planifica: { titulo: 'Planificá tu visita', texto: 'Cómo llegar, clima, temporada y qué llevar.', href: r.planifica }, wa: 'Hola, quiero reservar Camino de Azahar' },
+  pt: { meta: 'A experiência', reservarMod: 'Reserve esta modalidade', galeria: 'Galeria', queHaces: 'O que você vai fazer', datosTitulo: 'Dados da visita', duracion: 'Duração', temporada: 'Temporada', grupo: 'Grupo', grupoV: `De ${site.cupo.minimo} a ${site.cupo.maximo} pessoas (saídas programadas)`, idiomaG: 'Idioma do guia', idiomaV: 'Espanhol', encuentro: 'Ponto de encontro', exigencia: 'Exigência física', exigenciaV: 'Básica: caminhar durante parte do percurso', lluvia: 'Com chuva', lluviaV: 'A visita é remarcada sem custo ou a parte interpretativa é feita em local coberto', cancelacion: 'Política de cancelamento', llevar: 'O que levar', llevarV: 'Roupa confortável e calçado fechado para caminhar pela chácara.', reservar: 'Reserve sua vaga', otra: id === 'con-fruto' ? { titulo: 'Modalidade interpretativa', texto: 'De dezembro a abril: o ciclo da laranjeira, sua história e seus sabores.', href: r.interpretativa } : { titulo: 'Circuito com fruta', texto: 'De maio a novembro: o laranjal em plena safra.', href: r.conFruto }, chacra: { titulo: 'A chácara e a comunidade', texto: 'Patricia Real, a Chacra La Victoria e a feira de Colonia Osimani.', href: r.chacra }, planifica: { titulo: 'Planeje sua visita', texto: 'Como chegar, clima, temporada e o que levar.', href: r.planifica }, wa: 'Olá, quero reservar o Camino de Azahar' },
+  en: { meta: 'The experience', reservarMod: 'Book this visit', galeria: 'Gallery', queHaces: "What you'll do", datosTitulo: 'Visit details', duracion: 'Duration', temporada: 'Season', grupo: 'Group size', grupoV: `${site.cupo.minimo} to ${site.cupo.maximo} people (scheduled departures)`, idiomaG: 'Guide language', idiomaV: 'Spanish', encuentro: 'Meeting point', exigencia: 'Physical effort', exigenciaV: 'Light: walking for part of the visit', lluvia: 'If it rains', lluviaV: 'Rescheduled free of charge, or the interpretive part takes place indoors', cancelacion: 'Cancellation policy', llevar: 'What to bring', llevarV: 'Comfortable clothes and closed shoes for walking around the farm.', reservar: 'Book your spot', otra: id === 'con-fruto' ? { titulo: 'Interpretive visit', texto: "December to April: the orange tree's life cycle, its history and its flavours.", href: r.interpretativa } : { titulo: 'Harvest season visit', texto: 'May to November: the grove at the height of the harvest.', href: r.conFruto }, chacra: { titulo: 'The farm and community', texto: 'Patricia Real, Chacra La Victoria and the Colonia Osimani market.', href: r.chacra }, planifica: { titulo: 'Plan your visit', texto: 'Getting there, weather, season and what to bring.', href: r.planifica }, wa: 'Hi, I would like to book Camino de Azahar' },
+});
+const datos = [
+  { etiqueta: T.duracion, valor: dur },
+  { etiqueta: T.temporada, valor: modalidad.meses },
+  { etiqueta: T.grupo, valor: T.grupoV },
+  { etiqueta: T.idiomaG, valor: T.idiomaV },
+  { etiqueta: T.encuentro, valor: 'Chacra La Victoria, Colonia Osimani (Salto)' },
+  { etiqueta: T.exigencia, valor: T.exigenciaV },
+  { etiqueta: T.lluvia, valor: T.lluviaV },
+];
+---
+<Base titulo={`${contenido.titulo} · Camino de Azahar`} descripcion={contenido.desc} idioma={idioma} clave={id === 'con-fruto' ? 'conFruto' : 'interpretativa'} encabezadoFlotante tema="azahar" cta={{ texto: t(idioma, 'nav.reservar'), href: rutaReservar(idioma) }} whatsappFlotante={`${T.wa} (${modalidad.titulo.toLowerCase()}).`}>
+  <CabeceraPagina idioma={idioma} antetitulo={modalidad.meses} titulo={contenido.titulo} intro={contenido.intro} migas={[{ texto: t(idioma, 'nav.experiencias'), href: r.experiencias }, { texto: 'Camino de Azahar', href: r.azahar }, { texto: modalidad.titulo }]} imagen={{ toma: galeria[0], ...reales[0] }}>
+    <div class="flex flex-wrap items-center gap-3">
+      <IndicadorTemporada idioma={idioma} />
+      <a href="#reservar" class="btn btn-luz">{T.reservarMod}</a>
+    </div>
+  </CabeceraPagina>
+  <NavExperiencia idioma={idioma} actual={Astro.url.pathname} />
+
+  <section class="contenedor py-[clamp(3rem,8vh,6rem)]" aria-label={T.galeria}>
+    <div class="galeria grid grid-cols-2 gap-3 md:grid-cols-4 md:grid-rows-2">
+      {galeria.slice(1).map((toma, i) => (
+        <div class={i === 0 ? 'col-span-2 row-span-2' : ''}>
+          <Imagen proporcion="1/1" toma={toma} {...reales[i + 1]} revelar />
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="contenedor grid gap-12 pb-[clamp(4rem,10vh,7rem)] lg:grid-cols-[1.1fr_0.9fr]" aria-labelledby="que-haces">
+    <div class="grid content-start gap-6">
+      <h2 id="que-haces" class="text-[clamp(1.7rem,3.4vw,2.8rem)]">{T.queHaces}</h2>
+      <ul class="grid gap-4">
+        {contenido.haces.map((linea) => (
+          <li class="revelar flex gap-4 border-b border-line pb-4 text-lg">
+            <span class="mt-1.5 h-3 w-3 shrink-0 rounded-full bg-deco" aria-hidden="true"></span>
+            <span>{linea}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <aside class="tarjeta grid content-start gap-4 p-7" aria-labelledby="datos-titulo">
+      <h2 id="datos-titulo" class="font-body text-xl font-semibold text-ink">{T.datosTitulo}</h2>
+      <dl class="grid gap-3">
+        {datos.map((d) => (
+          <div class="grid gap-0.5 border-b border-line pb-3">
+            <dt class="text-sm text-muted">{d.etiqueta}</dt>
+            <dd class="font-semibold">{d.valor}</dd>
+          </div>
+        ))}
+        <div class="grid gap-0.5 border-b border-line pb-3">
+          <dt class="text-sm text-muted">{T.cancelacion}</dt>
+          <dd><Pendiente texto="política de cancelación" /></dd>
+        </div>
+        <div class="grid gap-0.5">
+          <dt class="text-sm text-muted">{T.llevar}</dt>
+          <dd>{T.llevarV} <Pendiente texto="recomendaciones de la chacra" /></dd>
+        </div>
+      </dl>
+    </aside>
+  </section>
+
+  <section class="contenedor grid gap-10 pb-[clamp(4rem,10vh,7rem)] lg:grid-cols-2">
+    <TablaTarifas idioma={idioma} />
+    <AvisoAccesibilidad idioma={idioma} id={`aviso-${id}`} />
+  </section>
+
+  <section id="reservar" class="bg-surface-2 py-[clamp(5rem,12vh,9rem)]" aria-labelledby="reservar-titulo">
+    <div class="contenedor grid items-start gap-10 lg:grid-cols-[0.9fr_1.1fr]">
+      <div class="grid gap-6">
+        <h2 id="reservar-titulo" class="text-[clamp(1.6rem,3.1vw,2.6rem)] leading-[0.98]">{T.reservar}</h2>
+        <ListaSalidas idioma={idioma} salidas={salidasModalidad} />
+      </div>
+      <FormularioReserva idioma={idioma} salidas={salidasModalidad} id="reserva" />
+    </div>
+  </section>
+
+  <div class="contenedor grid gap-24 py-[clamp(4rem,12vh,8rem)]">
+    <PreguntasFrecuentes idioma={idioma} temas={['experiencia']} />
+    <TambienTeInteresa idioma={idioma} enlaces={[T.otra, T.chacra, T.planifica]} />
+  </div>
+</Base>

@@ -1,0 +1,95 @@
+---
+// Ruta animada de VÍA: una línea de camino que se dibuja con el scroll y une las "paradas"
+// (elementos con data-parada) dentro de su contenedor. Un punto recorre la ruta.
+// Va por los márgenes para no tapar contenido. Solo en pantallas anchas y sin movimiento reducido.
+---
+<svg class="ruta-svg pointer-events-none absolute inset-0 z-20 hidden h-full w-full overflow-visible lg:block" aria-hidden="true">
+  <path class="ruta-fondo" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="2 10" stroke-linecap="round" />
+  <path class="ruta-linea" fill="none" stroke-width="3" stroke-linecap="round" />
+  <g class="ruta-paradas"></g>
+  <g class="ruta-punto">
+    <circle r="14" class="ruta-halo" />
+    <circle r="7" class="ruta-centro" />
+  </g>
+</svg>
+
+<style>
+  .ruta-svg { color: var(--ca-border-strong); }
+  .ruta-linea { stroke: var(--ca-deco); }
+  .ruta-halo { fill: var(--ca-deco); opacity: 0.25; }
+  .ruta-centro { fill: var(--ca-deco); stroke: var(--ca-bg); stroke-width: 3; }
+  .ruta-svg :global(.parada) { fill: var(--ca-bg); stroke: var(--ca-border-strong); stroke-width: 2; transition: fill 400ms ease, stroke 400ms ease; }
+  .ruta-svg :global(.parada.activa) { fill: var(--ca-deco); stroke: var(--ca-deco); }
+  @media (prefers-reduced-motion: reduce) { .ruta-svg { display: none; } }
+</style>
+
+<script>
+  import { gsap, ScrollTrigger, reducido } from '../scripts/movimiento';
+  const svg = document.querySelector<SVGSVGElement>('.ruta-svg');
+  const contenedor = svg?.parentElement as HTMLElement | null;
+  if (svg && contenedor && !reducido && window.matchMedia('(min-width: 1024px)').matches) {
+    const fondo = svg.querySelector<SVGPathElement>('.ruta-fondo')!;
+    const linea = svg.querySelector<SVGPathElement>('.ruta-linea')!;
+    const grupoParadas = svg.querySelector<SVGGElement>('.ruta-paradas')!;
+    const punto = svg.querySelector<SVGGElement>('.ruta-punto')!;
+    let largo = 0;
+    let cortes: number[] = [];
+
+    const construir = () => {
+      const w = contenedor.offsetWidth;
+      const h = contenedor.offsetHeight;
+      const base = contenedor.getBoundingClientRect().top;
+      const margen = Math.max(22, (w - 1248) / 4);
+      svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+      const paradas = Array.from(contenedor.querySelectorAll<HTMLElement>('[data-parada]')).map((el, i) => ({
+        x: i % 2 === 0 ? margen : w - margen,
+        y: el.getBoundingClientRect().top - base + 24,
+      }));
+      let d = `M ${margen} 0`;
+      let previo = { x: margen, y: 0 };
+      // Baja por el margen y cruza de lado a lado solo en el espacio libre de arriba de cada parada
+      for (const p of paradas) {
+        if (p.x === previo.x) {
+          d += ` L ${p.x} ${p.y}`;
+        } else {
+          const cruce = Math.max(previo.y, p.y - 130);
+          d += ` L ${previo.x} ${cruce} C ${previo.x} ${cruce + 70}, ${p.x} ${p.y - 80}, ${p.x} ${p.y - 10} L ${p.x} ${p.y}`;
+        }
+        previo = p;
+      }
+      d += ` L ${previo.x} ${h - 40}`;
+      fondo.setAttribute('d', d);
+      linea.setAttribute('d', d);
+      largo = linea.getTotalLength();
+      linea.style.strokeDasharray = `${largo}`;
+      // Paradas y su posición sobre la ruta (fracción del largo)
+      grupoParadas.innerHTML = paradas.map((p) => `<circle class="parada" cx="${p.x}" cy="${p.y}" r="9"/>`).join('');
+      cortes = paradas.map((p) => {
+        let mejor = 0;
+        for (let l = 0; l <= largo; l += largo / 400) {
+          if (Math.abs(linea.getPointAtLength(l).y - p.y) < Math.abs(linea.getPointAtLength(mejor).y - p.y)) mejor = l;
+        }
+        return mejor / largo;
+      });
+    };
+
+    const pintar = (progreso: number) => {
+      linea.style.strokeDashoffset = `${largo * (1 - progreso)}`;
+      const pos = linea.getPointAtLength(largo * progreso);
+      punto.setAttribute('transform', `translate(${pos.x} ${pos.y})`);
+      grupoParadas.querySelectorAll('.parada').forEach((c, i) => c.classList.toggle('activa', progreso >= cortes[i] - 0.005));
+    };
+
+    construir();
+    pintar(0);
+    ScrollTrigger.create({
+      trigger: contenedor,
+      start: 'top 75%',
+      end: 'bottom 85%',
+      scrub: 0.6,
+      onUpdate: (self) => pintar(self.progress),
+      onRefresh: (self) => { construir(); pintar(self.progress); },
+    });
+    gsap.from(punto, { scale: 0, transformOrigin: 'center', duration: 0.6, ease: 'back.out(2)', scrollTrigger: { trigger: contenedor, start: 'top 75%' } });
+  }
+</script>

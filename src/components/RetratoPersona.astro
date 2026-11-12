@@ -1,0 +1,27 @@
+---
+// Retrato editorial con cita en primera persona.
+import Imagen from './Imagen.astro';
+interface Props {
+  nombre: string;
+  rol: string;
+  cita: string;
+  fuente?: string;
+  foto: string;
+  invertir?: boolean;
+}
+const { nombre, rol, cita, fuente, foto, invertir = false } = Astro.props;
+---
+<figure class={`grid items-center gap-8 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:gap-14 ${invertir ? 'md:[&>*:first-child]:order-2' : ''}`}>
+  <Imagen proporcion="4/5" toma={foto} alt={`Retrato de ${nombre}, ${rol}`} revelar />
+  <div class="revelar grid gap-6">
+    <span class="font-display text-7xl leading-none text-deco" aria-hidden="true">“</span>
+    <blockquote class="-mt-10">
+      <p class="font-display text-2xl italic leading-snug text-heading sm:text-3xl">{cita}</p>
+    </blockquote>
+    <figcaption class="grid gap-0.5 border-l-2 border-deco pl-4">
+      <span class="font-semibold">{nombre}</span>
+      <span class="text-muted">{rol}</span>
+      {fuente && <span class="text-xs text-muted">{fuente}</span>}
+    </figcaption>
+  </div>
+</figure>

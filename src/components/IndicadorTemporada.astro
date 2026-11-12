@@ -1,0 +1,39 @@
+---
+// Indicador de temporada: zafra (mayo–noviembre) o modalidad interpretativa.
+// Se calcula al compilar y se corrige en el navegador con la fecha real del visitante.
+// Con "fijo" muestra un estado concreto (útil para la página del sistema de diseño).
+import { temporadaDelMes, type Temporada } from '../lib/util';
+import { t, type Idioma } from '../i18n/ui';
+import site from '../data/site.json';
+
+interface Props {
+  idioma?: Idioma;
+  fijo?: Temporada;
+  class?: string;
+}
+const { idioma = 'es', fijo, class: clase = '' } = Astro.props;
+const estado = fijo ?? temporadaDelMes(new Date().getMonth() + 1);
+const textoFruto = t(idioma, 'temporada.fruto');
+const textoInterp = t(idioma, 'temporada.interpretativa');
+---
+<p
+  class={`chip ${estado === 'fruto' ? 'chip-fruto' : 'chip-interp'} ${clase}`}
+  data-indicador-temporada={fijo ? undefined : JSON.stringify(site.temporada.mesesConFruto)}
+  data-texto-fruto={textoFruto}
+  data-texto-interp={textoInterp}
+>
+  <span class="inline-block h-2 w-2 rounded-full bg-current" aria-hidden="true"></span>
+  <span data-texto>{estado === 'fruto' ? textoFruto : textoInterp}</span>
+</p>
+
+<script>
+  // Actualiza el indicador con el mes actual del visitante.
+  document.querySelectorAll<HTMLElement>('[data-indicador-temporada]').forEach((el) => {
+    const meses: number[] = JSON.parse(el.dataset.indicadorTemporada || '[]');
+    const conFruto = meses.includes(new Date().getMonth() + 1);
+    el.classList.toggle('chip-fruto', conFruto);
+    el.classList.toggle('chip-interp', !conFruto);
+    const texto = el.querySelector('[data-texto]');
+    if (texto) texto.textContent = (conFruto ? el.dataset.textoFruto : el.dataset.textoInterp) || '';
+  });
+</script>

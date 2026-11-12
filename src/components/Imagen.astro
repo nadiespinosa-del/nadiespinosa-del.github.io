@@ -1,0 +1,67 @@
+---
+// Marco de imagen con proporción fija.
+// Mientras no haya foto real, muestra un fondo cálido con la rodaja y una etiqueta
+// que describe la toma requerida (sirve como guía para el fotógrafo).
+// Cuando haya foto, pasá "src" y se muestra la imagen con su texto alternativo.
+import Rodaja from './Rodaja.astro';
+
+interface Props {
+  proporcion?: '4/5' | '3/2' | '16/9' | '1/1' | '3/4' | '21/9';
+  toma: string;
+  alt: string;
+  src?: string;
+  momento?: string;
+  encuadre?: string;
+  archivo?: boolean;
+  revelar?: boolean;
+  /** Fotos de portada: se cargan de inmediato en lugar de esperar al scroll. */
+  prioridad?: boolean;
+  class?: string;
+}
+const {
+  proporcion = '3/2',
+  toma,
+  alt,
+  src,
+  momento,
+  encuadre,
+  archivo = false,
+  revelar = false,
+  prioridad = false,
+  class: clase = '',
+} = Astro.props;
+const detalle = [encuadre, momento].filter(Boolean).join(', ');
+---
+{src ? (
+  <img src={src} alt={alt} loading={prioridad ? 'eager' : 'lazy'} decoding="async" referrerpolicy="no-referrer" class={`w-full rounded-[var(--ca-radius-lg)] object-cover ${revelar ? 'revelar-circulo' : ''} ${clase}`} style={`aspect-ratio: ${proporcion};`} />
+) : (
+  <figure
+    class={`foto-pendiente relative isolate overflow-hidden rounded-[var(--ca-radius-lg)] ${archivo ? 'foto-archivo' : ''} ${revelar ? 'revelar-circulo' : ''} ${clase}`}
+    style={`aspect-ratio: ${proporcion};`}
+    role="img"
+    aria-label={alt}
+    data-foto-pendiente
+  >
+    <Rodaja tamano={520} grosor={0.9} class="absolute left-1/2 top-1/2 -z-10 h-[140%] w-[140%] -translate-x-1/2 -translate-y-1/2 opacity-25" />
+    <figcaption class="absolute inset-x-3 bottom-3 rounded-xl bg-black/35 px-3 py-2 text-left text-[0.8rem] leading-snug text-white backdrop-blur-sm">
+      <span class="font-semibold">{archivo ? 'Foto de archivo pendiente' : 'Foto pendiente'}:</span> {toma}{detalle && `. ${detalle}`}
+    </figcaption>
+  </figure>
+)}
+
+<style>
+  .foto-pendiente {
+    color: #fff3df;
+    background:
+      radial-gradient(120% 90% at 30% 20%, #f4b25a 0%, transparent 55%),
+      radial-gradient(90% 80% at 80% 90%, #2a4a38 0%, transparent 60%),
+      linear-gradient(160deg, #e07a2e 0%, #a8502a 55%, #1f3a2b 100%);
+  }
+  .foto-archivo {
+    color: #f3e6cc;
+    background:
+      radial-gradient(100% 80% at 40% 30%, #cdb58c 0%, transparent 60%),
+      linear-gradient(160deg, #8a7458 0%, #4a3c2c 100%);
+    filter: sepia(0.2);
+  }
+</style>

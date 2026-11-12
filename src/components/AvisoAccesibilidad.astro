@@ -1,0 +1,49 @@
+---
+// Aviso de accesibilidad y exigencia física. Debe verse ANTES de reservar.
+// "compacto" para formularios y fichas; "completo" para la página de accesibilidad.
+import Pendiente from './Pendiente.astro';
+import { elegir, type Idioma } from '../i18n/ui';
+interface Props { idioma?: Idioma; variante?: 'compacto' | 'completo'; id?: string }
+const { idioma = 'es', variante = 'compacto', id = 'aviso-accesibilidad' } = Astro.props;
+const T = elegir(idioma, {
+  es: {
+    titulo: 'Accesibilidad y exigencia física',
+    puntos: ['El recorrido es en un <strong>entorno rural</strong>, con caminos y superficies irregulares.', 'Por ahora <strong>no hay accesibilidad universal en todo el circuito</strong>.', 'Exigencia física <strong>básica</strong>: hay que caminar durante parte del recorrido.', 'Si tenés alguna necesidad, contanos al reservar y adaptamos lo que sea posible.'],
+    sectores: 'Sectores accesibles', sanitarios: 'Sanitarios', sombra: 'Sombra y espacio cubierto',
+    progresiva: 'Trabajamos con un enfoque de accesibilidad progresiva: vamos a ir mejorando los espacios a medida que la propuesta crezca.',
+  },
+  pt: {
+    titulo: 'Acessibilidade e exigência física',
+    puntos: ['O percurso é em <strong>ambiente rural</strong>, com caminhos e superfícies irregulares.', 'Por enquanto <strong>não há acessibilidade universal em todo o circuito</strong>.', 'Exigência física <strong>básica</strong>: é preciso caminhar durante parte do percurso.', 'Se você tiver alguma necessidade, conte-nos ao reservar e adaptamos o que for possível.'],
+    sectores: 'Áreas acessíveis', sanitarios: 'Banheiros', sombra: 'Sombra e espaço coberto',
+    progresiva: 'Trabalhamos com acessibilidade progressiva: vamos melhorando os espaços à medida que a proposta cresce.',
+  },
+  en: {
+    titulo: 'Accessibility and physical effort',
+    puntos: ['The visit takes place in the <strong>countryside</strong>, on uneven paths and ground.', 'The route is <strong>not yet fully accessible</strong>.', 'The physical effort is <strong>light</strong>: you walk for part of the visit.', 'If you have any needs, tell us when you book and we will adapt whatever we can.'],
+    sectores: 'Accessible areas', sanitarios: 'Toilets', sombra: 'Shade and covered space',
+    progresiva: 'We are improving accessibility step by step, and the spaces will keep getting better as the project grows.',
+  },
+});
+---
+<aside id={id} class="rounded-[var(--ca-radius)] border-2 border-line-strong bg-surface p-5" aria-labelledby={`${id}-titulo`}>
+  <div class="flex items-start gap-3">
+    <svg class="mt-0.5 shrink-0 text-accent" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="4.5" r="1.8" /><path d="M7 9h10M12 9v5l-3 6M12 14l3 6" />
+    </svg>
+    <div class="grid gap-2">
+      <h3 id={`${id}-titulo`} class="font-body text-lg font-semibold text-ink">{T.titulo}</h3>
+      <ul class="grid list-disc gap-1 pl-5 text-ink">
+        {T.puntos.map((p) => <li set:html={p} />)}
+      </ul>
+      {variante === 'completo' && (
+        <div class="mt-2 grid gap-1 text-sm text-muted">
+          <p>{T.sectores}: <Pendiente texto="qué sectores son accesibles" /></p>
+          <p>{T.sanitarios}: <Pendiente texto="disponibilidad y accesibilidad" /></p>
+          <p>{T.sombra}: <Pendiente texto="descripción" /></p>
+          <p>{T.progresiva}</p>
+        </div>
+      )}
+    </div>
+  </div>
+</aside>

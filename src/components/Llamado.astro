@@ -1,0 +1,24 @@
+---
+// Banda de llamado a la acción sobre verde profundo, con la rodaja como fondo.
+import Rodaja from './Rodaja.astro';
+interface Props {
+  antetitulo?: string;
+  titulo: string;
+  texto?: string;
+  boton: { texto: string; href: string };
+  secundario?: { texto: string; href: string };
+}
+const { antetitulo, titulo, texto, boton, secundario } = Astro.props;
+---
+<section class="on-deep relative overflow-hidden rounded-[var(--ca-radius-lg)] bg-deep px-6 py-14 text-on-deep sm:px-12">
+  <Rodaja tamano={420} grosor={1} class="pointer-events-none absolute -bottom-40 -left-24 text-highlight opacity-15" />
+  <div class="relative grid max-w-3xl gap-4">
+    {antetitulo && <p class="antetitulo !text-highlight">{antetitulo}</p>}
+    <h2 class="text-3xl !text-on-deep">{titulo}</h2>
+    {texto && <p class="text-lg text-on-deep-muted">{texto}</p>}
+    <div class="mt-2 flex flex-wrap gap-3">
+      <a href={boton.href} class="btn btn-luz">{boton.texto}</a>
+      {secundario && <a href={secundario.href} class="btn btn-contorno-claro">{secundario.texto}</a>}
+    </div>
+  </div>
+</section>

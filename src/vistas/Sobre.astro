@@ -1,0 +1,166 @@
+---
+// Sobre el proyecto (tres idiomas): origen, misión, visión, organización y marco.
+import Base from '../layouts/Base.astro';
+import CabeceraPagina from '../components/CabeceraPagina.astro';
+import NavExperiencia from '../components/NavExperiencia.astro';
+import TambienTeInteresa from '../components/TambienTeInteresa.astro';
+import DatosEstructurados from '../components/DatosEstructurados.astro';
+import site from '../data/site.json';
+import { elegir, rutas, rutaReservar, t, type Idioma } from '../i18n/ui';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const r = rutas[idioma];
+const programa = site.creditos.programa.replace('Proyecto de egreso, ', '');
+const T = elegir(idioma, {
+  es: {
+    meta: 'Sobre el proyecto · Camino de Azahar',
+    desc: 'Camino de Azahar nace como proyecto de egreso en el Polo Educativo Tecnológico de Salto (DGETP-UTU). Misión, visión, organización y marco del proyecto.',
+    titulo: 'Cultivando identidad, cosechando experiencia', intro: 'Camino de Azahar convierte la citricultura salteña en una experiencia turística y educativa, participativa y sostenible.',
+    porque: 'Por qué existe',
+    p1: 'La naranja tiene una fuerte presencia en la identidad productiva y cultural de Salto, pero ese valor no se reflejaba en su aprovechamiento turístico, asociado sobre todo a las termas. Esa contradicción es la razón de ser de Camino de Azahar.',
+    p2: ['El proyecto nace como proyecto de egreso del ', ', elaborado por ', '.'],
+    p3: 'Para diseñarlo se combinó investigación documental, observación del lugar, intercambio con actores locales y una encuesta a 60 personas en octubre de 2026. En esa consulta, el 96,7 % reconoció a la naranja como parte de la identidad de Salto y el 91,7 % manifestó interés en una experiencia vinculada a su producción. Son tendencias de una consulta, no datos representativos de toda la población.',
+    misionVision: 'Misión y visión', mision: 'Misión', vision: 'Visión',
+    misionTexto: 'Diseñar y ofrecer una experiencia turística y educativa en torno a la naranja, que permita a los visitantes conocer y vivenciar las diferentes etapas de su cadena productiva, integrando el patrimonio, la identidad local, la participación de actores del territorio y prácticas de turismo sostenible.',
+    visionTexto: 'Consolidarse como una propuesta turística y educativa referente en el departamento de Salto, reconocida por poner en valor la identidad citrícola del territorio, fortalecer la participación de la comunidad local y generar experiencias significativas y sostenibles para diferentes públicos.',
+    quienes: 'Quiénes lo hacen posible',
+    actores: [
+      ['Agencia turística Vía', 'Promoción, comercialización, reservas, atención a visitantes y coordinación general.'],
+      ['Equipo de Camino de Azahar', 'Diseño, planificación y coordinación de las actividades; guiones de visita, formación de guías, protocolos de seguridad y control de calidad.'],
+      ['Chacra La Victoria', 'Espacio central de la experiencia: recorrido por el naranjal y relato de su encargada, Patricia Real.'],
+      ['Emprendedores locales', 'Elaboración, muestra y degustación de productos derivados de la naranja; vinculados a la Feria de Colonia Osimani y Llerena.'],
+      ['Instituciones educativas', 'Adaptación pedagógica y coordinación de las visitas escolares.'],
+    ],
+    marco: 'Marco del proyecto',
+    m1: ['Camino de Azahar se alinea con el ', 'Plan Nacional de Turismo Sostenible 2030', ' del Ministerio de Turismo, que reconoce al turismo en espacios rurales y la identidad territorial como parte de la marca de un destino. Salto integra la región turística del Corredor de los Pájaros Pintados.'],
+    m2: 'También se vincula con la propuesta departamental de integrar los atractivos productivos, culturales y gastronómicos en circuitos como la «Ruta Salto».',
+    leyes: [['Ley N.º 19.253', ' (2014): regula la actividad turística y la declara de interés nacional.'], ['Decreto 371/2002', ': regula el turismo rural y los prestadores de servicios turísticos rurales.'], ['Ley N.º 17.283', ' (2000): protección del medio ambiente.']],
+    experiencia: 'La experiencia', enlaces: ['Cómo cuidamos el entorno y repartimos los beneficios.', 'Datos verificados, contacto y material para comunicar.', 'Las cinco etapas de la visita.'],
+  },
+  pt: {
+    meta: 'Sobre o projeto · Camino de Azahar',
+    desc: 'O Camino de Azahar nasceu como projeto de conclusão de curso no Polo Educativo Tecnológico de Salto (DGETP-UTU, Uruguai). Missão, visão, organização e marco do projeto.',
+    titulo: 'Cultivando identidade, colhendo experiência', intro: 'O Camino de Azahar transforma a citricultura de Salto em uma experiência turística e educativa, participativa e sustentável.',
+    porque: 'Por que existe',
+    p1: 'A laranja tem forte presença na identidade produtiva e cultural de Salto, mas esse valor não se refletia no turismo, associado sobretudo às termas. Essa contradição é a razão de ser do Camino de Azahar.',
+    p2: ['O projeto nasceu como projeto de conclusão do curso ', ', elaborado por ', '.'],
+    p3: 'Para desenhá-lo, combinou-se pesquisa documental, observação do lugar, troca com atores locais e uma pesquisa com 60 pessoas em outubro de 2026. Nessa consulta, 96,7 % reconheceram a laranja como parte da identidade de Salto e 91,7 % manifestaram interesse em uma experiência ligada à sua produção. São tendências de uma consulta, não dados representativos de toda a população.',
+    misionVision: 'Missão e visão', mision: 'Missão', vision: 'Visão',
+    misionTexto: 'Desenhar e oferecer uma experiência turística e educativa em torno da laranja, que permita aos visitantes conhecer e vivenciar as diferentes etapas da sua cadeia produtiva, integrando o patrimônio, a identidade local, a participação de atores do território e práticas de turismo sustentável.',
+    visionTexto: 'Consolidar-se como uma proposta turística e educativa de referência no departamento de Salto, reconhecida por valorizar a identidade cítrica do território, fortalecer a participação da comunidade local e gerar experiências significativas e sustentáveis para diferentes públicos.',
+    quienes: 'Quem torna isso possível',
+    actores: [
+      ['Agência de turismo Vía', 'Promoção, comercialização, reservas, atendimento aos visitantes e coordenação geral.'],
+      ['Equipe do Camino de Azahar', 'Desenho, planejamento e coordenação das atividades; roteiros de visita, formação de guias, protocolos de segurança e controle de qualidade.'],
+      ['Chacra La Victoria', 'Espaço central da experiência: percurso pelo laranjal e relato da sua responsável, Patricia Real.'],
+      ['Empreendedores locais', 'Preparo, mostra e degustação de produtos derivados da laranja; ligados à Feira de Colonia Osimani e Llerena.'],
+      ['Instituições de ensino', 'Adaptação pedagógica e coordenação das visitas escolares.'],
+    ],
+    marco: 'Marco do projeto',
+    m1: ['O Camino de Azahar está alinhado ao ', 'Plano Nacional de Turismo Sustentável 2030', ' do Ministério do Turismo do Uruguai, que reconhece o turismo em espaços rurais e a identidade territorial como parte da marca de um destino. Salto integra a região turística do Corredor de los Pájaros Pintados.'],
+    m2: 'Também se vincula à proposta departamental de integrar os atrativos produtivos, culturais e gastronômicos em circuitos como a "Ruta Salto".',
+    leyes: [['Lei n.º 19.253', ' (2014): regula a atividade turística e a declara de interesse nacional.'], ['Decreto 371/2002', ': regula o turismo rural e os prestadores de serviços turísticos rurais.'], ['Lei n.º 17.283', ' (2000): proteção do meio ambiente.']],
+    experiencia: 'A experiência', enlaces: ['Como cuidamos do ambiente e distribuímos os benefícios.', 'Dados verificados, contato e material para divulgar.', 'As cinco etapas da visita.'],
+  },
+  en: {
+    meta: 'About the project · Camino de Azahar',
+    desc: 'Camino de Azahar began as a final-year project at the Polo Educativo Tecnológico de Salto (DGETP-UTU, Uruguay). Mission, vision, organisation and framework.',
+    titulo: 'Growing identity, harvesting experience', intro: 'Camino de Azahar turns citrus farming in Salto into a hands-on, sustainable travel and learning experience.',
+    porque: 'Why it exists',
+    p1: 'The orange is a big part of Salto\'s farming and cultural identity, but that was not reflected in its tourism, which revolves mainly around the hot springs. That gap is the reason Camino de Azahar exists.',
+    p2: ['The project began as a final-year project for the ', ', created by ', '.'],
+    p3: 'It was designed through desk research, on-site observation, conversations with local stakeholders and a survey of 60 people in October 2026. In that survey, 96.7 % recognised the orange as part of Salto\'s identity and 91.7 % were interested in an experience linked to how it is grown. These are trends from one survey, not figures representative of the whole population.',
+    misionVision: 'Mission and vision', mision: 'Mission', vision: 'Vision',
+    misionTexto: 'To design and offer a travel and learning experience built around the orange, letting visitors discover and take part in the different stages of its production chain, while bringing together heritage, local identity, the involvement of local stakeholders and sustainable tourism practices.',
+    visionTexto: 'To become a leading travel and learning experience in the Salto department, recognised for celebrating the area\'s citrus identity, strengthening local community involvement and creating meaningful, sustainable experiences for different audiences.',
+    quienes: 'Who makes it possible',
+    actores: [
+      ['Vía travel agency', 'Promotion, sales, bookings, visitor care and overall coordination.'],
+      ['Camino de Azahar team', 'Design, planning and coordination of activities; visit scripts, guide training, safety protocols and quality control.'],
+      ['Chacra La Victoria', 'The heart of the experience: a walk through the orange grove and the story told by its manager, Patricia Real.'],
+      ['Local makers', 'Making, displaying and offering tastings of orange-based products; linked to the Colonia Osimani and Llerena market.'],
+      ['Schools', 'Adapting the content for teaching and coordinating school visits.'],
+    ],
+    marco: 'Project framework',
+    m1: ['Camino de Azahar is aligned with the ', 'National Sustainable Tourism Plan 2030', ' of Uruguay\'s Ministry of Tourism, which recognises rural tourism and local identity as part of a destination\'s brand. Salto is part of the Corredor de los Pájaros Pintados tourism region.'],
+    m2: 'It also connects with the departmental plan to bring farming, cultural and food attractions together in routes such as the "Ruta Salto".',
+    leyes: [['Law No. 19,253', ' (2014): regulates tourism and declares it of national interest.'], ['Decree 371/2002', ': regulates rural tourism and rural tourism service providers.'], ['Law No. 17,283', ' (2000): environmental protection.']],
+    experiencia: 'The experience', enlaces: ['How we look after the environment and share the benefits.', 'Verified facts, contact details and media material.', 'The five stages of the visit.'],
+  },
+});
+const orgLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Camino de Azahar',
+  slogan: site.lema,
+  url: site.dominio,
+  founder: [{ '@type': 'Person', name: 'Nadia Espinosa' }, { '@type': 'Person', name: 'Sthefanie Machado' }],
+  areaServed: 'Salto, Uruguay',
+};
+---
+<Base titulo={T.meta} descripcion={T.desc} idioma={idioma} encabezadoFlotante tema="azahar" clave="azaharSobre" cta={{ texto: t(idioma, 'nav.reservar'), href: rutaReservar(idioma) }}>
+  <CabeceraPagina
+    idioma={idioma}
+    antetitulo={t(idioma, 'pie.sobre')}
+    titulo={T.titulo}
+    intro={T.intro}
+    migas={[{ texto: t(idioma, 'nav.experiencias'), href: r.experiencias }, { texto: 'Camino de Azahar', href: r.azahar }, { texto: t(idioma, 'pie.sobre') }]}
+  />
+  <NavExperiencia idioma={idioma} actual={Astro.url.pathname} />
+
+  <div class="contenedor grid gap-20 py-[clamp(4rem,12vh,8rem)]">
+    <section class="grid gap-10 lg:grid-cols-2" aria-labelledby="origen-titulo">
+      <h2 id="origen-titulo" class="max-w-[14ch] text-[clamp(1.6rem,3.4vw,2.9rem)] leading-[0.98]">{T.porque}</h2>
+      <div class="prosa">
+        <p>{T.p1}</p>
+        <p>{T.p2[0]}<strong>{programa}</strong>{T.p2[1]}<strong>{site.creditos.contenido}</strong>{T.p2[2]}</p>
+        <p>{T.p3}</p>
+      </div>
+    </section>
+
+    <section class="grid gap-6 md:grid-cols-2" aria-label={T.misionVision}>
+      <article class="tarjeta grid content-start gap-4 p-8">
+        <h2 class="text-3xl">{T.mision}</h2>
+        <p class="text-lg text-muted">{T.misionTexto}</p>
+      </article>
+      <article class="tarjeta grid content-start gap-4 bg-deep p-8 text-on-deep">
+        <h2 class="text-3xl !text-on-deep">{T.vision}</h2>
+        <p class="text-lg text-on-deep-muted">{T.visionTexto}</p>
+      </article>
+    </section>
+
+    <section class="grid gap-8" aria-labelledby="quienes-titulo">
+      <h2 id="quienes-titulo" class="text-[clamp(1.6rem,3vw,2.6rem)]">{T.quienes}</h2>
+      <ul class="grid border-t border-line-strong">
+        {T.actores.map(([nombre, rol]) => (
+          <li class="grid gap-2 border-b border-line-strong py-6 md:grid-cols-[0.4fr_0.6fr]">
+            <h3 class="text-2xl">{nombre}</h3>
+            <p class="text-lg text-muted">{rol}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="grid gap-10 lg:grid-cols-2" aria-labelledby="marco-titulo">
+      <h2 id="marco-titulo" class="max-w-[14ch] text-[clamp(1.6rem,3vw,2.6rem)]">{T.marco}</h2>
+      <div class="prosa">
+        <p>{T.m1[0]}<strong>{T.m1[1]}</strong>{T.m1[2]}</p>
+        <p>{T.m2}</p>
+        <ul>
+          {T.leyes.map(([ley, texto]) => <li><strong>{ley}</strong>{texto}</li>)}
+        </ul>
+      </div>
+    </section>
+
+    <TambienTeInteresa
+      idioma={idioma}
+      enlaces={[
+        { titulo: t(idioma, 'pie.sostenibilidad'), texto: T.enlaces[0], href: r.sostenibilidad },
+        { titulo: t(idioma, 'pie.prensa'), texto: T.enlaces[1], href: r.prensa },
+        { titulo: T.experiencia, texto: T.enlaces[2], href: r.azahar },
+      ]}
+    />
+  </div>
+  <DatosEstructurados datos={orgLd} />
+</Base>

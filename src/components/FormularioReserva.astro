@@ -1,0 +1,254 @@
+---
+// Formulario de reserva y consulta.
+// - Antes de enviar, la persona tiene que leer y aceptar el aviso de accesibilidad.
+// - Calcula un total estimado con las tarifas de site.json (siempre como "tarifa propuesta").
+// - Sin servicio de formularios todavía: al enviar, abre WhatsApp con el mensaje armado.
+import AvisoAccesibilidad from './AvisoAccesibilidad.astro';
+import site from '../data/site.json';
+import { experiencia, textos } from '../lib/datos';
+import { fechaLarga } from '../lib/util';
+import { elegir, idiomas, type Idioma } from '../i18n/ui';
+import { textosValidacion } from '../i18n/formularios';
+
+interface Salida { fecha: string; hora?: string; modalidad: string; lugaresLibres: number; estado?: string }
+interface Props { idioma?: Idioma; salidas?: Salida[]; id?: string }
+const { idioma = 'es', salidas = [], id = 'reserva' } = Astro.props;
+const hoy = new Date().toISOString().slice(0, 10);
+const abiertas = salidas.filter((s) => s.lugaresLibres > 0 && s.estado !== 'a-confirmar');
+const precios = Object.fromEntries(site.tarifas.items.map((t) => [t.id, t.precio]));
+const numero = site.contacto.whatsapp?.numero ?? '';
+const T = elegir(idioma, {
+  es: {
+    ante: 'Reservá tu lugar', titulo: 'Consultá o reservá una salida', bajada: 'Te respondemos por WhatsApp para confirmar la fecha, el cupo y el pago. Los campos con * son obligatorios.',
+    salida: 'Salida', elegiSalida: 'Elegí una fecha', errSalida: 'Elegí una salida.', lugares: 'lugares',
+    fecha: 'Fecha que te interesa', errFecha: 'Elegí una fecha.', ayudaFecha: 'Te confirmamos si hay salida ese día o te ofrecemos la más cercana.', etFecha: 'Fecha de interés',
+    modalidad: 'Modalidad', personas: '¿Cuántas personas vienen?', general: 'Adultos y mayores de 5', estudiante: 'Estudiantes de educación media', menor: 'Menores de 5 años', etEstudiante: 'Estudiantes',
+    total: 'Total estimado', grupo: 'Tarifa de grupo aplicada', nombre: 'Tu nombre', errNombre: 'Escribí tu nombre para saber a quién responder.', etNombre: 'Nombre',
+    idioma: 'Idioma de la visita', ayudaIdioma: 'La guía es en español; consultanos por otros idiomas.', etIdioma: 'Idioma',
+    necesidades: 'Necesidades de accesibilidad (opcional)', phNecesidades: 'Por ejemplo: viene una persona que camina con bastón', etNecesidades: 'Necesidades de accesibilidad',
+    mensaje: 'Mensaje (opcional)', phMensaje: 'Contanos lo que quieras sobre tu visita', etMensaje: 'Mensaje',
+    acepto: 'Leí la información de accesibilidad y exigencia física de la visita.', errAcepto: 'Para reservar, confirmá que leíste el aviso de accesibilidad.',
+    enviar: 'Enviar consulta por WhatsApp', notaEnviar: 'Se abre WhatsApp con tu mensaje listo para enviar.',
+    exito: '¡Listo! Abrimos WhatsApp con tu consulta.', exito2: 'Solo falta tocar "Enviar" en WhatsApp. Si no se abrió,', exitoEnlace: 'abrí WhatsApp desde acá',
+    intro: 'Hola, quiero reservar Camino de Azahar.', totalMsj: 'Total estimado', propuesta: 'tarifa propuesta',
+    errPersonas: 'Indicá cuántas personas vienen.', errMaximo: `Cada salida tiene un máximo de ${site.cupo.maximo} personas. Para grupos más grandes, escribinos y armamos una salida especial.`,
+    hs: ' h',
+  },
+  pt: {
+    ante: 'Reserve sua vaga', titulo: 'Pergunte ou reserve uma saída', bajada: 'Respondemos pelo WhatsApp para confirmar a data, as vagas e o pagamento. Os campos com * são obrigatórios.',
+    salida: 'Saída', elegiSalida: 'Escolha uma data', errSalida: 'Escolha uma saída.', lugares: 'vagas',
+    fecha: 'Data de interesse', errFecha: 'Escolha uma data.', ayudaFecha: 'Confirmamos se há saída nesse dia ou oferecemos a mais próxima.', etFecha: 'Data de interesse',
+    modalidad: 'Modalidade', personas: 'Quantas pessoas vêm?', general: 'Adultos e maiores de 5 anos', estudiante: 'Estudantes do ensino médio', menor: 'Crianças menores de 5 anos', etEstudiante: 'Estudantes',
+    total: 'Total estimado', grupo: 'Tarifa de grupo aplicada', nombre: 'Seu nome', errNombre: 'Escreva seu nome para sabermos a quem responder.', etNombre: 'Nome',
+    idioma: 'Idioma da visita', ayudaIdioma: 'A visita é guiada em espanhol; consulte-nos sobre outros idiomas.', etIdioma: 'Idioma',
+    necesidades: 'Necessidades de acessibilidade (opcional)', phNecesidades: 'Por exemplo: vem uma pessoa que usa bengala', etNecesidades: 'Necessidades de acessibilidade',
+    mensaje: 'Mensagem (opcional)', phMensaje: 'Conte o que quiser sobre a sua visita', etMensaje: 'Mensagem',
+    acepto: 'Li as informações de acessibilidade e exigência física da visita.', errAcepto: 'Para reservar, confirme que leu o aviso de acessibilidade.',
+    enviar: 'Enviar pelo WhatsApp', notaEnviar: 'O WhatsApp abre com sua mensagem pronta para enviar.',
+    exito: 'Pronto! Abrimos o WhatsApp com a sua mensagem.', exito2: 'Só falta tocar em "Enviar" no WhatsApp. Se não abriu,', exitoEnlace: 'abra o WhatsApp por aqui',
+    intro: 'Olá, quero reservar o Camino de Azahar.', totalMsj: 'Total estimado', propuesta: 'tarifa proposta',
+    errPersonas: 'Informe quantas pessoas vêm.', errMaximo: `Cada saída tem no máximo ${site.cupo.maximo} pessoas. Para grupos maiores, escreva para nós e montamos uma saída especial.`,
+    hs: ' h',
+  },
+  en: {
+    ante: 'Book your spot', titulo: 'Ask about or book a departure', bajada: "We'll reply on WhatsApp to confirm the date, availability and payment. Fields marked * are required.",
+    salida: 'Departure', elegiSalida: 'Choose a date', errSalida: 'Choose a departure.', lugares: 'spots',
+    fecha: 'Preferred date', errFecha: 'Choose a date.', ayudaFecha: "We'll confirm whether there's a departure that day or offer the nearest one.", etFecha: 'Preferred date',
+    modalidad: 'Type of visit', personas: 'How many people are coming?', general: 'Adults and children over 5', estudiante: 'Secondary school students', menor: 'Children under 5', etEstudiante: 'Students',
+    total: 'Estimated total', grupo: 'Group price applied', nombre: 'Your name', errNombre: "Enter your name so we know who we're replying to.", etNombre: 'Name',
+    idioma: 'Language of the visit', ayudaIdioma: 'Visits are guided in Spanish; ask us about other languages.', etIdioma: 'Language',
+    necesidades: 'Accessibility needs (optional)', phNecesidades: 'For example: one person walks with a cane', etNecesidades: 'Accessibility needs',
+    mensaje: 'Message (optional)', phMensaje: 'Tell us anything about your visit', etMensaje: 'Message',
+    acepto: "I've read the accessibility and physical effort information for the visit.", errAcepto: 'To book, please confirm you have read the accessibility information.',
+    enviar: 'Send on WhatsApp', notaEnviar: 'WhatsApp opens with your message ready to send.',
+    exito: 'Done! We opened WhatsApp with your message.', exito2: 'Just tap "Send" in WhatsApp. If it didn\'t open,', exitoEnlace: 'open WhatsApp here',
+    intro: 'Hi, I would like to book Camino de Azahar.', totalMsj: 'Estimated total', propuesta: 'proposed price',
+    errPersonas: 'Tell us how many people are coming.', errMaximo: `Each departure has a maximum of ${site.cupo.maximo} people. For larger groups, message us and we'll set up a special departure.`,
+    hs: '',
+  },
+});
+const leyenda = textos(idioma).leyenda;
+---
+<form
+  id={id}
+  class="formulario-reserva tarjeta grid gap-6 p-6 sm:p-8"
+  novalidate
+  data-whatsapp={numero}
+  data-precios={JSON.stringify(precios)}
+  data-minimo-grupo={site.tarifas.minimoParaTarifaGrupo}
+  data-maximo={site.cupo.maximo}
+  data-textos={JSON.stringify(textosValidacion[idioma])}
+  data-locale={idiomas[idioma].locale}
+  data-intro={T.intro}
+  data-total-msj={T.totalMsj}
+  data-propuesta={T.propuesta}
+  data-err-personas={T.errPersonas}
+  data-err-maximo={T.errMaximo}
+  data-grupo-txt={T.grupo}
+  aria-labelledby={`${id}-titulo`}
+>
+  <div class="grid gap-1">
+    <p class="antetitulo">{T.ante}</p>
+    <h3 id={`${id}-titulo`} class="text-3xl">{T.titulo}</h3>
+    <p class="text-muted">{T.bajada}</p>
+  </div>
+
+  <div data-resumen-errores tabindex="-1" hidden class="rounded-[var(--ca-radius)] border-2 border-on-err bg-err p-4 text-on-err" role="alert"></div>
+
+  <div class="grid gap-5 md:grid-cols-2">
+    {abiertas.length > 0 ? (
+      <div class="campo md:col-span-2">
+        <label for={`${id}-salida`}>{T.salida} *</label>
+        <select id={`${id}-salida`} class="control" required data-etiqueta={T.salida} data-error={T.errSalida} aria-describedby={`${id}-salida-error`}>
+          <option value="">{T.elegiSalida}</option>
+          {abiertas.map((s) => (
+            <option value={s.fecha}>{fechaLarga(s.fecha, idioma)}{s.hora ? ` · ${s.hora}${T.hs}` : ''} · {s.lugaresLibres} {T.lugares}</option>
+          ))}
+        </select>
+        <p id={`${id}-salida-error`} class="error-campo" aria-live="polite"></p>
+      </div>
+    ) : (
+      <div class="campo">
+        <label for={`${id}-fecha`}>{T.fecha} *</label>
+        <input id={`${id}-fecha`} type="date" class="control" min={hoy} required data-etiqueta={T.etFecha} data-error={T.errFecha} aria-describedby={`${id}-fecha-ayuda ${id}-fecha-error`} />
+        <p id={`${id}-fecha-ayuda`} class="ayuda">{T.ayudaFecha}</p>
+        <p id={`${id}-fecha-error`} class="error-campo" aria-live="polite"></p>
+      </div>
+    )}
+
+    <div class="campo">
+      <label for={`${id}-modalidad`}>{T.modalidad}</label>
+      <select id={`${id}-modalidad`} class="control" data-etiqueta={T.modalidad}>
+        {experiencia(idioma).modalidades.map((m) => <option value={m.id}>{m.titulo} ({m.meses.toLowerCase()})</option>)}
+      </select>
+    </div>
+  </div>
+
+  <fieldset class="grid gap-4">
+    <legend class="mb-1 font-semibold">{T.personas} *</legend>
+    <div class="grid gap-4 sm:grid-cols-3">
+      {[
+        { tipo: 'general', etiqueta: T.general, et: T.general, valor: '2' },
+        { tipo: 'estudiante', etiqueta: T.estudiante, et: T.etEstudiante, valor: '0' },
+        { tipo: 'menor', etiqueta: T.menor, et: T.menor, valor: '0' },
+      ].map((c) => (
+        <div class="campo">
+          <label for={`${id}-${c.tipo}`}>{c.etiqueta}</label>
+          <input id={`${id}-${c.tipo}`} type="number" inputmode="numeric" min="0" max={site.cupo.maximo} value={c.valor} class="control" data-personas={c.tipo} data-etiqueta={c.et} aria-describedby={`${id}-${c.tipo}-error`} />
+          <p id={`${id}-${c.tipo}-error`} class="error-campo" aria-live="polite"></p>
+        </div>
+      ))}
+    </div>
+    <p id={`${id}-personas-error`} class="error-campo" aria-live="polite"></p>
+    <div class="flex flex-wrap items-baseline justify-between gap-2 rounded-[var(--ca-radius)] bg-surface-2 px-5 py-4">
+      <p class="font-semibold">{T.total}</p>
+      <p>
+        <output data-total class="font-display text-2xl text-heading" aria-live="polite">$U 1.500</output>
+        <span class="block text-right text-xs text-muted" data-total-nota>{leyenda}</span>
+      </p>
+    </div>
+  </fieldset>
+
+  <div class="grid gap-5 md:grid-cols-2">
+    <div class="campo">
+      <label for={`${id}-nombre`}>{T.nombre} *</label>
+      <input id={`${id}-nombre`} type="text" class="control" autocomplete="name" required data-etiqueta={T.etNombre} data-error={T.errNombre} aria-describedby={`${id}-nombre-error`} />
+      <p id={`${id}-nombre-error`} class="error-campo" aria-live="polite"></p>
+    </div>
+    <div class="campo">
+      <label for={`${id}-idioma`}>{T.idioma}</label>
+      <select id={`${id}-idioma`} class="control" data-etiqueta={T.etIdioma} aria-describedby={`${id}-idioma-ayuda`}>
+        <option selected={idioma === 'es'}>Español</option>
+        <option selected={idioma === 'pt'}>Português</option>
+        <option selected={idioma === 'en'}>English</option>
+      </select>
+      <p id={`${id}-idioma-ayuda`} class="ayuda">{T.ayudaIdioma}</p>
+    </div>
+    <div class="campo md:col-span-2">
+      <label for={`${id}-necesidades`}>{T.necesidades}</label>
+      <textarea id={`${id}-necesidades`} class="control" data-etiqueta={T.etNecesidades} placeholder={T.phNecesidades}></textarea>
+    </div>
+    <div class="campo md:col-span-2">
+      <label for={`${id}-mensaje`}>{T.mensaje}</label>
+      <textarea id={`${id}-mensaje`} class="control" data-etiqueta={T.etMensaje} placeholder={T.phMensaje}></textarea>
+    </div>
+  </div>
+
+  <AvisoAccesibilidad idioma={idioma} id={`${id}-aviso`} />
+
+  <div class="campo">
+    <label class="flex items-start gap-3 font-normal">
+      <input id={`${id}-acepto`} type="checkbox" required data-error={T.errAcepto} aria-describedby={`${id}-acepto-error`} />
+      <span>{T.acepto} *</span>
+    </label>
+    <p id={`${id}-acepto-error`} class="error-campo" aria-live="polite"></p>
+  </div>
+
+  <div class="flex flex-wrap items-center gap-4">
+    <button type="submit" class="btn btn-primario">{T.enviar}</button>
+    <p class="text-sm text-muted">{T.notaEnviar}</p>
+  </div>
+
+  <div data-exito tabindex="-1" hidden class="rounded-[var(--ca-radius)] border-2 border-on-ok bg-ok p-4 text-on-ok" role="status">
+    <p class="font-semibold">{T.exito}</p>
+    <p>{T.exito2} <a class="font-semibold text-on-ok" href="#" target="_blank" rel="noopener">{T.exitoEnlace}</a>.</p>
+  </div>
+</form>
+
+<script>
+  import { validarCampos, mostrarResumen, armarMensaje, enviarPorWhatsApp, limpiarAlEditar, marcarError } from '../scripts/formularios';
+
+  document.querySelectorAll<HTMLFormElement>('form.formulario-reserva').forEach((form) => {
+    const d = form.dataset;
+    const precios: Record<string, number> = JSON.parse(d.precios || '{}');
+    const minimoGrupo = Number(d.minimoGrupo || 15);
+    const maximo = Number(d.maximo || 25);
+    const salida = form.querySelector<HTMLOutputElement>('[data-total]');
+    const nota = form.querySelector<HTMLElement>('[data-total-nota]');
+    const leyenda = nota?.textContent || '';
+    const cantidad = (tipo: string) => Math.max(0, Math.floor(Number(form.querySelector<HTMLInputElement>(`[data-personas="${tipo}"]`)?.value) || 0));
+
+    // Total estimado: con 15 o más adultos se aplica la tarifa de grupo.
+    const calcular = () => {
+      const general = cantidad('general');
+      const estudiantes = cantidad('estudiante');
+      const menores = cantidad('menor');
+      const conGrupo = general >= minimoGrupo;
+      const total = general * (conGrupo ? precios.grupo : precios.general) + estudiantes * precios.estudiante + menores * precios.menor;
+      if (salida) salida.textContent = `$U ${total.toLocaleString('es-UY')}`;
+      if (nota) nota.textContent = conGrupo ? `${d.grupoTxt} · ${leyenda}` : leyenda;
+      return { personas: general + estudiantes + menores, total };
+    };
+    form.addEventListener('input', calcular);
+    calcular();
+    limpiarAlEditar(form);
+
+    // "Reservar esta salida" en la lista preselecciona la fecha.
+    document.querySelectorAll<HTMLAnchorElement>('[data-elegir-salida]').forEach((boton) => {
+      boton.addEventListener('click', () => {
+        const select = form.querySelector<HTMLSelectElement>('select[id$="-salida"]');
+        if (select) select.value = boton.dataset.elegirSalida || '';
+      });
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const errores = validarCampos(form);
+      const { personas, total } = calcular();
+      const errorPersonas = form.querySelector<HTMLElement>('[id$="-personas-error"]');
+      let mensajePersonas = '';
+      if (personas < 1) mensajePersonas = d.errPersonas || '';
+      else if (personas > maximo) mensajePersonas = d.errMaximo || '';
+      if (errorPersonas) errorPersonas.textContent = mensajePersonas;
+      const primerCampoPersonas = form.querySelector<HTMLInputElement>('[data-personas]');
+      if (mensajePersonas && primerCampoPersonas) {
+        errores.push({ campo: primerCampoPersonas, mensaje: mensajePersonas });
+        marcarError(primerCampoPersonas, '');
+      }
+      mostrarResumen(form, errores);
+      if (errores.length) return;
+      const mensaje = armarMensaje(form, d.intro || '') + `\n• ${d.totalMsj}: $U ${total.toLocaleString('es-UY')} (${d.propuesta})`;
+      enviarPorWhatsApp(form, mensaje);
+    });
+  });
+</script>

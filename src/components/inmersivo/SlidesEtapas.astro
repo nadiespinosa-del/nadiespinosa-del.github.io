@@ -1,0 +1,117 @@
+---
+// Las cinco etapas como slides de pantalla completa que avanzan de costado con el scroll.
+// La luz de cada slide cambia como cambia la tarde durante la visita.
+// En pantallas angostas o con movimiento reducido, las etapas se apilan en vertical.
+import site from '../../data/site.json';
+import Imagen from '../Imagen.astro';
+import { experiencia } from '../../lib/datos';
+import { formatoDuracion } from '../../lib/util';
+import { elegir, type Idioma } from '../../i18n/ui';
+import { foto, type ClaveFoto } from '../../lib/fotos';
+
+interface Props { idioma?: Idioma }
+const { idioma = 'es' } = Astro.props;
+const { etapas } = experiencia(idioma);
+const T = elegir(idioma, {
+  es: { titulo: 'La visita, en cinco etapas', bajada: `${formatoDuracion(site.duracionMinutos)} en la Chacra La Victoria, con reserva previa, en grupos de ${site.cupo.minimo} a ${site.cupo.maximo} personas.`, sigue: 'Seguí bajando: la visita avanza de costado', minuto: (a: number, b: number) => `Minuto ${a} a ${b}`, etapa: 'Etapa', de: 'de' },
+  pt: { titulo: 'A visita, em cinco etapas', bajada: `${formatoDuracion(site.duracionMinutos)} na Chacra La Victoria, com reserva antecipada, em grupos de ${site.cupo.minimo} a ${site.cupo.maximo} pessoas.`, sigue: 'Continue rolando: a visita avança para o lado', minuto: (a: number, b: number) => `Do minuto ${a} ao ${b}`, etapa: 'Etapa', de: 'de' },
+  en: { titulo: 'The visit, in five stages', bajada: `${formatoDuracion(site.duracionMinutos)} at Chacra La Victoria, booked in advance, in groups of ${site.cupo.minimo} to ${site.cupo.maximo} people.`, sigue: 'Keep scrolling: the visit moves sideways', minuto: (a: number, b: number) => `Minutes ${a} to ${b}`, etapa: 'Stage', de: 'of' },
+});
+const tomas = [
+  'Llegada a la chacra: la encargada recibe al grupo bajo los naranjos, mañana, plano general',
+  'Manos señalando una naranja en el árbol mientras se explica el cultivo, primer plano',
+  'Exprimidor manual y jugo cayendo en un vaso, luz lateral, macro',
+  'Mesa de degustación con mermeladas, budines y frascos de la feria, bodegón cenital',
+  'Ronda de conversación al atardecer entre los árboles, plano medio',
+];
+// Fotos reales de la chacra para cada etapa
+const fotosEtapas: ClaveFoto[] = ['entrada', 'recorrido-visitantes', 'manos-pelando', 'mesa-degustacion', 'recorrida-grupo'];
+// Paleta por etapa: de la luz de la mañana a la tarde en la quinta
+const tonos = [
+  { fondo: '#faf4e8', texto: '#1f3a2b', suave: '#5e5248', numero: '#e07a2e' },
+  { fondo: '#f6e7c8', texto: '#1f3a2b', suave: '#5a4a32', numero: '#d9661f' },
+  { fondo: '#f4cf9a', texto: '#2a1d10', suave: '#4f3a22', numero: '#b54e17' },
+  { fondo: '#a8502a', texto: '#fff6e8', suave: '#fff1e2', numero: '#f6d27a' },
+  { fondo: 'var(--ca-deep)', texto: '#fbf2e1', suave: 'var(--ca-on-deep-muted)', numero: '#f2c14e' },
+];
+let acumulado = 0;
+const conInicio = etapas.map((e) => {
+  const inicio = acumulado;
+  acumulado += e.minutos;
+  return { ...e, inicio };
+});
+---
+<section id="experiencia" class="slides-etapas relative overflow-hidden" aria-labelledby="etapas-titulo">
+  <div class="slides-pista flex flex-col lg:h-[100svh] lg:w-max lg:flex-row">
+    <article class="slide flex min-h-[80svh] w-full shrink-0 flex-col justify-center gap-6 bg-bg px-[clamp(1rem,5vw,5rem)] py-20 lg:h-full lg:w-[62vw]">
+      <h2 id="etapas-titulo" class="max-w-[12ch] text-[clamp(1.8rem,4.1vw,4rem)] leading-[0.95]">{T.titulo}</h2>
+      <p class="max-w-[40ch] text-lg text-muted">{T.bajada}</p>
+      <p class="hidden items-center gap-3 text-sm text-muted lg:flex" aria-hidden="true">
+        <span class="inline-block h-px w-16 bg-line-strong"></span> {T.sigue}
+      </p>
+    </article>
+
+    {conInicio.map((etapa, i) => {
+      const tono = tonos[i];
+      return (
+        <article
+          class="slide relative grid w-full shrink-0 items-center gap-10 overflow-hidden px-[clamp(1rem,5vw,5rem)] py-20 lg:h-full lg:w-[92vw] lg:grid-cols-[1.15fr_1fr] lg:gap-16"
+          style={`background:${tono.fondo};color:${tono.texto}`}
+          aria-labelledby={`etapa-${etapa.numero}`}
+        >
+          <span class="slide-numero pointer-events-none absolute -bottom-[0.18em] left-[2vw] select-none font-display leading-none" style={`color:${tono.numero}`} aria-hidden="true">{etapa.numero}</span>
+          <div class="relative z-10 grid content-center gap-5 lg:pl-[22vw]">
+            <h3 id={`etapa-${etapa.numero}`} class="max-w-[12ch] !text-[clamp(1.8rem,3.4vw,3.5rem)] !leading-[0.98]" style={`color:${tono.texto}`}>
+              <span class="solo-lectores">{T.etapa} {etapa.numero} {T.de} 5: </span>{etapa.titulo}
+            </h3>
+            <p class="max-w-[34ch] text-xl leading-relaxed" style={`color:${tono.suave}`}>{etapa.texto}</p>
+          </div>
+          <div class="slide-foto relative z-10 w-full max-w-[20rem] lg:mx-auto lg:max-w-[30rem]">
+            <Imagen proporcion="4/5" toma={tomas[i]} {...foto(fotosEtapas[i], idioma)} />
+          </div>
+        </article>
+      );
+    })}
+  </div>
+
+</section>
+
+<style>
+  .slide-numero { font-size: clamp(14rem, 42vh, 30rem); font-variation-settings: 'opsz' 144, 'SOFT' 100; opacity: 0.9; }
+  @media (max-width: 1023px) {
+    .slide-numero { font-size: 12rem; opacity: 0.25; left: auto; right: 1rem; bottom: -2rem; }
+  }
+</style>
+
+<script>
+  import { gsap, ScrollTrigger, reducido } from '../../scripts/movimiento';
+  const seccion = document.querySelector<HTMLElement>('.slides-etapas');
+  const pista = seccion?.querySelector<HTMLElement>('.slides-pista');
+
+  if (seccion && pista && !reducido) {
+    const mm = gsap.matchMedia();
+    mm.add('(min-width: 1024px)', () => {
+      const distancia = () => pista.scrollWidth - window.innerWidth;
+      const avance = gsap.to(pista, {
+        x: () => -distancia(),
+        ease: 'none',
+        scrollTrigger: {
+          trigger: seccion,
+          start: 'top top',
+          end: () => `+=${distancia()}`,
+          pin: true,
+          scrub: 0.8,
+          invalidateOnRefresh: true,
+          anticipatePin: 1,
+        },
+      });
+      seccion.querySelectorAll<HTMLElement>('.slide').forEach((slide) => {
+        const numero = slide.querySelector('.slide-numero');
+        const foto = slide.querySelector('.slide-foto');
+        if (numero) gsap.fromTo(numero, { xPercent: 40 }, { xPercent: -20, ease: 'none', scrollTrigger: { trigger: slide, containerAnimation: avance, start: 'left right', end: 'right left', scrub: true } });
+        if (foto) gsap.fromTo(foto, { clipPath: 'circle(8% at 50% 50%)', scale: 1.15 }, { clipPath: 'circle(75% at 50% 50%)', scale: 1, ease: 'power2.out', scrollTrigger: { trigger: slide, containerAnimation: avance, start: 'left 85%', end: 'left 25%', scrub: true } });
+      });
+      return () => ScrollTrigger.refresh();
+    });
+  }
+</script>

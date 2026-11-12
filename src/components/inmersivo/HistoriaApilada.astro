@@ -1,0 +1,106 @@
+---
+// Historia en tres momentos como pantallas que se apilan (sticky).
+// 1864: el almácigo · 1926: naranjos en las calles · 1972: las bóvedas de Dieste (se dibujan con el scroll).
+import Imagen from '../Imagen.astro';
+import { historia as datosHistoria } from '../../lib/datos';
+import { elegir, type Idioma } from '../../i18n/ui';
+import { fotoArchivo, type ClaveArchivo } from '../../lib/fotos';
+
+interface Props { idioma?: Idioma }
+const { idioma = 'es' } = Astro.props;
+const historia = datosHistoria(idioma);
+const T = elegir(idioma, {
+  es: { titulo: 'La naranja en la historia de Salto', hacia: 'Hacia 1864', fuente: 'Fuente' },
+  pt: { titulo: 'A laranja na história de Salto', hacia: 'Por volta de 1864', fuente: 'Fonte' },
+  en: { titulo: "The orange in Salto's history", hacia: 'Around 1864', fuente: 'Source' },
+});
+
+// Fotos de época de la Biblioteca Nacional y, para 1972, las bóvedas de Dieste (FADU) en blanco y negro
+const fotosMomento: Record<string, ClaveArchivo | undefined> = { '1864': 'salto-1888', '1926': 'naranjal-solari-1960', '1972': 'dieste-bovedas' };
+const tonos = [
+  { fondo: '#f3eada', texto: '#1f3a2b', suave: '#5e5248', anio: '#e07a2e' },
+  { fondo: 'var(--ca-deep)', texto: '#fbf2e1', suave: 'var(--ca-on-deep-muted)', anio: '#f2c14e' },
+  { fondo: '#fbf2e1', texto: '#231c16', suave: '#5e5248', anio: '#9c4a2f' },
+];
+// Diecisiete bóvedas de doble curvatura, dibujadas como arcos sucesivos
+const bovedas = Array.from({ length: 17 }, (_, i) => {
+  const ancho = 1000 / 17;
+  const x0 = i * ancho;
+  return `M ${x0.toFixed(1)} 160 Q ${(x0 + ancho / 2).toFixed(1)} ${i % 2 ? 40 : 52} ${(x0 + ancho).toFixed(1)} 160`;
+});
+---
+<section id="historia" class="historia-apilada relative" aria-labelledby="historia-titulo">
+  <h2 id="historia-titulo" class="solo-lectores">{T.titulo}</h2>
+  {historia.momentos.map((m, i) => {
+    const tono = tonos[i];
+    return (
+      <article
+        class="historia-slide sticky top-0 flex min-h-[100svh] items-center overflow-hidden py-24"
+        style={`background:${tono.fondo};color:${tono.texto};z-index:${i + 1}`}
+        aria-labelledby={`historia-${m.anio}`}
+      >
+        <p
+          class="historia-anio pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 select-none text-center font-display leading-none"
+          style={`color:${tono.anio}`}
+          aria-hidden="true"
+          data-anio={m.anio}
+        >{m.anio}</p>
+
+        {m.anio === '1972' && (
+          <svg class="bovedas absolute inset-x-0 bottom-0 w-full" viewBox="0 0 1000 170" fill="none" stroke={tono.anio} stroke-width="2.2" aria-hidden="true" preserveAspectRatio="none">
+            {bovedas.map((d) => <path d={d} pathLength="1" />)}
+            <line x1="0" y1="160" x2="1000" y2="160" />
+          </svg>
+        )}
+
+        <div class="contenedor relative z-10 grid items-center gap-10 lg:grid-cols-[1fr_0.8fr]">
+          <div class="grid gap-5">
+            <p class="font-display text-2xl italic" style={`color:${tono.anio}`}>{m.anio === '1864' ? T.hacia : m.anio}</p>
+            <h3 id={`historia-${m.anio}`} class="max-w-[14ch] !text-[clamp(1.8rem,3.7vw,3.6rem)] !leading-[0.98]" style={`color:${tono.texto}`}>{m.titulo}</h3>
+            <p class="max-w-[44ch] text-xl leading-relaxed" style={`color:${tono.suave}`}>{m.texto}</p>
+            <p class="text-sm" style={`color:${tono.suave}`}>{T.fuente}: {m.fuente}</p>
+          </div>
+          <figure class="mx-auto grid w-full max-w-[26rem] gap-2">
+            {fotosMomento[m.anio] ? (
+              <>
+                <Imagen proporcion="3/2" toma={m.foto} {...fotoArchivo(fotosMomento[m.anio]!, idioma)} class="historia-foto" />
+                <figcaption class="text-xs" style={`color:${tono.suave}`}>{fotoArchivo(fotosMomento[m.anio]!, idioma).credito}</figcaption>
+              </>
+            ) : (
+              <Imagen proporcion="3/4" toma={m.foto} alt={m.titulo} archivo />
+            )}
+          </figure>
+        </div>
+      </article>
+    );
+  })}
+</section>
+
+<style>
+  .historia-anio { font-size: clamp(9rem, 34vw, 36rem); opacity: 0.16; font-variation-settings: 'opsz' 144, 'wght' 300; letter-spacing: -0.04em; }
+  .historia-slide { box-shadow: 0 -40px 80px -40px rgba(16, 35, 26, 0.35); }
+  .bovedas { height: 22vh; }
+  .bovedas path { stroke-dasharray: 1; stroke-dashoffset: 0; }
+  @media (prefers-reduced-motion: reduce) {
+    .historia-slide { position: relative; }
+  }
+</style>
+
+<script>
+  import { gsap, reducido } from '../../scripts/movimiento';
+  if (!reducido) {
+    document.querySelectorAll<HTMLElement>('.historia-slide').forEach((slide) => {
+      const anio = slide.querySelector<HTMLElement>('.historia-anio');
+      if (anio) {
+        gsap.fromTo(anio, { scale: 1.25, yPercent: -40 }, { scale: 0.9, yPercent: -60, ease: 'none', scrollTrigger: { trigger: slide, start: 'top bottom', end: 'bottom top', scrub: true } });
+      }
+      const contenido = slide.querySelectorAll('.contenedor > *');
+      gsap.from(contenido, { y: 80, opacity: 0, duration: 1.1, ease: 'power3.out', stagger: 0.15, scrollTrigger: { trigger: slide, start: 'top 60%' } });
+    });
+    // Las 17 bóvedas de Dieste se dibujan una tras otra
+    const arcos = document.querySelectorAll<SVGPathElement>('.bovedas path');
+    if (arcos.length) {
+      gsap.fromTo(arcos, { strokeDashoffset: 1 }, { strokeDashoffset: 0, ease: 'none', stagger: 0.08, scrollTrigger: { trigger: '.bovedas', start: 'top 95%', end: 'top 35%', scrub: true } });
+    }
+  }
+</script>

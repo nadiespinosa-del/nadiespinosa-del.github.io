@@ -1,0 +1,73 @@
+---
+// Términos y condiciones de reserva (tres idiomas; texto base, a revisar).
+import Base from '../layouts/Base.astro';
+import CabeceraPagina from '../components/CabeceraPagina.astro';
+import Pendiente from '../components/Pendiente.astro';
+import site from '../data/site.json';
+import { elegir, t, type Idioma } from '../i18n/ui';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const { minimo, maximo } = site.cupo;
+const T = elegir(idioma, {
+  es: {
+    desc: 'Condiciones de reserva de las experiencias de VÍA, empezando por Camino de Azahar: salidas programadas, tarifas, lluvia, accesibilidad y cancelación.',
+    miga: 'Términos y condiciones', intro: 'Las reglas claras de cada visita.',
+    comercializa: 'Quién comercializa', comercializaTexto: ['Las experiencias son diseñadas y comercializadas por ', '. Registro de Operadores de Servicios Turísticos del Ministerio de Turismo: '],
+    alcance: ['Las condiciones que siguen corresponden a ', 'Camino de Azahar', '. Cada nueva experiencia sumará las suyas.'],
+    salidas: 'Salidas y cupo', salidasTexto: ['Las visitas son salidas programadas para grupos de ', `${minimo} a ${maximo} personas`, ', con reserva previa. Si una salida no alcanza el mínimo, te avisamos y te ofrecemos otra fecha.'],
+    tarifas: 'Tarifas', tarifasTexto: 'Las tarifas publicadas son propuestas y se confirman al reservar. Incluyen el recorrido interpretativo, la elaboración de jugo, la degustación y la muestra de productos. Los menores de 5 años no pagan.',
+    pago: 'Pago y cancelación', medios: 'Medios de pago', cancelacion: 'Política de cancelación',
+    lluvia: 'Lluvia y condiciones del cultivo', lluviaTexto: 'Con lluvia o mal tiempo, la visita se reprograma sin costo o se desarrolla la parte interpretativa en un espacio cubierto. Si ese día hay aplicaciones en el cultivo, el recorrido se reprograma.',
+    acceso: 'Accesibilidad y exigencia física', accesoTexto: 'El recorrido es en un entorno rural, sin accesibilidad universal en todo el circuito, y requiere caminar durante parte de la visita. Al reservar confirmás que conocés estas condiciones.',
+    cuidado: 'Cuidado del espacio', cuidadoTexto: 'La chacra es un espacio productivo en funcionamiento: pedimos seguir las indicaciones de la guía y respetar las plantaciones.',
+  },
+  pt: {
+    desc: 'Condições de reserva das experiências da VÍA, começando pelo Camino de Azahar: saídas programadas, tarifas, chuva, acessibilidade e cancelamento.',
+    miga: 'Termos e condições', intro: 'As regras claras de cada visita.',
+    comercializa: 'Quem comercializa', comercializaTexto: ['As experiências são desenhadas e comercializadas pela ', '. Registro de Operadores de Serviços Turísticos do Ministério do Turismo do Uruguai: '],
+    alcance: ['As condições a seguir correspondem ao ', 'Camino de Azahar', '. Cada nova experiência terá as suas.'],
+    salidas: 'Saídas e vagas', salidasTexto: ['As visitas são saídas programadas para grupos de ', `${minimo} a ${maximo} pessoas`, ', com reserva antecipada. Se uma saída não atingir o mínimo, avisamos e oferecemos outra data.'],
+    tarifas: 'Tarifas', tarifasTexto: 'As tarifas publicadas são propostas e confirmadas na reserva. Incluem o percurso interpretativo, o preparo de suco, a degustação e a mostra de produtos. Menores de 5 anos não pagam.',
+    pago: 'Pagamento e cancelamento', medios: 'Formas de pagamento', cancelacion: 'Política de cancelamento',
+    lluvia: 'Chuva e condições do cultivo', lluviaTexto: 'Com chuva ou mau tempo, a visita é remarcada sem custo ou a parte interpretativa é feita em local coberto. Se nesse dia houver aplicações no cultivo, o percurso é remarcado.',
+    acceso: 'Acessibilidade e exigência física', accesoTexto: 'O percurso é em ambiente rural, sem acessibilidade universal em todo o circuito, e exige caminhar durante parte da visita. Ao reservar, você confirma que conhece estas condições.',
+    cuidado: 'Cuidado com o espaço', cuidadoTexto: 'A chácara é um espaço produtivo em funcionamento: pedimos que siga as orientações do guia e respeite as plantações.',
+  },
+  en: {
+    desc: 'Booking conditions for VÍA experiences, starting with Camino de Azahar: scheduled departures, prices, rain, accessibility and cancellation.',
+    miga: 'Terms and conditions', intro: 'Clear rules for every visit.',
+    comercializa: 'Who sells the experiences', comercializaTexto: ['The experiences are designed and sold by ', ". Registration with Uruguay's Ministry of Tourism register of tourism service operators: "],
+    alcance: ['The conditions below apply to ', 'Camino de Azahar', '. Each new experience will add its own.'],
+    salidas: 'Departures and group size', salidasTexto: ['Visits are scheduled departures for groups of ', `${minimo} to ${maximo} people`, ', booked in advance. If a departure does not reach the minimum, we will let you know and offer another date.'],
+    tarifas: 'Prices', tarifasTexto: 'Published prices are proposals and are confirmed when you book. They include the guided walk, juice-making, tasting and the local produce display. Children under 5 go free.',
+    pago: 'Payment and cancellation', medios: 'Payment methods', cancelacion: 'Cancellation policy',
+    lluvia: 'Rain and orchard conditions', lluviaTexto: 'In rain or bad weather, the visit is rescheduled free of charge or the interpretive part takes place indoors. If the orchard is being sprayed that day, the visit is rescheduled.',
+    acceso: 'Accessibility and physical effort', accesoTexto: 'The visit takes place in a rural setting, the route is not fully accessible, and it involves walking for part of the time. By booking you confirm that you are aware of these conditions.',
+    cuidado: 'Looking after the farm', cuidadoTexto: 'The farm is a working space: please follow the guide\'s instructions and respect the plantations.',
+  },
+});
+---
+<Base titulo={t(idioma, 'pie.terminos')} clave="terminos" descripcion={T.desc} idioma={idioma} encabezadoFlotante>
+  <CabeceraPagina idioma={idioma} titulo={t(idioma, 'pie.terminos')} intro={T.intro} migas={[{ texto: T.miga }]} />
+  <article class="contenedor py-[clamp(4rem,12vh,8rem)]">
+    <div class="prosa">
+      <p><Pendiente tipo="TEXTO PROVISORIO" texto="texto base a revisar por la agencia y un profesional antes de publicar" /></p>
+      <h2>{T.comercializa}</h2>
+      <p>{T.comercializaTexto[0]}<strong>VÍA</strong> ({site.agencia}){T.comercializaTexto[1]}<Pendiente texto="número de registro" />.</p>
+      <p>{T.alcance[0]}<strong>{T.alcance[1]}</strong>{T.alcance[2]}</p>
+      <h2>{T.salidas}</h2>
+      <p>{T.salidasTexto[0]}<strong>{T.salidasTexto[1]}</strong>{T.salidasTexto[2]}</p>
+      <h2>{T.tarifas}</h2>
+      <p>{T.tarifasTexto}</p>
+      <h2>{T.pago}</h2>
+      <p>{T.medios}: <Pendiente texto="medios de pago" />. {T.cancelacion}: <Pendiente texto="plazos y reintegros" />.</p>
+      <h2>{T.lluvia}</h2>
+      <p>{T.lluviaTexto}</p>
+      <h2>{T.acceso}</h2>
+      <p>{T.accesoTexto}</p>
+      <h2>{T.cuidado}</h2>
+      <p>{T.cuidadoTexto}</p>
+    </div>
+  </article>
+</Base>

@@ -1,0 +1,36 @@
+---
+// Línea de tiempo vertical: una línea dorada se "llena" con el scroll y cada hito se enciende al pasar.
+import { lineaTiempo } from '../../lib/datos';
+import { elegir, type Idioma } from '../../i18n/ui';
+interface Props { idioma?: Idioma }
+const { idioma = 'es' } = Astro.props;
+const hitos = lineaTiempo(idioma);
+const fuente = elegir(idioma, { es: 'Fuente', pt: 'Fonte', en: 'Source' });
+---
+<ol class="linea-tiempo relative grid gap-16 pl-10 sm:pl-0">
+  <span class="lt-riel absolute bottom-0 left-3 top-0 w-px bg-line-strong sm:left-1/2" aria-hidden="true">
+    <span class="lt-relleno absolute inset-x-0 top-0 h-full origin-top scale-y-0 bg-deco"></span>
+  </span>
+  {hitos.map((h, i) => (
+    <li class={`lt-hito relative grid gap-3 sm:w-1/2 ${i % 2 ? 'sm:ml-auto sm:pl-14' : 'sm:pr-14 sm:text-right'}`}>
+      <span class={`lt-punto absolute top-2 h-4 w-4 rounded-full border-2 border-deco bg-bg -left-[2.05rem] ${i % 2 ? 'sm:-left-2' : 'sm:left-auto sm:-right-2'}`} aria-hidden="true"></span>
+      <p class="font-display text-[clamp(1.6rem,3.4vw,2.6rem)] leading-none text-deco">{h.anio}</p>
+      <h3 class="text-2xl sm:text-3xl">{h.titulo}</h3>
+      <p class={`text-lg text-muted ${i % 2 ? '' : 'sm:ml-auto'} max-w-[46ch]`}>{h.texto}</p>
+      <p class="text-sm text-muted">{fuente}: {h.fuente}</p>
+    </li>
+  ))}
+</ol>
+
+<script>
+  import { gsap, reducido } from '../../scripts/movimiento';
+  const linea = document.querySelector<HTMLElement>('.linea-tiempo');
+  if (linea && !reducido) {
+    gsap.to(linea.querySelector('.lt-relleno'), { scaleY: 1, ease: 'none', scrollTrigger: { trigger: linea, start: 'top 60%', end: 'bottom 60%', scrub: true } });
+    linea.querySelectorAll<HTMLElement>('.lt-hito').forEach((hito) => {
+      gsap.from(hito, { opacity: 0.15, y: 40, duration: 0.9, ease: 'power3.out', scrollTrigger: { trigger: hito, start: 'top 75%', toggleActions: 'play none none reverse' } });
+      const punto = hito.querySelector('.lt-punto');
+      if (punto) gsap.to(punto, { backgroundColor: '#e07a2e', scale: 1.3, scrollTrigger: { trigger: hito, start: 'top 60%', toggleActions: 'play none none reverse' } });
+    });
+  }
+</script>

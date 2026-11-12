@@ -1,0 +1,138 @@
+---
+// Nosotros (tres idiomas): quién es VÍA y cómo trabaja.
+import Base from '../layouts/Base.astro';
+import CabeceraPagina from '../components/CabeceraPagina.astro';
+import Imagen from '../components/Imagen.astro';
+import Llamado from '../components/Llamado.astro';
+import TambienTeInteresa from '../components/TambienTeInteresa.astro';
+import { elegir, rutas, t, type Idioma } from '../i18n/ui';
+import { foto } from '../lib/fotos';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const r = rutas[idioma];
+// Fotos propias y generales (no de una experiencia en particular): un camino rural y, en el collage, el río, un sendero y los brotes
+const camino = foto('camino-rural', idioma);
+const collage = [
+  { ...foto('atardecer-rio', idioma), celda: 'row-span-2' },
+  { ...foto('sendero-chacra', idioma), celda: '' },
+  { ...foto('hojas-citricos', idioma), celda: '' },
+];
+const T = elegir(idioma, {
+  es: {
+    titulo: 'Viajar para conocer de cerca', fotoAlt: 'El equipo de VÍA junto a productores locales', queHacemos: 'Qué hacemos',
+    rol: [
+      ['Creamos', 'Experiencias nuevas junto a productores, emprendedores e instituciones de cada lugar.'],
+      ['Diseñamos', 'Recorridos a medida de lo que cada persona, grupo o institución quiere vivir.'],
+      ['Coordinamos', 'Fechas, grupos, servicios y la comunicación con cada persona del lugar.'],
+      ['Resolvemos la logística', 'Transporte, alojamiento, comidas y entradas, para que vos solo disfrutes.'],
+    ],
+    modelo: 'Un modelo de cooperación local',
+    modeloTexto: 'Nosotros nos ocupamos de crear, coordinar y resolver; cada lugar aporta sus recursos, sus saberes y su gente. Así, una parte de lo que genera el turismo queda en la comunidad.',
+    arranque: ['Arrancamos en Salto con ', '. Las próximas experiencias llegarán desde otros puntos de Uruguay.'],
+    modeloAlt: 'Visitantes y emprendedores locales conversando', equipo: 'Un grupo de amigos', equipoTexto: 'Somos un grupo de amigos que lleva adelante VÍA, una agencia de turismo. En las experiencias nos vas a encontrar como guías, y una de nosotras también forma parte de la empresa.', personas: [['Nadia Espinosa', 'Guía y coordinadora de Camino de Azahar', 'Socia fundadora de VÍA'], ['Sthefanie Machado', 'Guía de Camino de Azahar']], retrato: (n: string) => `Retrato de ${n}`,
+    llamadoTitulo: 'Conocé nuestra primera propuesta', llamadoTexto: 'Camino de Azahar: la naranja, la gastronomía y la identidad de Salto, desde adentro.',
+    llamadoBoton: 'Ver Camino de Azahar', llamadoSec: 'Todas las experiencias',
+    enlaces: ['Cómo cuidamos cada lugar que visitamos.', 'Experiencias educativas para instituciones.', 'Escribinos para armar tu visita.'],
+  },
+  pt: {
+    titulo: 'Viajar para conhecer de perto', fotoAlt: 'A equipe da VÍA com produtores locais', queHacemos: 'O que fazemos',
+    rol: [
+      ['Criamos', 'Novas experiências com produtores, empreendedores e instituições de cada lugar.'],
+      ['Desenhamos', 'Roteiros sob medida para o que cada pessoa, grupo ou instituição quer viver.'],
+      ['Coordenamos', 'Datas, grupos, serviços e a comunicação com cada pessoa do lugar.'],
+      ['Cuidamos da logística', 'Transporte, hospedagem, refeições e ingressos, para você só aproveitar.'],
+    ],
+    modelo: 'Um modelo de cooperação local',
+    modeloTexto: 'Nós cuidamos de criar, coordenar e resolver; cada lugar contribui com seus recursos, seus saberes e sua gente. Assim, parte do que o turismo gera fica na comunidade.',
+    arranque: ['Começamos em Salto com o ', '. As próximas experiências virão de outros lugares do Uruguai.'],
+    modeloAlt: 'Visitantes e empreendedores locais conversando', equipo: 'Um grupo de amigos', equipoTexto: 'Somos um grupo de amigos que toca a VÍA, uma agência de turismo. Nas experiências, você vai nos encontrar como guias, e uma de nós também faz parte da empresa.', personas: [['Nadia Espinosa', 'Guia e coordenadora do Camino de Azahar', 'Sócia fundadora da VÍA'], ['Sthefanie Machado', 'Guia do Camino de Azahar']], retrato: (n: string) => `Retrato de ${n}`,
+    llamadoTitulo: 'Conheça nossa primeira proposta', llamadoTexto: 'Camino de Azahar: a laranja, a gastronomia e a identidade de Salto, por dentro.',
+    llamadoBoton: 'Ver o Camino de Azahar', llamadoSec: 'Todas as experiências',
+    enlaces: ['Como cuidamos de cada lugar que visitamos.', 'Experiências educativas para instituições.', 'Escreva para nós e montamos sua visita.'],
+  },
+  en: {
+    titulo: 'Travel to get to know places up close', fotoAlt: 'The VÍA team with local growers', queHacemos: 'What we do',
+    rol: [
+      ['We create', 'New experiences with growers, makers and institutions in each place.'],
+      ['We design', 'Routes tailored to what each person, group or school wants to experience.'],
+      ['We coordinate', 'Dates, groups, services and communication with everyone involved locally.'],
+      ['We handle the logistics', 'Transport, accommodation, meals and tickets, so all you have to do is enjoy.'],
+    ],
+    modelo: 'A local cooperation model',
+    modeloTexto: 'We take care of creating, coordinating and sorting things out; each place brings its resources, its know-how and its people. That way, part of what tourism generates stays in the community.',
+    arranque: ['We start in Salto with ', '. The next experiences will come from other parts of Uruguay.'],
+    modeloAlt: 'Visitors and local makers talking', equipo: 'A group of friends', equipoTexto: 'We are a group of friends who run VÍA, a travel agency. On the experiences you will meet us as guides, and one of us is also part of the company.', personas: [['Nadia Espinosa', 'Guide and coordinator of Camino de Azahar', 'Co-founder of VÍA'], ['Sthefanie Machado', 'Guide on Camino de Azahar']], retrato: (n: string) => `Portrait of ${n}`,
+    llamadoTitulo: 'Discover our first experience', llamadoTexto: 'Camino de Azahar: oranges, food and the identity of Salto, from the inside.',
+    llamadoBoton: 'See Camino de Azahar', llamadoSec: 'All experiences',
+    enlaces: ['How we look after every place we visit.', 'School trips for institutions.', 'Write to us to plan your visit.'],
+  },
+});
+---
+<Base titulo={t(idioma, 'nav.nosotros')} descripcion={t(idioma, 'marca.descripcion')} idioma={idioma} clave="nosotros" encabezadoFlotante>
+  <CabeceraPagina
+    idioma={idioma}
+    antetitulo={t(idioma, 'nav.nosotros')}
+    titulo={T.titulo}
+    intro={t(idioma, 'marca.descripcion')}
+    migas={[{ texto: t(idioma, 'nav.nosotros') }]}
+    imagen={{ toma: 'Camino rural', src: camino.src, alt: camino.alt }}
+  />
+
+  <section class="contenedor grid gap-12 py-[clamp(4rem,12vh,8rem)]" aria-labelledby="rol-titulo">
+    <h2 id="rol-titulo" class="max-w-[16ch] text-[clamp(1.6rem,3.1vw,2.8rem)] leading-[0.98]">{T.queHacemos}</h2>
+    <ol class="grid gap-px overflow-hidden rounded-[var(--ca-radius-lg)] border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
+      {T.rol.map(([titulo, texto], i) => (
+        <li class="revelar grid content-start gap-3 bg-surface p-7" style={`transition-delay:${i * 90}ms`}>
+          <span class="font-display text-5xl leading-none text-deco" aria-hidden="true">{i + 1}</span>
+          <h3 class="text-2xl">{titulo}</h3>
+          <p class="text-muted">{texto}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="bg-surface-2 py-[clamp(4rem,12vh,8rem)]" aria-labelledby="modelo-titulo">
+    <div class="contenedor grid items-center gap-12 lg:grid-cols-2">
+      <div class="grid gap-5">
+        <h2 id="modelo-titulo" class="max-w-[14ch] text-[clamp(1.6rem,3.1vw,2.8rem)] leading-[0.98]">{T.modelo}</h2>
+        <p class="text-lg text-muted">{T.modeloTexto}</p>
+        <p class="text-lg text-muted">{T.arranque[0]}<a href={r.azahar}>Camino de Azahar</a>{T.arranque[1]}</p>
+      </div>
+      <!-- Collage: el atardecer alto a la izquierda; el sendero y los brotes apilados a la derecha -->
+      <div class="collage grid aspect-[5/4] grid-cols-2 grid-rows-2 gap-3">
+        {collage.map((f) => (
+          <div class={`min-h-0 ${f.celda}`}><Imagen proporcion="1/1" toma={f.alt} src={f.src} alt={f.alt} revelar class="h-full !aspect-auto" /></div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="contenedor grid gap-6 py-[clamp(4rem,12vh,8rem)]" aria-labelledby="equipo-titulo">
+    <h2 id="equipo-titulo" class="text-[clamp(1.7rem,3.2vw,2.7rem)]">{T.equipo}</h2>
+    <p class="max-w-[60ch] text-lg text-muted">{T.equipoTexto}</p>
+    <ul class="grid max-w-2xl gap-6 sm:grid-cols-2">
+      {T.personas.map(([nombre, ...roles]) => (
+        <li class="tarjeta grid max-w-[20rem] content-start overflow-hidden">
+          <Imagen proporcion="1/1" toma={`Retrato de ${nombre}, plano medio, luz natural, en la chacra`} alt={T.retrato(nombre)} class="!rounded-none" />
+          <div class="grid gap-1 p-6">
+            <h3 class="text-2xl">{nombre}</h3>
+            {roles.map((rol) => <p class="text-muted">{rol}</p>)}
+          </div>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <div class="contenedor grid gap-20 pb-[clamp(4rem,12vh,8rem)]">
+    <Llamado antetitulo={t(idioma, 'nav.experiencias')} titulo={T.llamadoTitulo} texto={T.llamadoTexto} boton={{ texto: T.llamadoBoton, href: r.azahar }} secundario={{ texto: T.llamadoSec, href: r.experiencias }} />
+    <TambienTeInteresa
+      idioma={idioma}
+      enlaces={[
+        { titulo: t(idioma, 'pie.sostenibilidad'), texto: T.enlaces[0], href: r.sostenibilidad },
+        { titulo: t(idioma, 'nav.grupos'), texto: T.enlaces[1], href: r.grupos },
+        { titulo: t(idioma, 'nav.contacto'), texto: T.enlaces[2], href: r.contacto },
+      ]}
+    />
+  </div>
+</Base>

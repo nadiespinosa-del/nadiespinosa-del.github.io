@@ -1,0 +1,98 @@
+---
+// Cabecera de páginas internas: migas de pan, título grande, introducción y una imagen.
+// Incluye los datos estructurados BreadcrumbList.
+import Rodaja from './Rodaja.astro';
+import Imagen from './Imagen.astro';
+import DatosEstructurados from './DatosEstructurados.astro';
+import site from '../data/site.json';
+import { rutas, t, type Idioma } from '../i18n/ui';
+import { foto } from '../lib/fotos';
+
+interface Miga { texto: string; href?: string }
+interface Props {
+  idioma?: Idioma;
+  titulo: string;
+  intro: string;
+  migas: Miga[];
+  imagen?: { toma: string; alt: string; src?: string };
+  antetitulo?: string;
+}
+const { idioma = 'es', titulo, intro, migas, imagen, antetitulo } = Astro.props;
+// Fondo: en Camino de Azahar, la rodaja de naranja; en las páginas generales de VÍA, una foto propia difuminada
+const esAzahar = Astro.url.pathname.includes('/camino-de-azahar/');
+const fondoFoto = foto('rio-uruguay-atardecer', idioma);
+const todas: Miga[] = [{ texto: t(idioma, 'nav.inicio'), href: rutas[idioma].inicio }, ...migas];
+const migasLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: todas.map((m, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: m.texto,
+    item: m.href ? new URL(m.href, site.dominio).href : new URL(Astro.url.pathname, site.dominio).href,
+  })),
+};
+---
+<header class="cabecera-pagina on-deep relative overflow-hidden bg-deep-3 pb-16 pt-32 text-[#fbf2e1] sm:pb-20 sm:pt-36" data-zona-oscura>
+  {esAzahar ? (
+    <>
+      <div class="cabecera-fondo absolute inset-0" aria-hidden="true"></div>
+      <Rodaja tamano={620} grosor={0.7} class="pointer-events-none absolute -right-40 -top-40 text-[#f2c14e] opacity-[0.12]" />
+    </>
+  ) : (
+    <>
+      <img src={fondoFoto.src} alt="" aria-hidden="true" decoding="async" class="cabecera-foto absolute inset-0 h-full w-full object-cover" />
+      <div class="cabecera-velo absolute inset-0" aria-hidden="true"></div>
+    </>
+  )}
+  <div class="contenedor relative grid items-end gap-12 lg:grid-cols-[1.25fr_0.75fr]">
+    <div class="grid gap-6">
+      <nav aria-label={t(idioma, 'migas')}>
+        <ol class="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-on-deep-muted">
+          {todas.map((m, i) => (
+            <li class="flex items-center gap-2">
+              {i > 0 && <span aria-hidden="true">/</span>}
+              {m.href && i < todas.length - 1 ? (
+                <a href={m.href} class="text-on-deep-muted underline-offset-4 hover:text-[#fbf2e1]">{m.texto}</a>
+              ) : (
+                <span aria-current="page" class="text-[#fbf2e1]">{m.texto}</span>
+              )}
+            </li>
+          ))}
+        </ol>
+      </nav>
+      {antetitulo && <p class="font-display text-xl italic text-[#f2c14e]">{antetitulo}</p>}
+      <h1 class="cabecera-titulo max-w-[14ch] !text-[clamp(2rem,4.8vw,4.3rem)] !leading-[0.95] !text-[#fbf2e1]">{titulo}</h1>
+      <p class="cabecera-intro max-w-[48ch] text-lg leading-relaxed text-on-deep-muted">{intro}</p>
+      <slot />
+    </div>
+    {imagen && (
+      <div class="cabecera-imagen hidden lg:block">
+        <Imagen proporcion="4/5" toma={imagen.toma} src={imagen.src} alt={imagen.alt} prioridad />
+      </div>
+    )}
+  </div>
+</header>
+<DatosEstructurados datos={migasLd} />
+
+<style>
+  .cabecera-fondo {
+    background:
+      radial-gradient(ellipse 50% 60% at 85% 20%, rgba(242, 150, 60, 0.2), transparent 70%),
+      linear-gradient(180deg, var(--ca-deep-3) 0%, var(--ca-deep) 100%);
+  }
+  /* Páginas de VÍA: el atardecer en el río Uruguay, desenfocado bajo un velo verde yerba */
+  .cabecera-foto { filter: blur(6px) saturate(1.15); transform: scale(1.08); opacity: 0.8; }
+  .cabecera-velo { background: linear-gradient(90deg, color-mix(in srgb, var(--ca-deep-3) 95%, transparent) 0%, color-mix(in srgb, var(--ca-deep) 72%, transparent) 50%, color-mix(in srgb, var(--ca-deep) 22%, transparent) 100%); }
+  .cabecera-titulo :global(.linea) { overflow-x: visible; overflow-y: clip; padding-bottom: 0.2em; margin-bottom: -0.14em; }
+</style>
+
+<script>
+  import { gsap, SplitText, reducido } from '../scripts/movimiento';
+  const titulo = document.querySelector<HTMLElement>('.cabecera-titulo');
+  if (titulo && !reducido) {
+    const partido = SplitText.create(titulo, { type: 'lines,words', linesClass: 'linea' });
+    gsap.from(partido.words, { yPercent: 115, duration: 1.2, ease: 'expo.out', stagger: 0.05, delay: 0.1 });
+    gsap.from(['.cabecera-intro', '.cabecera-imagen'], { opacity: 0, y: 30, duration: 1, ease: 'power3.out', stagger: 0.15, delay: 0.5 });
+  }
+</script>

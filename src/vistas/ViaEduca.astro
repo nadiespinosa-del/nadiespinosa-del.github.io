@@ -1,0 +1,137 @@
+---
+// VÍA Educa (tres idiomas): propuestas educativas a medida para instituciones.
+// Textos según el documento de cambios de copia (11/11/2026).
+// Cada experiencia con versión educativa se lista acá; hoy, Camino de Azahar.
+import Base from '../layouts/Base.astro';
+import CabeceraPagina from '../components/CabeceraPagina.astro';
+import Imagen from '../components/Imagen.astro';
+import FormularioGrupos from '../components/FormularioGrupos.astro';
+import TambienTeInteresa from '../components/TambienTeInteresa.astro';
+import { catalogo } from '../lib/datos';
+import { foto } from '../lib/fotos';
+import { elegir, rutas, t, type Idioma } from '../i18n/ui';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const r = rutas[idioma];
+const educativas = catalogo(idioma).filter((e) => e.tiposFiltro.includes('Educativa'));
+const T = elegir(idioma, {
+  es: {
+    titulo: 'Aprender también es salir, conocer y vivir nuevas experiencias.',
+    intro: 'Diseñamos propuestas educativas que conectan los contenidos trabajados en el aula con experiencias reales, adaptadas a los intereses y objetivos de cada institución.',
+    fotoAlt: 'Estudiantes en una salida educativa', boton: 'Diseñá tu experiencia educativa',
+    integralTitulo: 'Cada viaje se piensa de manera integral', destacado: 'La institución nos cuenta qué quiere trabajar. Nosotros diseñamos cómo vivirlo.',
+    integral: [
+      ['Destino', 'El lugar que mejor conecta con lo que se trabaja en clase.'], ['Actividades', 'Recorridos, talleres y encuentros con la gente del lugar.'],
+      ['Tiempos', 'Un ritmo pensado para la edad y la duración del viaje.'], ['Transporte', 'Traslados coordinados de ida, vuelta y durante el viaje.'],
+      ['Alojamiento', 'Opciones acordes al grupo cuando el viaje es de varios días.'], ['Coordinación', 'Una sola persona de contacto que se ocupa de que todo funcione.'],
+    ],
+    propuestas: 'Propuestas para empezar', propuestasTexto: 'Experiencias que ya tienen su versión educativa. También armamos propuestas en otros destinos.',
+    paraEscuelas: 'para escuelas', escuelasAlt: (n: string) => `${n} para escuelas`,
+    escuelasTexto: 'Ciencias, historia, geografía, economía y ambiente en una chacra citrícola. De 11 a 15 años.', ver: 'Ver la propuesta',
+    enlaces: ['Todas las propuestas de VÍA.', 'Un viaje a medida para tu grupo.', 'Escribinos y lo coordinamos.'],
+  },
+  pt: {
+    titulo: 'Aprender também é sair, conhecer e viver novas experiências.',
+    intro: 'Desenhamos propostas educativas que conectam os conteúdos trabalhados em sala de aula com experiências reais, adaptadas aos interesses e objetivos de cada instituição.',
+    fotoAlt: 'Estudantes em uma saída educativa', boton: 'Monte sua experiência educativa',
+    integralTitulo: 'Cada viagem é pensada de forma integral', destacado: 'A instituição nos conta o que quer trabalhar. Nós desenhamos como vivenciar.',
+    integral: [
+      ['Destino', 'O lugar que melhor se conecta com o que é trabalhado em aula.'], ['Atividades', 'Percursos, oficinas e encontros com as pessoas do lugar.'],
+      ['Tempos', 'Um ritmo pensado para a idade e a duração da viagem.'], ['Transporte', 'Traslados coordenados de ida, volta e durante a viagem.'],
+      ['Hospedagem', 'Opções adequadas ao grupo quando a viagem dura vários dias.'], ['Coordenação', 'Uma única pessoa de contato que cuida para que tudo funcione.'],
+    ],
+    propuestas: 'Propostas para começar', propuestasTexto: 'Experiências que já têm sua versão educativa. Também montamos propostas em outros destinos.',
+    paraEscuelas: 'para escolas', escuelasAlt: (n: string) => `${n} para escolas`,
+    escuelasTexto: 'Ciências, história, geografia, economia e meio ambiente em uma chácara de citros. De 11 a 15 anos.', ver: 'Ver a proposta',
+    enlaces: ['Todas as propostas da VÍA.', 'Uma viagem sob medida para o seu grupo.', 'Escreva para nós e combinamos tudo.'],
+  },
+  en: {
+    titulo: 'Learning also means getting out, discovering and living new experiences.',
+    intro: "We design school trips that link what students work on in class with real experiences, tailored to each institution's interests and goals.",
+    fotoAlt: 'Students on a school trip', boton: 'Design your school trip',
+    integralTitulo: 'Every trip is planned as a whole', destacado: 'The school tells us what it wants to work on. We design how to experience it.',
+    integral: [
+      ['Destination', 'The place that best connects with what is covered in class.'], ['Activities', 'Walks, workshops and meeting local people.'],
+      ['Timing', "A pace that suits the students' age and the length of the trip."], ['Transport', 'Coordinated transfers there, back and during the trip.'],
+      ['Accommodation', 'Options that suit the group when the trip lasts several days.'], ['Coordination', 'A single contact person who makes sure everything runs smoothly.'],
+    ],
+    propuestas: 'Trips to start with', propuestasTexto: 'Experiences that already have a school version. We also plan trips to other destinations.',
+    paraEscuelas: 'for schools', escuelasAlt: (n: string) => `${n} for schools`,
+    escuelasTexto: 'Science, history, geography, economics and the environment on a citrus farm. Ages 11 to 15.', ver: 'See the school visit',
+    enlaces: ['All VÍA experiences.', 'A tailor-made trip for your group.', "Write to us and we'll arrange it."],
+  },
+});
+---
+<Base titulo="VÍA Educa" descripcion={T.intro} idioma={idioma} clave="grupos" encabezadoFlotante>
+  <CabeceraPagina
+    idioma={idioma}
+    antetitulo="VÍA Educa"
+    titulo={T.titulo}
+    intro={T.intro}
+    migas={[{ texto: 'VÍA Educa' }]}
+    imagen={{ toma: 'Fogón con un grupo de jóvenes', ...foto('fogon', idioma) }}
+  >
+    <div class="flex flex-wrap gap-3"><a href="#propuesta" class="btn btn-luz">{T.boton}</a></div>
+  </CabeceraPagina>
+
+  <section class="contenedor grid gap-12 py-[clamp(4rem,12vh,8rem)]" aria-labelledby="integral-titulo">
+    <div class="grid gap-6 lg:grid-cols-[1fr_1fr] lg:items-end">
+      <h2 id="integral-titulo" class="max-w-[16ch] text-[clamp(1.6rem,3.1vw,2.6rem)] leading-[1]">{T.integralTitulo}</h2>
+      <p class="max-w-[40ch] border-l-4 border-deco pl-4 font-display text-2xl text-heading">{T.destacado}</p>
+    </div>
+    <ol class="educa-pasos grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {T.integral.map(([nombre, texto], i) => (
+        <li class="educa-paso grid content-start gap-3 rounded-[var(--ca-radius-lg)] border border-line bg-surface p-6">
+          <span class="font-display text-4xl text-deco" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+          <h3 class="text-2xl">{nombre}</h3>
+          <p class="text-muted">{texto}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="contenedor grid gap-8 pb-[clamp(4rem,12vh,8rem)]" aria-labelledby="educativas-titulo">
+    <div class="grid gap-2">
+      <h2 id="educativas-titulo" class="text-[clamp(1.6rem,3vw,2.6rem)]">{T.propuestas}</h2>
+      <p class="max-w-[52ch] text-lg text-muted">{T.propuestasTexto}</p>
+    </div>
+    <ul class="grid gap-6 md:grid-cols-2">
+      {educativas.map((e) => (
+        <li>
+          <a href={r.azaharGrupos} class="tarjeta group grid overflow-hidden text-ink no-underline sm:grid-cols-[0.8fr_1.2fr]" style={`border-top:4px solid ${e.color}`}>
+            <Imagen proporcion="1/1" toma="Grupo recorriendo la chacra" src={foto('recorrido-visitantes', idioma).src} alt={T.escuelasAlt(e.nombre)} class="!rounded-none" />
+            <span class="grid content-center gap-3 p-6">
+              <span class="chip w-max">{e.destino}</span>
+              <span class="font-display text-3xl text-heading group-hover:underline">{e.nombre} {T.paraEscuelas}</span>
+              <span class="text-muted">{T.escuelasTexto}</span>
+              <span class="font-semibold text-primary">{T.ver}</span>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section id="propuesta" class="bg-surface-2 py-[clamp(5rem,12vh,9rem)]" aria-label={T.boton}>
+    <div class="contenedor max-w-4xl"><FormularioGrupos idioma={idioma} general id="educa" /></div>
+  </section>
+
+  <div class="contenedor py-[clamp(4rem,12vh,8rem)]">
+    <TambienTeInteresa
+      idioma={idioma}
+      enlaces={[
+        { titulo: t(idioma, 'nav.experiencias'), texto: T.enlaces[0], href: r.experiencias },
+        { titulo: t(idioma, 'nav.disena'), texto: T.enlaces[1], href: r.disena },
+        { titulo: t(idioma, 'nav.contacto'), texto: T.enlaces[2], href: r.contacto },
+      ]}
+    />
+  </div>
+</Base>
+
+<script>
+  import { gsap, reducido } from '../scripts/movimiento';
+  if (!reducido) {
+    gsap.from('.educa-paso', { y: 50, opacity: 0, duration: 0.9, ease: 'power3.out', stagger: 0.09, scrollTrigger: { trigger: '.educa-pasos', start: 'top 80%' } });
+  }
+</script>

@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /es/sistema/
+
+Sitemap: https://nadiespinosa-del.github.io/sitemap-index.xml

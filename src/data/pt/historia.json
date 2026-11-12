@@ -1,0 +1,25 @@
+{
+  "momentos": [
+    {
+      "anio": "1864",
+      "titulo": "Uma sementeira em La Amarilla",
+      "texto": "Por volta de 1864, Pedro Gallino planta uma sementeira de tangerineiras no estabelecimento La Amarilla, perto do atual Obelisco de Rodó. As sementes vieram do Rio de Janeiro, trazidas por José Gonçalvez Amorim.",
+      "fuente": "Museo del Hombre y la Tecnología de Salto; Padrón Favre (2008)",
+      "foto": "Imagen de archivo de una quinta salteña del siglo XIX o grabado de época"
+    },
+    {
+      "anio": "1926",
+      "titulo": "Laranjeiras nas ruas",
+      "texto": "Pedro Benito Solari promove o plantio de laranjeiras nas ruas de Salto e oferece árvores para a arborização urbana. A iniciativa chega depois a Belén e Constitución.",
+      "fuente": "Archivo Isidra Solari",
+      "foto": "Fotografía de archivo de una calle de Salto con naranjos"
+    },
+    {
+      "anio": "1972",
+      "titulo": "Dezessete abóbadas para a fruta",
+      "texto": "Fica pronto o edifício da Citrícola Salteña S.A., projetado pelo engenheiro Eladio Dieste: 17 abóbadas de dupla curvatura em cerâmica armada cobrem 45 metros sem colunas intermediárias.",
+      "fuente": "FADU, Universidad de la República",
+      "foto": "Bóvedas de Dieste vistas desde el interior, luz de los lucernarios, plano general"
+    }
+  ]
+}

@@ -1,0 +1,134 @@
+---
+// Catálogo de experiencias de VÍA (tres idiomas), con filtros por destino y tipo.
+// Las experiencias se cargan desde src/data/experiencias.json.
+import Base from '../layouts/Base.astro';
+import CabeceraPagina from '../components/CabeceraPagina.astro';
+import TarjetaExperiencia from '../components/TarjetaExperiencia.astro';
+import ProximamenteExperiencias from '../components/ProximamenteExperiencias.astro';
+import TambienTeInteresa from '../components/TambienTeInteresa.astro';
+import { catalogo, textos } from '../lib/datos';
+import { elegir, rutas, t, type Idioma } from '../i18n/ui';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const r = rutas[idioma];
+const lista = catalogo(idioma);
+const destinos = [...new Set(lista.map((e) => e.destino))];
+// Tipos: el valor del filtro es siempre el tipo en español; la etiqueta, el tipo traducido
+const tipos = new Map<string, string>();
+lista.forEach((e) => e.tiposFiltro.forEach((valor, i) => tipos.set(valor, e.tipos[i] ?? valor)));
+const T = elegir(idioma, {
+  es: {
+    desc: 'Experiencias turísticas participativas de VÍA en Uruguay: naturaleza, producción local, gastronomía e identidad. Empezamos por Camino de Azahar, en Salto.',
+    comienza: ['VÍA comienza su recorrido con su primera experiencia en ', '.'],
+    titulo: 'Elegí cómo vivir Uruguay', intro: 'Propuestas para conocer cada lugar con las manos, el gusto y la palabra de quienes lo habitan.',
+    filtrar: 'Filtrar experiencias', destino: 'Destino', todos: 'Todos', tipo: 'Tipo de experiencia', todas: 'Todas', una: 'experiencia', varias: 'experiencias',
+    vacio: 'No hay experiencias con esos filtros', vacioTexto: 'Probá con otro destino u otro tipo, o mirá todas.', verTodas: 'Ver todas',
+    enlaces: [['Experiencias educativas para instituciones.'], ['Quiénes somos y cómo trabajamos con cada comunidad.'], ['Escribinos para armar tu visita.']],
+  },
+  pt: {
+    desc: 'Experiências turísticas participativas da VÍA no Uruguai: natureza, produção local, gastronomia e identidade. Começamos pelo Camino de Azahar, em Salto.',
+    comienza: ['A VÍA começa seu percurso com a primeira experiência em ', ', no Uruguai.'],
+    titulo: 'Escolha como viver o Uruguai', intro: 'Propostas para conhecer cada lugar com as mãos, o paladar e a palavra de quem vive nele.',
+    filtrar: 'Filtrar experiências', destino: 'Destino', todos: 'Todos', tipo: 'Tipo de experiência', todas: 'Todas', una: 'experiência', varias: 'experiências',
+    vacio: 'Não há experiências com esses filtros', vacioTexto: 'Tente outro destino ou outro tipo, ou veja todas.', verTodas: 'Ver todas',
+    enlaces: [['Experiências educativas para instituições.'], ['Quem somos e como trabalhamos com cada comunidade.'], ['Escreva para nós e montamos sua visita.']],
+  },
+  en: {
+    desc: "VÍA's hands-on travel experiences in Uruguay: nature, local produce, food and identity. We start with Camino de Azahar, in Salto.",
+    comienza: ['VÍA starts its journey with its first experience in ', ', Uruguay.'],
+    titulo: 'Choose how to experience Uruguay', intro: 'Ways to get to know each place with your hands, your taste buds and the words of the people who live there.',
+    filtrar: 'Filter experiences', destino: 'Destination', todos: 'All', tipo: 'Type of experience', todas: 'All', una: 'experience', varias: 'experiences',
+    vacio: 'No experiences match those filters', vacioTexto: 'Try another destination or type, or see them all.', verTodas: 'See all',
+    enlaces: [['School trips for institutions.'], ['Who we are and how we work with each community.'], ['Write to us to plan your visit.']],
+  },
+});
+---
+<Base titulo={t(idioma, 'nav.experiencias')} descripcion={T.desc} idioma={idioma} clave="experiencias" encabezadoFlotante>
+  <CabeceraPagina
+    idioma={idioma}
+    titulo={T.titulo}
+    intro={T.intro}
+    migas={[{ texto: t(idioma, 'nav.experiencias') }]}
+  />
+
+  <section class="contenedor grid gap-8 py-[clamp(3rem,8vh,5rem)]" aria-labelledby="filtros-titulo">
+    <p class="max-w-[50ch] font-display text-2xl text-heading">{T.comienza[0]}<span class="text-primary">Salto</span>{T.comienza[1]}</p>
+    <h2 id="filtros-titulo" class="solo-lectores">{T.filtrar}</h2>
+    <div class="filtros grid gap-4">
+      <fieldset class="flex flex-wrap items-center gap-2">
+        <legend class="mb-2 w-full text-sm font-semibold text-muted">{T.destino}</legend>
+        <button type="button" class="chip filtro" aria-pressed="true" data-filtro="destino" data-valor="">{T.todos}</button>
+        {destinos.map((d) => <button type="button" class="chip filtro" aria-pressed="false" data-filtro="destino" data-valor={d}>{d}</button>)}
+      </fieldset>
+      <fieldset class="flex flex-wrap items-center gap-2">
+        <legend class="mb-2 w-full text-sm font-semibold text-muted">{T.tipo}</legend>
+        <button type="button" class="chip filtro" aria-pressed="true" data-filtro="tipo" data-valor="">{T.todas}</button>
+        {[...tipos].map(([valor, etiqueta]) => <button type="button" class="chip filtro" aria-pressed="false" data-filtro="tipo" data-valor={valor}>{etiqueta}</button>)}
+      </fieldset>
+    </div>
+    <p class="resultado text-sm text-muted" aria-live="polite" data-una={T.una} data-varias={T.varias}>{lista.length} {lista.length === 1 ? T.una : T.varias}</p>
+
+    <div class="grid gap-6 lg:grid-cols-[1.6fr_0.8fr]">
+      <div class="lista-exp grid gap-6">
+        {lista.map((e) => <TarjetaExperiencia experiencia={e} destacada idioma={idioma} />)}
+        <div class="sin-resultados hidden rounded-[var(--ca-radius-lg)] border border-line bg-surface p-8">
+          <h3 class="text-2xl">{T.vacio}</h3>
+          <p class="mt-2 text-muted">{T.vacioTexto}</p>
+          <button type="button" class="btn btn-secundario mt-4 limpiar">{T.verTodas}</button>
+        </div>
+      </div>
+      <ProximamenteExperiencias idioma={idioma} />
+    </div>
+    <p class="text-xs text-muted">* {textos(idioma).leyenda}.</p>
+  </section>
+
+  <div class="contenedor py-[clamp(4rem,10vh,7rem)]">
+    <TambienTeInteresa
+      idioma={idioma}
+      enlaces={[
+        { titulo: t(idioma, 'nav.grupos'), texto: T.enlaces[0][0], href: r.grupos },
+        { titulo: t(idioma, 'nav.nosotros'), texto: T.enlaces[1][0], href: r.nosotros },
+        { titulo: t(idioma, 'nav.contacto'), texto: T.enlaces[2][0], href: r.contacto },
+      ]}
+    />
+  </div>
+</Base>
+
+<style>
+  .filtro { cursor: pointer; min-height: 40px; }
+  .filtro[aria-pressed='true'] { background: var(--ca-heading); color: var(--ca-bg); border-color: transparent; }
+</style>
+
+<script>
+  // Filtros del catálogo: combinan destino y tipo; muestran un estado vacío si no hay coincidencias.
+  const botones = document.querySelectorAll<HTMLButtonElement>('.filtro');
+  const tarjetas = document.querySelectorAll<HTMLElement>('.lista-exp .tarjeta-exp');
+  const vacio = document.querySelector<HTMLElement>('.sin-resultados');
+  const resultado = document.querySelector<HTMLElement>('.resultado');
+  const estado: Record<string, string> = { destino: '', tipo: '' };
+  const aplicar = () => {
+    let visibles = 0;
+    tarjetas.forEach((t) => {
+      const ok = (!estado.destino || t.dataset.destino === estado.destino) && (!estado.tipo || (t.dataset.tipos || '').split('|').includes(estado.tipo));
+      t.hidden = !ok;
+      if (ok) visibles++;
+    });
+    vacio?.classList.toggle('hidden', visibles > 0);
+    if (resultado) resultado.textContent = `${visibles} ${visibles === 1 ? resultado.dataset.una : resultado.dataset.varias}`;
+  };
+  botones.forEach((b) =>
+    b.addEventListener('click', () => {
+      const filtro = b.dataset.filtro || '';
+      estado[filtro] = b.dataset.valor || '';
+      botones.forEach((o) => { if (o.dataset.filtro === filtro) o.setAttribute('aria-pressed', String(o === b)); });
+      aplicar();
+    })
+  );
+  document.querySelector('.limpiar')?.addEventListener('click', () => {
+    estado.destino = '';
+    estado.tipo = '';
+    botones.forEach((o) => o.setAttribute('aria-pressed', String(!o.dataset.valor)));
+    aplicar();
+  });
+</script>

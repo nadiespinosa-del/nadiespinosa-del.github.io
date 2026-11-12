@@ -1,0 +1,125 @@
+---
+// Hero inmersivo: naranja 3D que se abre con el scroll y deja ver los gajos.
+// La sección mide 280vh: el contenido queda fijo (sticky) mientras la naranja se abre.
+// Sin WebGL o con movimiento reducido: imagen fija de la naranja abierta (o la rodaja en SVG).
+import IndicadorTemporada from '../IndicadorTemporada.astro';
+import Rodaja from '../Rodaja.astro';
+import { elegir, type Idioma } from '../../i18n/ui';
+interface Props { idioma?: Idioma }
+const { idioma = 'es' } = Astro.props;
+const T = elegir(idioma, {
+  es: { titulo: 'Salto se descubre por la naranja', bajada: 'Recorré un naranjal en funcionamiento en Colonia Osimani, exprimí tu propio jugo y conocé a quienes lo cultivan.', vivi: 'Viví la experiencia', historia: 'Conocé la historia', leyenda: 'Adentro, la historia de Salto', pista: 'Deslizá para abrir la naranja' },
+  pt: { titulo: 'Salto se descobre pela laranja', bajada: 'Percorra um laranjal em funcionamento em Colonia Osimani, no Uruguai, esprema o seu próprio suco e conheça quem o cultiva.', vivi: 'Viva a experiência', historia: 'Conheça a história', leyenda: 'Por dentro, a história de Salto', pista: 'Role para abrir a laranja' },
+  en: { titulo: 'Discover Salto through its oranges', bajada: "Walk a working orange grove in Colonia Osimani, Uruguay, squeeze your own juice and meet the people who grow it.", vivi: 'Live the experience', historia: 'Discover the story', leyenda: "Inside, Salto's story", pista: 'Scroll to open the orange' },
+});
+---
+<section id="inicio" class="hero-naranja relative" aria-labelledby="hero-titulo" data-zona-oscura>
+  <div class="hero-escenario sticky top-0 h-[100svh] overflow-hidden">
+    <div class="hero-fondo absolute inset-0" aria-hidden="true"></div>
+    <canvas class="hero-lienzo absolute inset-0 h-full w-full" aria-hidden="true"></canvas>
+    <div class="hero-respaldo absolute inset-0 hidden items-center justify-center text-deco" aria-hidden="true">
+      <Rodaja tamano={420} grosor={1.4} />
+    </div>
+
+    <div class="on-deep relative z-10 flex h-full flex-col justify-end pb-[max(2rem,6vh)] pt-28">
+      <div class="contenedor grid gap-6">
+        <div class="hero-entrada"><IndicadorTemporada idioma={idioma} /></div>
+        <h1 id="hero-titulo" class="hero-titulo max-w-[11ch] !text-[clamp(2.3rem,6.5vw,6.3rem)] !leading-[0.92] !text-[#fbf2e1]">
+          {T.titulo}
+        </h1>
+        <div class="flex flex-wrap items-end justify-between gap-6">
+          <p class="hero-entrada max-w-[38ch] text-lg text-on-deep-muted">{T.bajada}</p>
+          <div class="hero-entrada flex flex-wrap gap-3">
+            <a href="#reservar" class="btn btn-luz">{T.vivi}</a>
+            <a href="#historia" class="btn btn-contorno-claro">{T.historia}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="hero-leyenda pointer-events-none absolute inset-x-0 top-[18vh] z-10 text-center font-display text-[clamp(1.6rem,3.4vw,3rem)] italic leading-tight text-[#fbf2e1] opacity-0" aria-hidden="true">
+      {T.leyenda}
+    </p>
+
+    <div class="hero-pista absolute bottom-6 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-2 text-sm text-on-deep-muted md:flex" aria-hidden="true">
+      <span>{T.pista}</span>
+      <span class="hero-pista-linea block h-10 w-px overflow-hidden bg-white/25"><span class="block h-full w-full bg-[#f2c14e]"></span></span>
+    </div>
+
+    <div class="hero-amanecer pointer-events-none absolute inset-0 z-20 bg-bg opacity-0" aria-hidden="true"></div>
+  </div>
+</section>
+
+<style>
+  /* Fondo verde yerba (tema azahar): toma los tonos profundos del tema */
+  .hero-naranja { height: 280vh; background: var(--ca-deep-3); }
+  .hero-fondo {
+    background:
+      radial-gradient(ellipse 60% 55% at 50% 42%, rgba(242, 150, 60, 0.24), transparent 70%),
+      radial-gradient(ellipse 120% 90% at 50% 120%, var(--ca-deep-2) 0%, transparent 60%),
+      linear-gradient(180deg, var(--ca-deep-3) 0%, var(--ca-deep) 100%);
+  }
+  .hero-pista-linea > span { animation: pista 2.2s cubic-bezier(0.77, 0, 0.175, 1) infinite; }
+  @keyframes pista {
+    0% { transform: translateY(-100%); }
+    60%, 100% { transform: translateY(100%); }
+  }
+  .hero-titulo :global(.linea) { overflow-x: visible; overflow-y: clip; padding-bottom: 0.2em; margin-bottom: -0.14em; }
+  :global(.sin-webgl) .hero-respaldo { display: flex; }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-naranja { height: auto; }
+    .hero-escenario { position: relative; }
+    .hero-pista-linea > span { animation: none; }
+  }
+</style>
+
+<script>
+  import { gsap, ScrollTrigger, SplitText, reducido, esMovil } from '../../scripts/movimiento';
+  import { crearEscenaNaranja } from '../../scripts/escena-naranja';
+
+  const seccion = document.querySelector<HTMLElement>('.hero-naranja');
+  const lienzo = seccion?.querySelector<HTMLCanvasElement>('.hero-lienzo');
+
+  if (seccion && lienzo) {
+    const escena = crearEscenaNaranja(lienzo, { movil: esMovil, reducido });
+    if (!escena) seccion.classList.add('sin-webgl');
+    // Si el modelo 3D no carga (sin conexión, archivo faltante), se muestra la rodaja de respaldo
+    lienzo.addEventListener('naranja-error', () => seccion.classList.add('sin-webgl'));
+
+    // Entrada: el título sube línea por línea desde una máscara
+    const titulo = seccion.querySelector<HTMLElement>('.hero-titulo');
+    if (titulo && !reducido) {
+      const partido = SplitText.create(titulo, { type: 'lines,words', linesClass: 'linea' });
+      gsap.from(partido.words, { yPercent: 115, rotate: 4, duration: 1.4, ease: 'expo.out', stagger: 0.07, delay: 0.25 });
+      gsap.from(seccion.querySelectorAll('.hero-entrada'), { opacity: 0, y: 24, duration: 1.1, ease: 'power3.out', stagger: 0.12, delay: 0.9 });
+      gsap.from(lienzo, { opacity: 0, scale: 1.08, duration: 2.2, ease: 'power2.out' });
+    }
+
+    if (escena && !reducido) {
+      // El scroll abre la naranja
+      ScrollTrigger.create({
+        trigger: seccion,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: true,
+        onUpdate: (self) => escena.setProgreso(self.progress),
+      });
+      // Textos: el título se va, aparece la leyenda, y al final "amanece" (crema)
+      const linea = gsap.timeline({ scrollTrigger: { trigger: seccion, start: 'top top', end: 'bottom bottom', scrub: 0.6 } });
+      linea
+        .to(seccion.querySelectorAll('.on-deep, .hero-pista'), { opacity: 0, y: -60, ease: 'none', duration: 0.18 }, 0.08)
+        .fromTo(seccion.querySelector('.hero-leyenda'), { opacity: 0, y: 40 }, { opacity: 1, y: 0, ease: 'none', duration: 0.14 }, 0.4)
+        .to(seccion.querySelector('.hero-leyenda'), { opacity: 0, y: -30, ease: 'none', duration: 0.1 }, 0.72)
+        .to(seccion.querySelector('.hero-amanecer'), { opacity: 1, ease: 'none', duration: 0.12 }, 0.88);
+
+      // El puntero inclina la fruta (solo con mouse)
+      if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+        window.addEventListener('pointermove', (e) => {
+          escena.setPuntero((e.clientX / window.innerWidth) * 2 - 1, (e.clientY / window.innerHeight) * 2 - 1);
+        });
+      }
+      // Ahorro: se pausa cuando el hero no está en pantalla
+      new IntersectionObserver(([entrada]) => escena.pausar(!entrada.isIntersecting)).observe(seccion);
+    }
+  }
+</script>

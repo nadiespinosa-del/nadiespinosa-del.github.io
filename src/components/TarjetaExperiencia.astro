@@ -1,0 +1,58 @@
+---
+// Tarjeta de una experiencia del catálogo de VÍA. Lleva el color de acento de su experiencia.
+import Imagen from './Imagen.astro';
+import { formatoPrecio } from '../lib/util';
+import { elegir, type Idioma } from '../i18n/ui';
+
+interface Experiencia {
+  id: string; nombre: string; lema: string; destino: string; lugar: string; region: string;
+  tipos: string[]; tiposFiltro?: string[]; resumen: string; frase?: string; duracion: string; desde: number; temporada: string;
+  color: string; href: string; foto: string; imagen?: string;
+}
+interface Props { experiencia: Experiencia; destacada?: boolean; idioma?: Idioma }
+const { experiencia: e, destacada = false, idioma = 'es' } = Astro.props;
+const T = elegir(idioma, {
+  es: { tipo: 'Tipo de experiencia', lugar: 'Lugar', duracion: 'Duración', desde: 'Desde', conoce: 'Conocé' },
+  pt: { tipo: 'Tipo de experiência', lugar: 'Lugar', duracion: 'Duração', desde: 'A partir de', conoce: 'Conheça o' },
+  en: { tipo: 'Type of experience', lugar: 'Place', duracion: 'Duration', desde: 'From', conoce: 'Discover' },
+});
+---
+<article
+  class={`tarjeta-exp tarjeta group relative grid overflow-hidden ${destacada ? 'lg:grid-cols-[1.1fr_0.9fr]' : ''}`}
+  data-destino={e.destino}
+  data-tipos={(e.tiposFiltro ?? e.tipos).join('|')}
+  style={`--acento:${e.color}`}
+>
+  <div class="relative">
+    <Imagen proporcion={destacada ? '3/2' : '4/5'} toma={e.foto} src={e.imagen} alt={`${e.nombre}, ${e.lugar}`} class="!rounded-none" />
+    <span class="absolute left-4 top-4 rounded-full bg-[#10231a]/85 px-3 py-1 text-sm font-semibold text-[#fbf2e1] backdrop-blur">{e.destino}</span>
+  </div>
+  <div class="grid content-start gap-4 p-6 sm:p-8">
+    <span class="h-1.5 w-14 rounded-full" style="background:var(--acento)" aria-hidden="true"></span>
+    <h3 class="text-[clamp(1.8rem,3vw,2.6rem)] leading-tight">
+      <a href={e.href} class="text-heading no-underline after:absolute after:inset-0 group-hover:underline">{e.nombre}</a>
+    </h3>
+    <p class="text-lg">{e.resumen}</p>
+    {e.frase && <p class="font-display text-xl text-heading">{e.frase}</p>}
+    <ul class="flex flex-wrap gap-2" aria-label={T.tipo}>
+      {e.tipos.map((tipo) => <li class="chip">{tipo}</li>)}
+    </ul>
+    <dl class="grid grid-cols-3 gap-3 border-t border-line pt-4 text-sm">
+      <div><dt class="text-muted">{T.lugar}</dt><dd class="font-semibold">{e.destino}</dd></div>
+      <div><dt class="text-muted">{T.duracion}</dt><dd class="font-semibold">{e.duracion}</dd></div>
+      <div><dt class="text-muted">{T.desde}</dt><dd class="font-semibold">{formatoPrecio(e.desde, idioma)}*</dd></div>
+    </dl>
+    <!-- El botón es parte visual del enlace de la tarjeta (el título la cubre entera): no va por encima, así el clic llega al enlace -->
+    <span class="btn btn-pequeno w-max" style="background:var(--acento);color:#231c16" aria-hidden="true">{T.conoce} {e.nombre}</span>
+  </div>
+</article>
+
+<style>
+  .tarjeta-exp { transition: transform 400ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 400ms ease; }
+  @media (hover: hover) and (pointer: fine) {
+    .tarjeta-exp:hover { transform: translateY(-6px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tarjeta-exp { transition: none; }
+  }
+</style>

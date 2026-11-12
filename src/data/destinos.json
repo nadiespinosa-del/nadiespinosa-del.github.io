@@ -1,0 +1,31 @@
+{
+  "_nota": "Coordenadas aproximadas de lugares públicos conocidos (escala regional). La ubicación exacta de la Chacra La Victoria se agrega cuando el equipo la confirme: completar 'chacra' con lat y lng.",
+  "chacra": null,
+  "lugares": [
+    {
+      "id": "salto", "tipo": "destino", "lat": -31.388, "lng": -57.961,
+      "nombre": { "es": "Ciudad de Salto", "pt": "Cidade de Salto", "en": "Salto city" },
+      "texto": { "es": "Patrimonio urbano, naranjos en las calles y el edificio de Dieste para Citrícola Salteña.", "pt": "Patrimônio urbano, laranjeiras nas ruas e o edifício de Dieste para a Citrícola Salteña.", "en": "Historic centre, orange trees along the streets and Dieste's packing house for Citrícola Salteña." }
+    },
+    {
+      "id": "dayman", "tipo": "termas", "lat": -31.451, "lng": -57.906,
+      "nombre": { "es": "Termas del Daymán", "pt": "Termas del Daymán", "en": "Daymán hot springs" },
+      "texto": { "es": "Centro termal cercano a la ciudad de Salto.", "pt": "Centro termal próximo à cidade de Salto.", "en": "Hot springs resort near Salto city." }
+    },
+    {
+      "id": "arapey", "tipo": "termas", "lat": -30.945, "lng": -57.522,
+      "nombre": { "es": "Termas del Arapey", "pt": "Termas del Arapey", "en": "Arapey hot springs" },
+      "texto": { "es": "Centro termal en el norte del departamento.", "pt": "Centro termal no norte do departamento.", "en": "Hot springs resort in the north of the department." }
+    },
+    {
+      "id": "salto-grande", "tipo": "destino", "lat": -31.276, "lng": -57.938,
+      "nombre": { "es": "Represa de Salto Grande", "pt": "Represa de Salto Grande", "en": "Salto Grande dam" },
+      "texto": { "es": "Une Salto con Concordia sobre el río Uruguay.", "pt": "Liga Salto a Concordia sobre o rio Uruguai.", "en": "Links Salto and Concordia across the Uruguay River." }
+    },
+    {
+      "id": "concordia", "tipo": "destino", "lat": -31.393, "lng": -58.021,
+      "nombre": { "es": "Concordia (Argentina)", "pt": "Concordia (Argentina)", "en": "Concordia (Argentina)" },
+      "texto": { "es": "La otra orilla citrícola, sede de la Fiesta Nacional de la Citricultura.", "pt": "A outra margem citrícola, sede da Festa Nacional da Citricultura argentina.", "en": "The citrus town across the river, home of Argentina's National Citrus Festival." }
+    }
+  ]
+}

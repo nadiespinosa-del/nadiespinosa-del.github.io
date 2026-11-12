@@ -1,0 +1,75 @@
+---
+// Política de privacidad (tres idiomas; texto base, a revisar por un profesional).
+import Base from '../layouts/Base.astro';
+import CabeceraPagina from '../components/CabeceraPagina.astro';
+import Pendiente from '../components/Pendiente.astro';
+import { elegir, t, type Idioma } from '../i18n/ui';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const T = elegir(idioma, {
+  es: {
+    desc: 'Cómo trata VÍA los datos personales, según la Ley N.º 18.331 de Protección de Datos Personales de Uruguay.', intro: 'Qué datos usamos, para qué y cuáles son tus derechos.',
+    responsable: 'Quién es responsable', responsableTexto: ['Responsable del tratamiento de datos: ', '. Cumplimos la ', 'Ley N.º 18.331', ' de Protección de Datos Personales de Uruguay.'],
+    datos: 'Qué datos usamos',
+    lista: [
+      ['Formularios de reserva y de grupos:', 'no se guardan en este sitio. Al enviarlos se abre WhatsApp con el mensaje que escribiste, y vos decidís si lo enviás.'],
+      ['Boletín:', 'todavía no está activo; el formulario no guarda ningún dato.'],
+      ['Grupos escolares:', 'solo pedimos datos de la persona adulta responsable, nunca de estudiantes.'],
+    ],
+    externos: 'Servicios externos',
+    servicios: [['WhatsApp', '(Meta), cuando elegís contactarnos por ese medio.'], ['OpenStreetMap', ', que muestra el mapa en "Planificá tu visita".'], ['Open-Meteo', ', que provee el pronóstico del tiempo. No recibe datos personales.']],
+    cookies: 'Este sitio no usa cookies de seguimiento ni herramientas de analítica por ahora. Si se agregan, se pedirá tu consentimiento antes, con la opción de rechazar tan fácil como la de aceptar.',
+    derechos: 'Tus derechos', derechosTexto: 'Podés pedir acceso, rectificación, actualización o eliminación de tus datos escribiéndonos por WhatsApp o por email.',
+  },
+  pt: {
+    desc: 'Como a VÍA trata os dados pessoais, de acordo com a Lei n.º 18.331 de Proteção de Dados Pessoais do Uruguai.', intro: 'Quais dados usamos, para quê e quais são os seus direitos.',
+    responsable: 'Quem é o responsável', responsableTexto: ['Responsável pelo tratamento dos dados: ', '. Cumprimos a ', 'Lei n.º 18.331', ' de Proteção de Dados Pessoais do Uruguai.'],
+    datos: 'Quais dados usamos',
+    lista: [
+      ['Formulários de reserva e de grupos:', 'não são armazenados neste site. Ao enviá-los, o WhatsApp abre com a mensagem que você escreveu, e você decide se a envia.'],
+      ['Boletim:', 'ainda não está ativo; o formulário não armazena nenhum dado.'],
+      ['Grupos escolares:', 'só pedimos dados do adulto responsável, nunca dos estudantes.'],
+    ],
+    externos: 'Serviços externos',
+    servicios: [['WhatsApp', '(Meta), quando você escolhe falar conosco por esse meio.'], ['OpenStreetMap', ', que mostra o mapa em "Planeje sua visita".'], ['Open-Meteo', ', que fornece a previsão do tempo. Não recebe dados pessoais.']],
+    cookies: 'Este site não usa cookies de rastreamento nem ferramentas de análise por enquanto. Se forem adicionados, pediremos seu consentimento antes, com a opção de recusar tão fácil quanto a de aceitar.',
+    derechos: 'Seus direitos', derechosTexto: 'Você pode pedir acesso, retificação, atualização ou exclusão dos seus dados escrevendo para nós pelo WhatsApp ou por e-mail.',
+  },
+  en: {
+    desc: "How VÍA handles personal data, under Uruguay's Personal Data Protection Law No. 18,331.", intro: 'What data we use, what for, and what your rights are.',
+    responsable: 'Who is responsible', responsableTexto: ['Data controller: ', '. We comply with Uruguay\'s ', 'Law No. 18,331', ' on Personal Data Protection.'],
+    datos: 'What data we use',
+    lista: [
+      ['Booking and group forms:', 'are not stored on this site. When you send them, WhatsApp opens with the message you wrote, and you decide whether to send it.'],
+      ['Newsletter:', 'not active yet; the form does not store any data.'],
+      ['School groups:', 'we only ask for details of the responsible adult, never of students.'],
+    ],
+    externos: 'Third-party services',
+    servicios: [['WhatsApp', '(Meta), when you choose to contact us that way.'], ['OpenStreetMap', ', which shows the map on "Plan your visit".'], ['Open-Meteo', ', which provides the weather forecast. It does not receive personal data.']],
+    cookies: 'This site does not use tracking cookies or analytics tools for now. If they are added, we will ask for your consent first, and declining will be as easy as accepting.',
+    derechos: 'Your rights', derechosTexto: 'You can ask to access, correct, update or delete your data by writing to us on WhatsApp or by email.',
+  },
+});
+---
+<Base titulo={t(idioma, 'pie.privacidad')} clave="privacidad" descripcion={T.desc} idioma={idioma} encabezadoFlotante>
+  <CabeceraPagina idioma={idioma} titulo={t(idioma, 'pie.privacidad')} intro={T.intro} migas={[{ texto: t(idioma, 'pie.privacidad') }]} />
+  <article class="contenedor py-[clamp(4rem,12vh,8rem)]">
+    <div class="prosa">
+      <p><Pendiente tipo="TEXTO PROVISORIO" texto="texto base a revisar por un profesional antes de publicar" /></p>
+      <h2>{T.responsable}</h2>
+      <p>{T.responsableTexto[0]}<Pendiente texto="razón social, RUT y domicilio del responsable" />{T.responsableTexto[1]}<strong>{T.responsableTexto[2]}</strong>{T.responsableTexto[3]}</p>
+      <h2>{T.datos}</h2>
+      <ul>
+        {T.lista.map(([titulo, texto]) => <li><strong>{titulo}</strong> {texto}</li>)}
+      </ul>
+      <h2>{T.externos}</h2>
+      <ul>
+        {T.servicios.map(([nombre, texto]) => <li><strong>{nombre}</strong>{texto.startsWith(',') ? '' : ' '}{texto}</li>)}
+      </ul>
+      <p>{T.cookies}</p>
+      <h2>{T.derechos}</h2>
+      <p>{T.derechosTexto}</p>
+    </div>
+  </article>
+</Base>

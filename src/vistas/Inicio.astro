@@ -1,0 +1,162 @@
+---
+// Inicio de VÍA (tres idiomas). Textos según el documento de cambios de copia (11/11/2026).
+// Recorrido: portada → Servicios → VÍA Educa → novedades. Las experiencias (Salto, Camino de Azahar)
+// se descubren desde el botón «Descubrí las experiencias».
+// Una ruta animada (RutaVia) une las secciones al hacer scroll.
+import Base from '../layouts/Base.astro';
+import Imagen from '../components/Imagen.astro';
+import Servicios from '../components/Servicios.astro';
+import RutaVia from '../components/RutaVia.astro';
+import Boletin from '../components/Boletin.astro';
+import DatosEstructurados from '../components/DatosEstructurados.astro';
+import site from '../data/site.json';
+import { catalogo } from '../lib/datos';
+import { foto } from '../lib/fotos';
+import { elegir, rutas, t, type Idioma } from '../i18n/ui';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const r = rutas[idioma];
+const experiencias = catalogo(idioma);
+const T = elegir(idioma, {
+  es: {
+    meta: 'VÍA · Salí a descubrir lo que hace único a cada lugar',
+    titulo: 'Salí a descubrir lo que hace único a cada lugar.',
+    texto: 'Creamos experiencias turísticas para conocer, disfrutar y conectar con los paisajes, la cultura, la producción y las personas que hacen único a cada lugar.',
+    destacado: 'Vos traés las ganas. Nosotros nos ocupamos del resto.',
+    expTitulo: 'Descubrí las experiencias', expTexto: ['VÍA comienza su recorrido con su primera experiencia en ', '.'], verTodas: 'Ver todas',
+    educaTitulo: 'Aprender también es salir, conocer y vivir nuevas experiencias.',
+    educaTexto: 'Diseñamos propuestas educativas que conectan los contenidos trabajados en el aula con experiencias reales, adaptadas a los intereses y objetivos de cada institución.',
+    educaDestacado: 'La institución nos cuenta qué quiere trabajar. Nosotros diseñamos cómo vivirlo.',
+    educaBoton: 'Diseñá tu experiencia educativa', integralTitulo: 'Cada viaje se piensa de manera integral:',
+    integral: ['Destino', 'Actividades', 'Tiempos', 'Transporte', 'Alojamiento', 'Coordinación'],
+  },
+  pt: {
+    meta: 'VÍA · Saia para descobrir o que torna cada lugar único',
+    titulo: 'Saia para descobrir o que torna cada lugar único.',
+    texto: 'Criamos experiências turísticas para conhecer, aproveitar e se conectar com as paisagens, a cultura, a produção e as pessoas que tornam cada lugar único.',
+    destacado: 'Você traz a vontade. Nós cuidamos do resto.',
+    expTitulo: 'Descubra as experiências', expTexto: ['A VÍA começa seu percurso com a primeira experiência em ', ', no Uruguai.'], verTodas: 'Ver todas',
+    educaTitulo: 'Aprender também é sair, conhecer e viver novas experiências.',
+    educaTexto: 'Desenhamos propostas educativas que conectam os conteúdos trabalhados em sala de aula com experiências reais, adaptadas aos interesses e objetivos de cada instituição.',
+    educaDestacado: 'A instituição nos conta o que quer trabalhar. Nós desenhamos como vivenciar.',
+    educaBoton: 'Monte sua experiência educativa', integralTitulo: 'Cada viagem é pensada de forma integral:',
+    integral: ['Destino', 'Atividades', 'Tempos', 'Transporte', 'Hospedagem', 'Coordenação'],
+  },
+  en: {
+    meta: 'VÍA · Go and discover what makes each place unique',
+    titulo: 'Go and discover what makes each place unique.',
+    texto: 'We create travel experiences to discover, enjoy and connect with the landscapes, culture, produce and people that make each place unique.',
+    destacado: 'You bring the curiosity. We take care of the rest.',
+    expTitulo: 'Discover the experiences', expTexto: ['VÍA starts its journey with its first experience in ', ', Uruguay.'], verTodas: 'See all',
+    educaTitulo: 'Learning also means getting out, discovering and living new experiences.',
+    educaTexto: "We design school trips that link what students work on in class with real experiences, tailored to each institution's interests and goals.",
+    educaDestacado: 'The school tells us what it wants to work on. We design how to experience it.',
+    educaBoton: 'Design your school trip', integralTitulo: 'Every trip is planned as a whole:',
+    integral: ['Destination', 'Activities', 'Timing', 'Transport', 'Accommodation', 'Coordination'],
+  },
+});
+// Fotos propias de la portada: el atardecer en el río Uruguay (Salto), la Plaza 33 y un fogón
+const fotos = [
+  { celda: 'col-span-4 row-span-4', ...foto('rio-uruguay-atardecer', idioma) },
+  { celda: 'col-span-2 col-start-5 row-span-3 row-start-2', ...foto('plaza-33', idioma) },
+  { celda: 'col-span-3 col-start-2 row-span-2 row-start-5', ...foto('fogon', idioma) },
+];
+const orgLd = {
+  '@context': 'https://schema.org',
+  '@type': 'TravelAgency',
+  name: 'VÍA',
+  description: t(idioma, 'marca.descripcion'),
+  url: new URL(r.inicio, site.dominio).href,
+  areaServed: { '@type': 'Country', name: 'Uruguay' },
+  makesOffer: experiencias.map((e) => ({ '@type': 'Offer', itemOffered: { '@type': 'TouristTrip', name: e.nombre, url: new URL(e.href, site.dominio).href } })),
+};
+---
+<Base titulo={T.meta} descripcion={T.texto} idioma={idioma} clave="inicio" encabezadoFlotante>
+  <section class="via-hero relative overflow-hidden pb-20 pt-32 sm:pt-40" aria-labelledby="via-titulo">
+    <div class="via-hero-fondo absolute inset-0" aria-hidden="true"></div>
+    <div class="contenedor relative grid items-center gap-14 lg:grid-cols-[1.05fr_0.95fr]">
+      <div class="grid gap-7">
+        <h1 id="via-titulo" class="via-titulo max-w-[13ch] !text-[clamp(2.2rem,5vw,4.7rem)] !leading-[0.95]">{T.titulo}</h1>
+        <p class="via-entrada max-w-[46ch] text-xl leading-relaxed text-muted">{T.texto}</p>
+        <p class="via-entrada border-l-4 border-[#f29a1f] pl-4 font-display text-2xl text-heading">{T.destacado}</p>
+        <div class="via-entrada flex flex-wrap gap-3">
+          <a href={r.experiencias} class="btn btn-primario">{t(idioma, 'nav.verExperiencias')}</a>
+          <a href={r.disena} class="btn btn-secundario">{t(idioma, 'nav.disena')}</a>
+        </div>
+      </div>
+      <div class="via-mosaico relative grid h-[min(70vh,620px)] grid-cols-6 grid-rows-6 gap-3">
+        {fotos.map((f) => (
+          <div class={`via-foto ${f.celda}`}><Imagen proporcion="1/1" src={f.src} toma={f.alt} alt={f.alt} prioridad class="h-full !aspect-auto" /></div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <div class="ruta-contenedor relative">
+    <RutaVia />
+
+    <div class="bg-surface-2 py-[clamp(5rem,14vh,9rem)]">
+      <div class="contenedor" data-parada><Servicios idioma={idioma} /></div>
+    </div>
+
+    <section class="via-educa on-deep relative overflow-hidden bg-deep py-[clamp(5rem,14vh,9rem)] text-[#fbf2e1]" aria-labelledby="educa-titulo">
+      <div class="contenedor relative grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center" data-parada>
+        <div class="grid gap-6">
+          <p class="font-display text-2xl font-semibold text-[#f2c14e]">VÍA Educa</p>
+          <h2 id="educa-titulo" class="max-w-[15ch] !text-[clamp(1.8rem,3.7vw,3.3rem)] !leading-[0.96] !text-[#fbf2e1]">{T.educaTitulo}</h2>
+          <p class="max-w-[48ch] text-lg text-on-deep-muted">{T.educaTexto}</p>
+          <p class="border-l-4 border-[#f2c14e] pl-4 font-display text-2xl">{T.educaDestacado}</p>
+          <div><a href={`${r.grupos}#propuesta`} class="btn btn-luz">{T.educaBoton}</a></div>
+        </div>
+        <div class="grid gap-4">
+          <p class="text-on-deep-muted">{T.integralTitulo}</p>
+          <ul class="educa-integral grid grid-cols-2 gap-3 sm:grid-cols-3">
+            {T.integral.map((item, i) => (
+              <li class="educa-item grid gap-2 rounded-[var(--ca-radius-lg)] border border-white/15 bg-white/5 p-5">
+                <span class="font-display text-3xl text-[#f2c14e]" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                <span class="text-lg font-semibold">{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="contenedor py-[clamp(4rem,10vh,7rem)]" data-parada>
+      <Boletin general idioma={idioma} />
+    </div>
+  </div>
+  <DatosEstructurados datos={orgLd} />
+</Base>
+
+<style>
+  /* Portada clara: beige cálido con un resplandor de sol naranja y un toque de verde, como el logo */
+  .via-hero-fondo {
+    background:
+      radial-gradient(ellipse 45% 55% at 82% 22%, rgba(242, 154, 31, 0.2), transparent 70%),
+      radial-gradient(ellipse 55% 60% at 5% 100%, rgba(125, 168, 50, 0.16), transparent 70%),
+      linear-gradient(180deg, #efe2c9 0%, #f4e9d5 65%, #faf4e8 100%);
+  }
+  .via-titulo :global(.linea) { overflow-x: visible; overflow-y: clip; padding-bottom: 0.2em; margin-bottom: -0.14em; }
+  .via-foto :global(figure) { height: 100%; }
+  @media (max-width: 1023px) { .via-mosaico { height: 460px; } }
+</style>
+
+<script>
+  import { gsap, SplitText, reducido } from '../scripts/movimiento';
+  if (!reducido) {
+    const titulo = document.querySelector<HTMLElement>('.via-titulo');
+    if (titulo) {
+      const partido = SplitText.create(titulo, { type: 'lines,words', linesClass: 'linea' });
+      gsap.from(partido.words, { yPercent: 115, duration: 1.3, ease: 'expo.out', stagger: 0.06, delay: 0.15 });
+    }
+    gsap.from('.via-entrada', { opacity: 0, y: 24, duration: 1, ease: 'power3.out', stagger: 0.12, delay: 0.6 });
+    gsap.from('.via-foto', { clipPath: 'inset(100% 0 0 0 round 20px)', duration: 1.4, ease: 'expo.out', stagger: 0.15, delay: 0.3 });
+    document.querySelectorAll<HTMLElement>('.via-foto').forEach((foto, i) => {
+      gsap.to(foto, { yPercent: (i - 1) * 8, ease: 'none', scrollTrigger: { trigger: '.via-hero', start: 'top top', end: 'bottom top', scrub: true } });
+    });
+    // VÍA Educa: los seis aspectos del viaje entran uno a uno
+    gsap.from('.educa-item', { scale: 0.85, opacity: 0, duration: 0.7, ease: 'back.out(1.6)', stagger: 0.08, scrollTrigger: { trigger: '.educa-integral', start: 'top 80%' } });
+  }
+</script>

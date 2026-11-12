@@ -1,0 +1,93 @@
+---
+// Sostenibilidad (tres idiomas): prácticas ambientales, socioculturales y económicas del circuito.
+import Base from '../layouts/Base.astro';
+import CabeceraPagina from '../components/CabeceraPagina.astro';
+import Llamado from '../components/Llamado.astro';
+import TambienTeInteresa from '../components/TambienTeInteresa.astro';
+import { elegir, rutas, rutaReservar, t, type Idioma } from '../i18n/ui';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const r = rutas[idioma];
+const T = elegir(idioma, {
+  es: {
+    desc: 'Cómo VÍA cuida cada lugar. En Camino de Azahar: cero plásticos descartables, compost con la cáscara, grupos limitados y beneficios compartidos con la comunidad de Colonia Osimani.',
+    titulo: 'Turismo y naranjal, en equilibrio',
+    intro: 'El turismo y la producción citrícola pueden complementarse de manera responsable: con beneficios para quienes visitan, para quienes producen y para la comunidad, sin comprometer los recursos naturales.',
+    practicas: 'Prácticas',
+    dimensiones: [
+      ['Ambiente', ['Sin plásticos descartables: utensilios y delantales reutilizables.', 'Separación y reciclaje de residuos durante la elaboración del jugo.', 'La cáscara y los restos de la naranja se aprovechan para compost o productos derivados.', 'Uso responsable del agua y cuidado de las plantaciones.', 'Grupos de tamaño limitado (de 10 a 25 personas) para no sobrecargar el espacio productivo.']],
+      ['Comunidad', ['Reconocimiento de los saberes de productores y trabajadores.', 'Participación de emprendedores de la Feria de Colonia Osimani y Llerena.', 'Contenido educativo para liceos y UTU, en temporada baja y alta.', 'Accesibilidad progresiva: información clara y adaptación de actividades.']],
+      ['Economía local', ['Valor agregado sobre un producto que ya existe en el lugar.', 'Beneficios distribuidos entre la chacra, los emprendedores locales y la agencia.', 'Una alternativa rural que diversifica la oferta de Salto más allá de las termas.']],
+    ],
+    marco: 'Un compromiso con nombre',
+    marco1: ['La propuesta sigue el enfoque del ', 'Plan Nacional de Turismo Sostenible 2030', ', que pide atender a la vez lo ambiental, lo sociocultural y lo económico, y las metas 8.9 y 12.b de los ', 'Objetivos de Desarrollo Sostenible', ', que promueven un turismo que cree empleo y valorice la cultura y los productos locales.'],
+    marco2: ['La visita se desarrolla en un entorno rural y productivo regulado por la ', 'Ley N.º 17.283', ' de protección del medio ambiente. Al final de cada visita, una encuesta de satisfacción nos ayuda a evaluar y mejorar.'],
+    llamado: 'Viví una experiencia responsable', llamadoTexto: 'Cada visita suma a la economía de Colonia Osimani y cuida el naranjal.', reservar: 'Reservá tu lugar',
+    enlaces: ['Quiénes somos y cómo trabajamos con cada comunidad.', 'Las personas detrás de cada naranja.', 'Qué podés esperar del recorrido.'],
+  },
+  pt: {
+    desc: 'Como a VÍA cuida de cada lugar. No Camino de Azahar: zero plásticos descartáveis, compostagem com a casca, grupos limitados e benefícios compartilhados com a comunidade de Colonia Osimani.',
+    titulo: 'Turismo e laranjal, em equilíbrio',
+    intro: 'O turismo e a produção de citros podem se complementar de forma responsável: com benefícios para quem visita, para quem produz e para a comunidade, sem comprometer os recursos naturais.',
+    practicas: 'Práticas',
+    dimensiones: [
+      ['Meio ambiente', ['Sem plásticos descartáveis: utensílios e aventais reutilizáveis.', 'Separação e reciclagem de resíduos durante o preparo do suco.', 'A casca e os restos da laranja são aproveitados para compostagem ou produtos derivados.', 'Uso responsável da água e cuidado das plantações.', 'Grupos de tamanho limitado (de 10 a 25 pessoas) para não sobrecarregar o espaço produtivo.']],
+      ['Comunidade', ['Reconhecimento dos saberes de produtores e trabalhadores.', 'Participação de empreendedores da Feira de Colonia Osimani e Llerena.', 'Conteúdo educativo para escolas, na baixa e na alta temporada.', 'Acessibilidade progressiva: informação clara e adaptação das atividades.']],
+      ['Economia local', ['Valor agregado a um produto que já existe no lugar.', 'Benefícios distribuídos entre a chácara, os empreendedores locais e a agência.', 'Uma alternativa rural que diversifica a oferta de Salto além das termas.']],
+    ],
+    marco: 'Um compromisso com nome',
+    marco1: ['A proposta segue a abordagem do ', 'Plano Nacional de Turismo Sustentável 2030', ' do Uruguai, que pede atenção ao mesmo tempo ao ambiental, ao sociocultural e ao econômico, e as metas 8.9 e 12.b dos ', 'Objetivos de Desenvolvimento Sustentável', ', que promovem um turismo que gere emprego e valorize a cultura e os produtos locais.'],
+    marco2: ['A visita acontece em um ambiente rural e produtivo regulado pela ', 'Lei n.º 17.283', ' de proteção do meio ambiente do Uruguai. Ao final de cada visita, uma pesquisa de satisfação nos ajuda a avaliar e melhorar.'],
+    llamado: 'Viva uma experiência responsável', llamadoTexto: 'Cada visita contribui com a economia de Colonia Osimani e cuida do laranjal.', reservar: 'Reserve sua vaga',
+    enlaces: ['Quem somos e como trabalhamos com cada comunidade.', 'As pessoas por trás de cada laranja.', 'O que esperar do percurso.'],
+  },
+  en: {
+    desc: 'How VÍA looks after every place. At Camino de Azahar: no single-use plastics, peel composting, small groups and benefits shared with the Colonia Osimani community.',
+    titulo: 'Tourism and orange groves, in balance',
+    intro: 'Tourism and citrus farming can go hand in hand responsibly: benefiting visitors, growers and the community, without compromising natural resources.',
+    practicas: 'Practices',
+    dimensiones: [
+      ['Environment', ['No single-use plastics: reusable utensils and aprons.', 'Waste is sorted and recycled while making juice.', 'Peel and leftovers are composted or turned into other products.', 'Responsible water use and care for the orchards.', 'Small groups (10 to 25 people) so the farm is not overloaded.']],
+      ['Community', ['Recognising the know-how of growers and farm workers.', 'Makers from the Colonia Osimani and Llerena market take part.', 'Educational content for secondary schools, in low and high season.', 'Gradually improving accessibility: clear information and adapted activities.']],
+      ['Local economy', ['Adding value to a product that already exists in the area.', 'Benefits shared between the farm, local makers and the agency.', 'A rural option that broadens what Salto offers beyond its hot springs.']],
+    ],
+    marco: 'A commitment with a name',
+    marco1: ['The experience follows the approach of Uruguay\'s ', 'National Sustainable Tourism Plan 2030', ', which calls for environmental, sociocultural and economic aspects to be addressed together, and targets 8.9 and 12.b of the ', 'Sustainable Development Goals', ', which promote tourism that creates jobs and values local culture and products.'],
+    marco2: ['The visit takes place in a rural, working setting covered by Uruguay\'s environmental protection ', 'Law No. 17,283', '. At the end of each visit, a short survey helps us assess and improve.'],
+    llamado: 'Enjoy a responsible experience', llamadoTexto: 'Every visit supports the Colonia Osimani economy and looks after the grove.', reservar: 'Book your spot',
+    enlaces: ['Who we are and how we work with each community.', 'The people behind every orange.', 'What to expect on the visit.'],
+  },
+});
+---
+<Base titulo={t(idioma, 'pie.sostenibilidad')} descripcion={T.desc} idioma={idioma} clave="sostenibilidad" encabezadoFlotante>
+  <CabeceraPagina idioma={idioma} antetitulo={t(idioma, 'pie.sostenibilidad')} titulo={T.titulo} intro={T.intro} migas={[{ texto: t(idioma, 'pie.sostenibilidad') }]} />
+  <div class="contenedor grid gap-20 py-[clamp(4rem,12vh,8rem)]">
+    <section class="grid gap-6 lg:grid-cols-3" aria-label={T.practicas}>
+      {T.dimensiones.map(([titulo, practicas], i) => (
+        <article class="revelar tarjeta grid content-start gap-5 p-8" style={`transition-delay:${i * 100}ms`}>
+          <h2 class="text-3xl">{titulo}</h2>
+          <ul class="grid gap-3">
+            {(practicas as string[]).map((p) => <li class="border-t border-line pt-3 text-muted">{p}</li>)}
+          </ul>
+        </article>
+      ))}
+    </section>
+    <section class="grid gap-10 lg:grid-cols-2" aria-labelledby="marco-sost">
+      <h2 id="marco-sost" class="max-w-[14ch] text-[clamp(1.6rem,3vw,2.6rem)]">{T.marco}</h2>
+      <div class="prosa">
+        <p>{T.marco1[0]}<strong>{T.marco1[1]}</strong>{T.marco1[2]}<strong>{T.marco1[3]}</strong>{T.marco1[4]}</p>
+        <p>{T.marco2[0]}<strong>{T.marco2[1]}</strong>{T.marco2[2]}</p>
+      </div>
+    </section>
+    <Llamado titulo={T.llamado} texto={T.llamadoTexto} boton={{ texto: T.reservar, href: rutaReservar(idioma) }} />
+    <TambienTeInteresa
+      idioma={idioma}
+      enlaces={[
+        { titulo: t(idioma, 'nav.nosotros'), texto: T.enlaces[0], href: r.nosotros },
+        { titulo: t(idioma, 'nav.chacra'), texto: T.enlaces[1], href: r.chacra },
+        { titulo: t(idioma, 'pie.accesibilidad'), texto: T.enlaces[2], href: r.accesibilidad },
+      ]}
+    />
+  </div>
+</Base>

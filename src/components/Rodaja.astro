@@ -1,0 +1,37 @@
+---
+// Rodaja de naranja en trazo fino: el recurso gráfico firma de la marca.
+// Es decorativa: siempre aria-hidden.
+interface Props {
+  tamano?: number;
+  gajos?: number;
+  grosor?: number;
+  class?: string;
+}
+const { tamano = 48, gajos = 10, grosor = 2.5, class: clase = '' } = Astro.props;
+const lineas = Array.from({ length: gajos }, (_, i) => {
+  const angulo = (i / gajos) * Math.PI * 2 - Math.PI / 2;
+  return {
+    x1: 50 + Math.cos(angulo) * 7,
+    y1: 50 + Math.sin(angulo) * 7,
+    x2: 50 + Math.cos(angulo) * 36,
+    y2: 50 + Math.sin(angulo) * 36,
+  };
+});
+---
+<svg
+  class={clase}
+  width={tamano}
+  height={tamano}
+  viewBox="0 0 100 100"
+  fill="none"
+  stroke="currentColor"
+  stroke-width={grosor}
+  stroke-linecap="round"
+  aria-hidden="true"
+  focusable="false"
+>
+  <circle cx="50" cy="50" r="46" />
+  <circle cx="50" cy="50" r="40" opacity="0.55" />
+  {lineas.map((l) => <line x1={l.x1.toFixed(2)} y1={l.y1.toFixed(2)} x2={l.x2.toFixed(2)} y2={l.y2.toFixed(2)} />)}
+  <circle cx="50" cy="50" r="3" />
+</svg>

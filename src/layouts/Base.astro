@@ -1,0 +1,134 @@
+---
+// Plantilla base de todas las páginas: <head> con SEO, fuentes locales, encabezado, pie
+// y el script de aparición suave al hacer scroll.
+// Tipografías de VÍA (elegidas el 11/11/2026, opción D): Gloock para titulares
+// (serif de cartel, un solo peso) y Figtree para el texto. Alojadas en el propio sitio.
+import '@fontsource/gloock/latin-400.css';
+import '@fontsource/gloock/latin-ext-400.css';
+import '@fontsource-variable/figtree';
+import '@fontsource-variable/figtree/wght-italic.css';
+import '../styles/global.css';
+import Encabezado from '../components/Encabezado.astro';
+import Pie from '../components/Pie.astro';
+import BotonWhatsApp from '../components/BotonWhatsApp.astro';
+import { idiomas, listaIdiomas, rutas, t, type ClavePagina, type Idioma } from '../i18n/ui';
+
+interface Props {
+  titulo: string;
+  descripcion: string;
+  idioma?: Idioma;
+  /** Identifica la página en los tres idiomas (hreflang y selector de idioma). */
+  clave?: ClavePagina;
+  imagenOg?: string;
+  noIndexar?: boolean;
+  whatsappFlotante?: string | false;
+  encabezadoFlotante?: boolean;
+  /** Tema de color: "via" (marca general) o el de una experiencia (por ejemplo "azahar"). */
+  tema?: 'via' | 'azahar';
+  /** Botón destacado del encabezado (por defecto: ver experiencias). */
+  cta?: { texto: string; href: string };
+}
+const {
+  titulo,
+  descripcion,
+  idioma = 'es',
+  clave,
+  imagenOg = '/og/predeterminada.jpg',
+  noIndexar = false,
+  whatsappFlotante = false,
+  encabezadoFlotante = false,
+  tema = 'via',
+  cta,
+} = Astro.props;
+const canonica = new URL(Astro.url.pathname, Astro.site);
+const tituloCompleto = titulo.includes('VÍA') ? titulo : `${titulo} · VÍA`;
+const idiomasActivos = listaIdiomas.filter((i) => idiomas[i].disponible);
+const actual = Astro.url.pathname;
+// Versiones de esta misma página en cada idioma
+const alternos = Object.fromEntries(listaIdiomas.map((i) => [i, clave ? rutas[i][clave] : rutas[i].inicio])) as Record<Idioma, string>;
+---
+<!doctype html>
+<html lang={idioma} data-tema={tema}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{tituloCompleto}</title>
+    <meta name="description" content={descripcion} />
+    <link rel="canonical" href={canonica} />
+    {clave && idiomasActivos.length > 1 && idiomasActivos.map((i) => <link rel="alternate" hreflang={idiomas[i].locale} href={new URL(alternos[i], Astro.site)} />)}
+    {clave && idiomasActivos.length > 1 && <link rel="alternate" hreflang="x-default" href={new URL(alternos.es, Astro.site)} />}
+    {noIndexar && <meta name="robots" content="noindex, nofollow" />}
+    <meta name="theme-color" content="#56673a" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="VÍA" />
+    <meta property="og:locale" content={idiomas[idioma].og} />
+    {idiomasActivos.filter((i) => i !== idioma).map((i) => <meta property="og:locale:alternate" content={idiomas[i].og} />)}
+    <meta property="og:title" content={tituloCompleto} />
+    <meta property="og:description" content={descripcion} />
+    <meta property="og:url" content={canonica} />
+    <meta property="og:image" content={new URL(imagenOg, Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <slot name="head" />
+  </head>
+  <body class={`min-h-dvh ${whatsappFlotante ? 'pb-24 sm:pb-0' : ''}`}>
+    <Encabezado idioma={idioma} actual={actual} flotante={encabezadoFlotante} alternos={alternos} cta={cta} />
+    <main id="contenido" tabindex="-1">
+      <slot />
+    </main>
+    <Pie idioma={idioma} alternos={alternos} />
+
+    {whatsappFlotante && (
+      <div class="fixed inset-x-4 bottom-4 z-30 sm:hidden">
+        <BotonWhatsApp idioma={idioma} variante="flotante" mensaje={whatsappFlotante} texto={t(idioma, 'whatsapp.reservar')} class="w-full" />
+      </div>
+    )}
+
+    <script>
+      // Scroll suave en todo el sitio (el encabezado es siempre beige y sólido, legible sobre cualquier sección)
+      import { ScrollTrigger, iniciarScrollSuave } from '../scripts/movimiento';
+      iniciarScrollSuave();
+      window.addEventListener('load', () => ScrollTrigger.refresh());
+    </script>
+    <script>
+      // Aparición suave de elementos con .revelar / .revelar-circulo al entrar en pantalla.
+      const elementos = document.querySelectorAll('.revelar, .revelar-circulo');
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
+        elementos.forEach((el) => el.classList.add('visible'));
+      } else {
+        const observador = new IntersectionObserver(
+          (entradas) => {
+            entradas.forEach((entrada) => {
+              if (entrada.isIntersecting) {
+                entrada.target.classList.add('visible');
+                observador.unobserve(entrada.target);
+              }
+            });
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.12 }
+        );
+        elementos.forEach((el) => observador.observe(el));
+        // Respaldo: si la página salta directo a una sección (enlace con #, recarga a mitad de página)
+        // y el observador no avisa, se revisa la posición al hacer scroll para no dejar nada oculto.
+        let pendiente = false;
+        const revisar = () => {
+          pendiente = false;
+          const alto = window.innerHeight;
+          elementos.forEach((el) => {
+            if (el.classList.contains('visible')) return;
+            const r = el.getBoundingClientRect();
+            if (r.top < alto * 0.92 && r.bottom > 0) el.classList.add('visible');
+          });
+        };
+        const programar = () => { if (!pendiente) { pendiente = true; requestAnimationFrame(revisar); } };
+        window.addEventListener('scroll', programar, { passive: true });
+        window.addEventListener('load', () => setTimeout(revisar, 300));
+        window.addEventListener('hashchange', () => setTimeout(revisar, 300));
+      }
+    </script>
+  </body>
+</html>

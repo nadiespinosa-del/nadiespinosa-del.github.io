@@ -1,0 +1,9 @@
+# Documento interno de instrucciones (no se publica)
+Master-Prompt-Camino-de-Azahar.md
+.claude/
+
+node_modules/
+dist/
+.astro/
+.DS_Store
+*.log

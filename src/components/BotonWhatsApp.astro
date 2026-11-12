@@ -1,0 +1,34 @@
+---
+// Botón de WhatsApp de reservas con mensaje prellenado en el idioma de la página.
+// Si no hay número en site.json, muestra "Próximamente" y no enlaza a ningún lado.
+import { enlaceWhatsApp } from '../lib/util';
+import { t, type Idioma } from '../i18n/ui';
+
+interface Props {
+  idioma?: Idioma;
+  mensaje?: string;
+  texto?: string;
+  variante?: 'primario' | 'secundario' | 'luz' | 'flotante';
+  class?: string;
+}
+const { idioma = 'es', mensaje = t(idioma, 'whatsapp.mensaje'), texto = t(idioma, 'whatsapp.consultar'), variante = 'secundario', class: clase = '' } = Astro.props;
+const href = enlaceWhatsApp(mensaje);
+const clasesVariante = {
+  primario: 'btn btn-primario',
+  secundario: 'btn btn-secundario',
+  luz: 'btn btn-luz',
+  flotante: 'btn btn-primario shadow-card',
+}[variante];
+---
+{href ? (
+  <a href={href} class={`${clasesVariante} ${clase}`} target="_blank" rel="noopener">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M3 21l1.65-4.3A8.5 8.5 0 1 1 8 20.1z" />
+      <path d="M9 10.5c.5 1.6 1.9 3 3.5 3.5l1.2-1.2 2.3 1v1.7c0 .5-.4.9-.9.9A7.6 7.6 0 0 1 7.6 9c0-.5.4-.9.9-.9h1.7l1 2.3z" />
+    </svg>
+    <span>{texto}</span>
+    <span class="solo-lectores">{t(idioma, 'whatsapp.pestana')}</span>
+  </a>
+) : (
+  <span class={`${clasesVariante} ${clase} cursor-not-allowed opacity-70`} aria-disabled="true">{t(idioma, 'whatsapp.pronto')}</span>
+)}

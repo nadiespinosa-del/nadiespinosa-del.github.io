@@ -1,0 +1,60 @@
+---
+// Accesibilidad (tres idiomas): accesibilidad física del recorrido y accesibilidad del sitio web.
+import Base from '../layouts/Base.astro';
+import CabeceraPagina from '../components/CabeceraPagina.astro';
+import AvisoAccesibilidad from '../components/AvisoAccesibilidad.astro';
+import BotonWhatsApp from '../components/BotonWhatsApp.astro';
+import { elegir, t, type Idioma } from '../i18n/ui';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const T = elegir(idioma, {
+  es: {
+    desc: 'Accesibilidad de las experiencias de VÍA (empezando por Camino de Azahar, en la Chacra La Victoria) y de este sitio web.',
+    titulo: 'Lo que podés esperar, sin letra chica', intro: 'Te contamos con claridad cómo es el recorrido para que decidas con toda la información. Y trabajamos para que cada vez más personas puedan disfrutarlo.',
+    recorrido: 'El recorrido', recorridoTexto: 'Antes de tu visita te enviamos información sobre el entorno rural y las condiciones del recorrido. Durante la visita usamos explicaciones claras y apoyo visual, y adaptamos las actividades según las necesidades de cada grupo.',
+    boton: 'Consultar mis necesidades', mensaje: 'Hola, quiero consultar por la accesibilidad de Camino de Azahar.',
+    web: 'Este sitio web',
+    web1: ['Diseñamos el sitio para cumplir las pautas ', 'WCAG 2.2 en nivel AA', ': contraste suficiente en los textos, navegación completa con teclado, foco visible, textos alternativos en las imágenes y formularios con errores claros.'],
+    web2: ['Si en tu dispositivo activaste ', '"reducir movimiento"', ', el sitio muestra todo el contenido sin animaciones ni efectos de desplazamiento.'],
+    web3: 'Si encontrás una barrera, escribinos por WhatsApp y la corregimos.',
+  },
+  pt: {
+    desc: 'Acessibilidade das experiências da VÍA (começando pelo Camino de Azahar, na Chacra La Victoria) e deste site.',
+    titulo: 'O que você pode esperar, sem letras miúdas', intro: 'Contamos com clareza como é o percurso para que você decida com todas as informações. E trabalhamos para que cada vez mais pessoas possam aproveitá-lo.',
+    recorrido: 'O percurso', recorridoTexto: 'Antes da sua visita, enviamos informações sobre o ambiente rural e as condições do percurso. Durante a visita, usamos explicações claras e apoio visual, e adaptamos as atividades às necessidades de cada grupo.',
+    boton: 'Perguntar sobre minhas necessidades', mensaje: 'Olá, quero perguntar sobre a acessibilidade do Camino de Azahar.',
+    web: 'Este site',
+    web1: ['Desenhamos o site para cumprir as diretrizes ', 'WCAG 2.2 nível AA', ': contraste suficiente nos textos, navegação completa por teclado, foco visível, textos alternativos nas imagens e formulários com erros claros.'],
+    web2: ['Se você ativou ', '"reduzir movimento"', ' no seu dispositivo, o site mostra todo o conteúdo sem animações nem efeitos de rolagem.'],
+    web3: 'Se encontrar alguma barreira, escreva para nós pelo WhatsApp e a corrigimos.',
+  },
+  en: {
+    desc: 'Accessibility of VÍA experiences (starting with Camino de Azahar, at Chacra La Victoria) and of this website.',
+    titulo: 'What to expect, with no small print', intro: 'We tell you clearly what the visit is like so you can decide with all the information. And we are working so that more and more people can enjoy it.',
+    recorrido: 'The visit', recorridoTexto: 'Before your visit we send you information about the rural setting and the conditions along the route. During the visit we use clear explanations and visual support, and adapt activities to each group\'s needs.',
+    boton: 'Ask about my needs', mensaje: 'Hi, I would like to ask about accessibility at Camino de Azahar.',
+    web: 'This website',
+    web1: ['We designed the site to meet ', 'WCAG 2.2 level AA', ': sufficient text contrast, full keyboard navigation, visible focus, alternative text for images and forms with clear error messages.'],
+    web2: ['If you have turned on ', '"reduce motion"', ' on your device, the site shows all content without animations or scroll effects.'],
+    web3: "If you find a barrier, message us on WhatsApp and we'll fix it.",
+  },
+});
+---
+<Base titulo={t(idioma, 'pie.accesibilidad')} descripcion={T.desc} idioma={idioma} clave="accesibilidad" encabezadoFlotante>
+  <CabeceraPagina idioma={idioma} antetitulo={t(idioma, 'pie.accesibilidad')} titulo={T.titulo} intro={T.intro} migas={[{ texto: t(idioma, 'pie.accesibilidad') }]} />
+  <div class="contenedor grid gap-16 py-[clamp(4rem,12vh,8rem)] lg:grid-cols-2">
+    <section class="grid content-start gap-6" aria-labelledby="recorrido-titulo">
+      <h2 id="recorrido-titulo" class="text-[clamp(1.7rem,3.2vw,2.7rem)]">{T.recorrido}</h2>
+      <AvisoAccesibilidad idioma={idioma} variante="completo" id="aviso-accesibilidad-pagina" />
+      <p class="text-lg text-muted">{T.recorridoTexto}</p>
+      <BotonWhatsApp idioma={idioma} variante="primario" texto={T.boton} mensaje={T.mensaje} />
+    </section>
+    <section class="prosa" aria-labelledby="web-titulo">
+      <h2 id="web-titulo" class="!mt-0">{T.web}</h2>
+      <p>{T.web1[0]}<strong>{T.web1[1]}</strong>{T.web1[2]}</p>
+      <p>{T.web2[0]}<strong>{T.web2[1]}</strong>{T.web2[2]}</p>
+      <p>{T.web3}</p>
+    </section>
+  </div>
+</Base>

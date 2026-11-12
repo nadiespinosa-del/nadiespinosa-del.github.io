@@ -1,0 +1,277 @@
+/*
+  Estilos globales · Camino de Azahar
+  1. Tailwind + tokens
+  2. Mapeo de tokens a utilidades de Tailwind (bg-surface, text-heading, font-display…)
+  3. Base (tipografía, foco, movimiento reducido)
+  4. Componentes reutilizables (botones, campos, chips, placeholders)
+*/
+@import 'tailwindcss';
+@import './tokens.css';
+
+/* Los tokens se leen en tiempo de ejecución, así el modo oscuro cambia sin recompilar */
+@theme inline {
+  --color-bg: var(--ca-bg);
+  --color-surface: var(--ca-surface);
+  --color-surface-2: var(--ca-surface-2);
+  --color-ink: var(--ca-text);
+  --color-muted: var(--ca-text-muted);
+  --color-heading: var(--ca-heading);
+  --color-primary: var(--ca-primary);
+  --color-primary-hover: var(--ca-primary-hover);
+  --color-on-primary: var(--ca-on-primary);
+  --color-accent: var(--ca-accent);
+  --color-deco: var(--ca-deco);
+  --color-deep: var(--ca-deep);
+  --color-deep-2: var(--ca-deep-2);
+  --color-deep-3: var(--ca-deep-3);
+  --color-on-deep: var(--ca-on-deep);
+  --color-on-deep-muted: var(--ca-on-deep-muted);
+  --color-highlight: var(--ca-highlight);
+  --color-on-highlight: var(--ca-on-highlight);
+  --color-line: var(--ca-border);
+  --color-line-strong: var(--ca-border-strong);
+  --color-fruto: var(--ca-fruto-bg);
+  --color-on-fruto: var(--ca-fruto-text);
+  --color-interp: var(--ca-interp-bg);
+  --color-on-interp: var(--ca-interp-text);
+  --color-ok: var(--ca-success-bg);
+  --color-on-ok: var(--ca-success-text);
+  --color-err: var(--ca-error-bg);
+  --color-on-err: var(--ca-error-text);
+  --color-warn: var(--ca-warning-bg);
+  --color-on-warn: var(--ca-warning-text);
+
+  --font-display: var(--ca-font-display);
+  --font-body: var(--ca-font-body);
+
+  --text-xs: var(--ca-text-xs);
+  --text-sm: var(--ca-text-sm);
+  --text-base: var(--ca-text-base);
+  --text-lg: var(--ca-text-lg);
+  --text-xl: var(--ca-text-xl);
+  --text-2xl: var(--ca-text-2xl);
+  --text-3xl: var(--ca-text-3xl);
+  --text-4xl: var(--ca-text-4xl);
+
+  --radius-card: var(--ca-radius);
+  --radius-lg: var(--ca-radius-lg);
+  --shadow-card: var(--ca-shadow-card);
+  --ease-organic: var(--ca-ease);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  /* Scroll suave con Lenis */
+  html.lenis, html.lenis body { height: auto; }
+  .lenis.lenis-smooth { scroll-behavior: auto !important; }
+  .lenis.lenis-stopped { overflow: hidden; }
+  body {
+    background-color: var(--ca-bg);
+    color: var(--ca-text);
+    font-family: var(--ca-font-body);
+    font-size: var(--ca-text-base);
+    line-height: var(--ca-leading-body);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    /* Grano de papel muy sutil (recurso de marca) */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.035'/%3E%3C/svg%3E");
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--ca-font-display);
+    color: var(--ca-heading);
+    line-height: var(--ca-leading-tight);
+    font-weight: 400;
+    text-wrap: balance;
+    letter-spacing: -0.015em;
+    /* Si una palabra no entra en pantallas angostas, se corta con guion en lugar de salirse */
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+  /* Gloock tiene un solo peso y no tiene itálica: sin negritas ni itálicas falsas */
+  h1, h2, h3, h4, .font-display, .antetitulo { font-synthesis: none; }
+  .font-display.italic, .font-display .italic { font-style: normal; }
+  .font-display { letter-spacing: -0.01em; overflow-wrap: break-word; hyphens: auto; }
+  h1 { font-size: var(--ca-text-4xl); }
+  h2 { font-size: var(--ca-text-3xl); }
+  h3 { font-size: var(--ca-text-xl); }
+  h4 { font-size: var(--ca-text-lg); }
+  p { text-wrap: pretty; }
+  a { color: var(--ca-primary); text-underline-offset: 0.2em; }
+  a:hover { color: var(--ca-primary-hover); }
+  ::selection { background: var(--ca-highlight); color: var(--ca-on-highlight); }
+
+  /* Foco visible y diseñado: siempre presente al navegar con teclado */
+  :focus-visible {
+    outline: 3px solid var(--ca-focus);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  .on-deep :focus-visible { outline-color: var(--ca-highlight); }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Contenedor general con medianil de 16 px en móvil */
+  .contenedor {
+    width: 100%;
+    max-width: 78rem;
+    margin-inline: auto;
+    padding-inline: clamp(1rem, 4vw, 2.5rem);
+  }
+  .medida { max-width: var(--ca-measure); }
+
+  /* Texto largo (páginas legales e institucionales) */
+  .prosa { max-width: 68ch; font-size: var(--ca-text-base); color: var(--ca-text); }
+  .prosa > * + * { margin-top: 1.1em; }
+  .prosa h2 { font-size: var(--ca-text-2xl); margin-top: 2.2em; }
+  .prosa h3 { font-size: var(--ca-text-xl); margin-top: 1.8em; }
+  .prosa ul { list-style: disc; padding-left: 1.3em; }
+  .prosa ul > li + li { margin-top: 0.4em; }
+  .prosa p, .prosa li { color: var(--ca-text-muted); }
+  .prosa strong { color: var(--ca-text); }
+
+  /* Antetítulo: corto, en el color de acento (sin mayúsculas sostenidas) */
+  .antetitulo {
+    font-family: var(--ca-font-display);
+    font-size: var(--ca-text-lg);
+    font-weight: 400;
+    letter-spacing: 0;
+    color: var(--ca-accent);
+  }
+
+  /* — Botones — */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 48px;
+    padding: 0.7rem 1.4rem;
+    border-radius: var(--ca-radius-pill);
+    font-family: var(--ca-font-body);
+    font-size: var(--ca-text-sm);
+    font-weight: 600;
+    line-height: 1.2;
+    text-decoration: none;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: background-color var(--ca-dur-fast) var(--ca-ease), color var(--ca-dur-fast) var(--ca-ease),
+      border-color var(--ca-dur-fast) var(--ca-ease), transform var(--ca-dur-fast) var(--ca-ease);
+  }
+  .btn:active { transform: translateY(1px) scale(0.99); }
+  .btn-primario { background: var(--ca-primary); color: var(--ca-on-primary); }
+  .btn-primario:hover { background: var(--ca-primary-hover); color: var(--ca-on-primary); }
+  .btn-secundario { background: transparent; color: var(--ca-heading); border-color: var(--ca-heading); }
+  .btn-secundario:hover { background: var(--ca-heading); color: var(--ca-bg); }
+  .btn-fantasma { background: transparent; color: var(--ca-primary); padding-inline: 0.6rem; }
+  .btn-fantasma:hover { background: var(--ca-surface-2); color: var(--ca-primary-hover); }
+  /* Sobre fondos verdes profundos: botón "luz" dorado (10:1 con la tinta) */
+  .btn-luz { background: var(--ca-highlight); color: var(--ca-on-highlight); }
+  .btn-luz:hover { background: #f6d27a; color: var(--ca-on-highlight); }
+  .btn-contorno-claro { background: transparent; color: var(--ca-on-deep); border-color: var(--ca-on-deep); }
+  .btn-contorno-claro:hover { background: var(--ca-on-deep); color: var(--ca-deep); }
+  .btn[aria-busy='true'] { cursor: progress; opacity: 0.85; }
+  .btn-pequeno { min-height: 44px; padding: 0.5rem 1rem; }
+
+  /* — Chips e insignias — */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: var(--ca-radius-pill);
+    font-size: var(--ca-text-xs);
+    font-weight: 600;
+    line-height: 1.3;
+    background: var(--ca-surface-2);
+    color: var(--ca-text);
+    border: 1px solid var(--ca-border);
+  }
+  .chip-fruto { background: var(--ca-fruto-bg); color: var(--ca-fruto-text); border-color: transparent; }
+  .chip-interp { background: var(--ca-interp-bg); color: var(--ca-interp-text); border-color: transparent; }
+  .chip-ok { background: var(--ca-success-bg); color: var(--ca-success-text); border-color: transparent; }
+  .chip-warn { background: var(--ca-warning-bg); color: var(--ca-warning-text); border-color: transparent; }
+  .chip-err { background: var(--ca-error-bg); color: var(--ca-error-text); border-color: transparent; }
+
+  /* — Tarjeta — */
+  .tarjeta {
+    background: var(--ca-surface);
+    border: 1px solid var(--ca-border);
+    border-radius: var(--ca-radius-lg);
+    box-shadow: var(--ca-shadow-card);
+  }
+
+  /* — Campos de formulario — */
+  .campo { display: grid; gap: 0.35rem; align-content: start; align-self: start; }
+  .campo label, .campo legend { font-weight: 600; font-size: var(--ca-text-sm); color: var(--ca-text); }
+  .campo .ayuda { font-size: var(--ca-text-xs); color: var(--ca-text-muted); }
+  .control {
+    width: 100%;
+    min-height: 48px;
+    padding: 0.65rem 0.9rem;
+    border-radius: var(--ca-radius-sm);
+    border: 1.5px solid var(--ca-border-strong);
+    background: var(--ca-surface);
+    color: var(--ca-text);
+    font: inherit;
+    font-size: var(--ca-text-base);
+  }
+  textarea.control { min-height: 7rem; resize: vertical; }
+  .control:hover { border-color: var(--ca-text-muted); }
+  .control[aria-invalid='true'] { border-color: var(--ca-error-text); border-width: 2px; }
+  .error-campo {
+    display: flex;
+    gap: 0.4rem;
+    align-items: flex-start;
+    font-size: var(--ca-text-xs);
+    font-weight: 600;
+    color: var(--ca-error-text);
+  }
+  .error-campo:empty { display: none; }
+  .error-campo::before { content: '⚠'; }
+  input[type='checkbox'], input[type='radio'] { width: 1.3rem; height: 1.3rem; accent-color: var(--ca-primary); flex: none; }
+
+  /* — Placeholders visibles de contenido pendiente — */
+  .ph {
+    display: inline;
+    padding: 0.05em 0.4em;
+    border-radius: 4px;
+    border: 1.5px dashed var(--ca-placeholder-text);
+    background: var(--ca-placeholder-bg);
+    color: var(--ca-placeholder-text);
+    font-style: italic;
+    font-size: 0.92em;
+  }
+
+  /* — Aparición suave al hacer scroll — */
+  .revelar { opacity: 0; transform: translateY(18px); transition: opacity var(--ca-dur-slow) var(--ca-ease), transform var(--ca-dur-slow) var(--ca-ease); }
+  .revelar.visible { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .revelar { opacity: 1; transform: none; }
+  }
+  /* Revelado circular de imágenes (la rodaja que se abre) */
+  .revelar-circulo { clip-path: circle(12% at 50% 50%); transition: clip-path 900ms var(--ca-ease); }
+  .revelar-circulo.visible { clip-path: circle(75% at 50% 50%); }
+  @media (prefers-reduced-motion: reduce) {
+    .revelar-circulo { clip-path: none; }
+  }
+
+  .solo-lectores {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+  }
+}
+
+/* Encabezado fijo arriba en las páginas con portada a pantalla completa. Siempre beige y sólido.
+   Va fuera de las capas (@layer) para tener prioridad sobre las utilidades de Tailwind. */
+header[data-flotante] { position: fixed; inset-inline: 0; top: 0; }

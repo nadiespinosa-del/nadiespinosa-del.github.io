@@ -1,0 +1,38 @@
+{
+  "etapas": [
+    { "numero": 1, "titulo": "Recepción", "minutos": 20, "texto": "Bienvenida y presentación de la chacra y del entorno rural de Colonia Osimani y Llerena." },
+    { "numero": 2, "titulo": "Recorrido interpretativo", "minutos": 50, "texto": "Cultivo, variedades, tareas productivas y antecedentes históricos de la citricultura salteña." },
+    { "numero": 3, "titulo": "Elaboración de jugo", "minutos": 30, "texto": "Actividad práctica: transformás el fruto con tus propias manos." },
+    { "numero": 4, "titulo": "Degustación y muestra local", "minutos": 45, "texto": "Mermeladas, budines y otras preparaciones; productos de emprendedores de la feria." },
+    { "numero": 5, "titulo": "Intercambio y cierre", "minutos": 25, "texto": "Relato de Patricia Real, encargada de la chacra, reflexión compartida y encuesta de satisfacción." }
+  ],
+  "modalidades": [
+    {
+      "id": "con-fruto",
+      "titulo": "Circuito con fruto",
+      "temporada": "fruto",
+      "meses": "Mayo a noviembre",
+      "resumen": "En plena zafra: recorrés el naranjal, reconocés árboles y frutos, cosechás cuando las condiciones lo permiten y exprimís tu propio jugo.",
+      "publico": "Familias, parejas, grupos",
+      "foto": "Manos tomando una naranja madura del árbol, hora dorada, primer plano, luz lateral"
+    },
+    {
+      "id": "interpretativa",
+      "titulo": "Modalidad interpretativa",
+      "temporada": "interpretativa",
+      "meses": "Diciembre a abril",
+      "resumen": "Fuera de la zafra, el recorrido se centra en el ciclo del naranjo, el cuidado de los árboles y la historia. Elaboración y degustación con fruta de productores locales.",
+      "publico": "Familias, parejas, grupos",
+      "foto": "Filas de naranjos verdes al atardecer, plano general, luz rasante"
+    },
+    {
+      "id": "educativa",
+      "titulo": "Versión educativa",
+      "temporada": "todo-el-ano",
+      "meses": "Durante el año lectivo",
+      "resumen": "Para estudiantes de 11 a 15 años: ciencias naturales, geografía, historia, economía y ambiente aprendidos en una chacra en funcionamiento.",
+      "publico": "Liceos, UTU y grupos de fin de año",
+      "foto": "Grupo de estudiantes escuchando a la encargada entre los naranjos, plano medio, mañana"
+    }
+  ]
+}

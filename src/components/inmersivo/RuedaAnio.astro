@@ -1,0 +1,107 @@
+---
+// Rueda 3D de los doce meses (CSS 3D): gira con el scroll hasta dejar al frente el mes actual.
+// Mayo a noviembre: con fruto. Diciembre a abril: modalidad interpretativa.
+import Pendiente from '../Pendiente.astro';
+import { textos } from '../../lib/datos';
+import { meses as nombresMeses, temporadaDelMes } from '../../lib/util';
+import { elegir, type Idioma } from '../../i18n/ui';
+
+interface Props { idioma?: Idioma }
+const { idioma = 'es' } = Astro.props;
+const meses = nombresMeses(idioma).map((nombre, i) => ({ nombre, numero: i + 1, temporada: temporadaDelMes(i + 1) }));
+const feria = textos(idioma).feria;
+const T = elegir(idioma, {
+  es: { titulo: 'Cada mes, otra quinta', texto: 'De mayo a noviembre es zafra: la visita es con fruto, con cosecha cuando las condiciones lo permiten. De diciembre a abril, la modalidad interpretativa recorre el ciclo del naranjo, su historia y sus sabores.', fruto: 'Con fruto, mayo a noviembre', interp: 'Interpretativa, diciembre a abril', feria: `La Feria de Colonia Osimani y Llerena se hace el ${feria.cuando}.`, floracion: 'Floración del azahar', aria: 'Meses del año y su modalidad', conFruto: 'Con fruto', interpretativa: 'Interpretativa', hoy: 'Este mes', anterior: 'Mes anterior', siguiente: 'Mes siguiente', mostrando: 'Mostrando' },
+  pt: { titulo: 'A cada mês, outro pomar', texto: 'De maio a novembro é safra: a visita é com fruta, com colheita quando as condições permitem. De dezembro a abril, a modalidade interpretativa percorre o ciclo da laranjeira, sua história e seus sabores.', fruto: 'Com fruta, de maio a novembro', interp: 'Interpretativa, de dezembro a abril', feria: `A Feira de Colonia Osimani e Llerena acontece no ${feria.cuando}.`, floracion: 'Floração da laranjeira', aria: 'Meses do ano e sua modalidade', conFruto: 'Com fruta', interpretativa: 'Interpretativa', hoy: 'Este mês', anterior: 'Mês anterior', siguiente: 'Próximo mês', mostrando: 'Mostrando' },
+  en: { titulo: 'Every month, a different grove', texto: 'May to November is harvest season: visits include fruit on the trees and picking when conditions allow. From December to April, the interpretive visit explores the life cycle of the orange tree, its history and its flavours.', fruto: 'With fruit, May to November', interp: 'Interpretive, December to April', feria: `The Colonia Osimani and Llerena market takes place on the ${feria.cuando}.`, floracion: 'Orange blossom season', aria: 'Months of the year and type of visit', conFruto: 'With fruit', interpretativa: 'Interpretive', hoy: 'This month', anterior: 'Previous month', siguiente: 'Next month', mostrando: 'Showing' },
+});
+---
+<section id="temporada" class="rueda-anio relative overflow-hidden bg-surface-2 py-[clamp(5rem,14vh,10rem)]" aria-labelledby="temporada-titulo">
+  <div class="contenedor grid items-center gap-14 lg:grid-cols-[0.9fr_1.1fr]">
+    <div class="grid gap-6">
+      <h2 id="temporada-titulo" class="max-w-[12ch] text-[clamp(1.8rem,3.4vw,3.1rem)] leading-[0.98]">{T.titulo}</h2>
+      <p class="max-w-[42ch] text-lg text-muted">{T.texto}</p>
+      <ul class="grid gap-3">
+        <li class="flex items-center gap-3"><span class="h-4 w-4 rounded-full bg-[#e07a2e]" aria-hidden="true"></span>{T.fruto}</li>
+        <li class="flex items-center gap-3"><span class="h-4 w-4 rounded-full bg-deep" aria-hidden="true"></span>{T.interp}</li>
+        <li class="text-muted">{T.feria}</li>
+        <li class="text-muted">{T.floracion}: <Pendiente tipo="CALENDARIO_A_CONFIRMAR" texto="meses de floración en la chacra" /></li>
+      </ul>
+    </div>
+
+    <div class="rueda-escena relative mx-auto h-[250px] w-full max-w-[560px] sm:h-[300px]">
+      <div class="rueda-mascara absolute inset-0">
+      <ol class="rueda absolute left-1/2 top-1/2 h-[160px] w-[106px] sm:h-[210px] sm:w-[140px]" aria-label={T.aria}>
+        {meses.map((m, i) => (
+          <li class={`rueda-cara absolute inset-0 flex flex-col justify-between rounded-[16px] p-3 sm:p-4 ${m.temporada === 'fruto' ? 'cara-fruto' : 'cara-interp'}`} style={`--i:${i}`} data-mes={m.numero}>
+            <span class="font-display text-[1.8rem] leading-none sm:text-[2.2rem]">{m.nombre.slice(0, 3)}</span>
+            <span class="grid gap-1">
+              <span class="solo-lectores">{m.nombre}: </span>
+              <span class="text-xs font-semibold sm:text-sm">{m.temporada === 'fruto' ? T.conFruto : T.interpretativa}</span>
+              <span class="cara-hoy hidden w-max rounded-full bg-white px-2 py-0.5 text-xs font-semibold text-[#1f3a2b]">{T.hoy}</span>
+            </span>
+          </li>
+        ))}
+      </ol>
+      </div>
+      <!-- Flechas para girar el calendario mes a mes -->
+      <button type="button" class="rueda-flecha rueda-anterior absolute left-0 top-1/2 z-10 -translate-y-1/2" aria-label={T.anterior} data-paso="-1">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
+      </button>
+      <button type="button" class="rueda-flecha rueda-siguiente absolute right-0 top-1/2 z-10 -translate-y-1/2" aria-label={T.siguiente} data-paso="1">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
+      </button>
+      <p class="rueda-anuncio solo-lectores" aria-live="polite" data-mostrando={T.mostrando}></p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .rueda-escena { perspective: 1400px; }
+  /* En pantallas angostas, los meses de los costados se desvanecen en lugar de verse cortados */
+  @media (max-width: 1023px) {
+    .rueda-mascara { -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 22%, #000 78%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0%, #000 22%, #000 78%, transparent 100%); }
+  }
+  .rueda { --radio: 265px; transform-style: preserve-3d; translate: -50% -50%; transform: rotateX(-8deg) rotateY(0deg); transition: transform 1.4s cubic-bezier(0.45, 0.05, 0.25, 1); }
+  .rueda-mascara { perspective: 1400px; }
+  .rueda-flecha { display: flex; height: 3rem; width: 3rem; align-items: center; justify-content: center; border-radius: 999px; background: var(--ca-surface); color: var(--ca-primary); border: 1px solid var(--ca-border-strong); box-shadow: var(--ca-shadow-card); transition: background-color 150ms ease, scale 150ms ease; }
+  .rueda-flecha:active { scale: 0.95; }
+  @media (hover: hover) and (pointer: fine) { .rueda-flecha:hover { background: var(--ca-surface-2); } }
+  @media (prefers-reduced-motion: reduce) { .rueda { transition: none; } }
+  .rueda-cara { transform: rotateY(calc(var(--i) * 30deg)) translateZ(var(--radio)); backface-visibility: hidden; box-shadow: 0 30px 60px -30px rgba(16, 35, 26, 0.5); }
+  .cara-fruto { background: linear-gradient(160deg, #f4a24a, #d9661f); color: #2a1406; }
+  .cara-interp { background: linear-gradient(160deg, var(--ca-deep-2), var(--ca-deep-3)); color: #fbf2e1; }
+  .rueda-cara[aria-current='date'] { outline: 3px solid #f2c14e; outline-offset: 4px; }
+  .rueda-cara[aria-current='date'] .cara-hoy { display: inline-block; }
+  /* En celular, rueda más chica para que los meses del frente y los costados entren en pantalla */
+  @media (max-width: 639px) { .rueda { --radio: 195px; } }
+</style>
+
+<script>
+  // Calendario: arranca mostrando el mes actual y se gira con las flechas, de a un mes (giro lento, 1,4 s)
+  const rueda = document.querySelector<HTMLElement>('.rueda');
+  const escena = document.querySelector<HTMLElement>('.rueda-escena');
+  const anuncio = document.querySelector<HTMLElement>('.rueda-anuncio');
+  if (rueda && escena) {
+    const mesActual = new Date().getMonth() + 1;
+    rueda.querySelector(`[data-mes="${mesActual}"]`)?.setAttribute('aria-current', 'date');
+    let posicion = mesActual - 1;
+    const aplicar = (anunciar: boolean) => {
+      rueda.style.transform = `rotateX(-8deg) rotateY(${posicion * -30}deg)`;
+      if (anunciar && anuncio) {
+        const indice = ((posicion % 12) + 12) % 12;
+        const cara = rueda.querySelectorAll('.rueda-cara')[indice];
+        const nombre = cara?.querySelector('.solo-lectores')?.textContent?.replace(':', '').trim() ?? '';
+        const modalidad = cara?.querySelector('.text-xs')?.textContent?.trim() ?? '';
+        anuncio.textContent = `${anuncio.dataset.mostrando}: ${nombre}, ${modalidad}`;
+      }
+    };
+    // Primera posición sin animación
+    rueda.style.transition = 'none';
+    aplicar(false);
+    requestAnimationFrame(() => requestAnimationFrame(() => { rueda.style.transition = ''; }));
+    escena.querySelectorAll<HTMLButtonElement>('.rueda-flecha').forEach((boton) => {
+      boton.addEventListener('click', () => { posicion += Number(boton.dataset.paso); aplicar(true); });
+    });
+  }
+</script>

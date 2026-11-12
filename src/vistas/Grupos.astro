@@ -1,0 +1,168 @@
+---
+// Grupos y escuelas (tres idiomas): versión educativa para educación media y grupos organizados.
+import Base from '../layouts/Base.astro';
+import CabeceraPagina from '../components/CabeceraPagina.astro';
+import LineaEtapas from '../components/LineaEtapas.astro';
+import FormularioGrupos from '../components/FormularioGrupos.astro';
+import PreguntasFrecuentes from '../components/PreguntasFrecuentes.astro';
+import TambienTeInteresa from '../components/TambienTeInteresa.astro';
+import NavExperiencia from '../components/NavExperiencia.astro';
+import Pendiente from '../components/Pendiente.astro';
+import Imagen from '../components/Imagen.astro';
+import AvisoAccesibilidad from '../components/AvisoAccesibilidad.astro';
+import { elegir, rutas, rutaReservar, t, type Idioma } from '../i18n/ui';
+import { foto } from '../lib/fotos';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const r = rutas[idioma];
+const colores = ['#2f6b3f', '#9c4a2f', '#b54e17', '#6b4a06', '#1f3a2b'];
+const T = elegir(idioma, {
+  es: {
+    meta: 'Grupos y escuelas', desc: 'Salida didáctica para liceos y UTU en una chacra citrícola de Salto: ciencias naturales, geografía, historia, economía y ambiente para estudiantes de 11 a 15 años. Tarifa propuesta: $U 500 por estudiante.',
+    titulo: 'Una clase que se puede oler', intro: 'Una salida didáctica en una chacra citrícola en funcionamiento, pensada para estudiantes de educación media de 11 a 15 años. El currículo, al aire libre y con las manos en la fruta.',
+    alt: 'Grupo de estudiantes en la Chacra La Victoria', pedir: 'Pedí una propuesta', ver: 'Ver contenidos', paraQuien: 'Para quién es',
+    bloques: [
+      { titulo: 'Liceos y UTU de Salto', texto: 'Una salida fuera del aula para trabajar la identidad productiva del departamento. En Salto hay 21 centros de educación media (ANEP, 2022).' },
+      { titulo: 'Viajes de fin de año', texto: 'Para grupos de Montevideo y del sur del país que visitan Salto: una actividad distinta para sumar al itinerario.' },
+      { titulo: 'Grupos organizados', texto: 'Con 15 personas o más se aplica la tarifa de grupo: $U 675 por persona (propuesta, con 10 % de descuento).' },
+    ],
+    asigTitulo: 'Cinco materias en un mismo naranjal', asigTexto: 'Cada etapa de la visita se conecta con contenidos del programa. Los docentes eligen el foco y adaptamos el recorrido.',
+    asignaturas: [
+      { nombre: 'Ciencias naturales', temas: ['El ciclo del naranjo: floración, crecimiento y cosecha.', 'El injerto sobre portainjerto trifoliado y por qué protege a la planta del frío y de enfermedades del suelo.', 'La sanidad vegetal y la vigilancia del HLB, la enfermedad que más preocupa al sector.'] },
+      { nombre: 'Geografía', temas: ['Por qué la región norte concentra cerca del 91 % de la superficie citrícola del país.', 'La franja productiva junto al río Uruguay, sus suelos arenosos y el río como regulador de las heladas.', 'Salto y Concordia: dos orillas citrícolas unidas por Salto Grande.'] },
+      { nombre: 'Historia', temas: ['El almácigo de Pedro Gallino en La Amarilla, hacia 1864.', 'La inmigración italiana y los naranjos que Pedro Benito Solari plantó en las calles de Salto en 1926.', 'El edificio de Eladio Dieste para Citrícola Salteña, patrimonio de la citricultura.'] },
+      { nombre: 'Economía', temas: ['La cadena productiva: cultivo, cosecha, selección, empaque, industria y exportación.', 'La producción "contra estación" y los mercados del hemisferio norte.', 'El trabajo zafral y su peso en la economía de Salto.'] },
+      { nombre: 'Ambiente', temas: ['Riego por goteo y curvas de nivel para cuidar el agua y el suelo.', 'Residuos de la visita: separación, compost con la cáscara y cero plásticos descartables.', 'El uso responsable de productos fitosanitarios.'] },
+    ],
+    visitaTitulo: 'La visita, adaptada a cada curso', visitaTexto: 'Las mismas cinco etapas, con lenguaje y tiempos ajustados a la edad del grupo. La duración puede acortarse según la planificación del centro.',
+    segTitulo: 'Seguridad y materiales', seg1: 'Los grupos van acompañados por sus docentes. Proporción de adultos por estudiante:', seg2: 'Recorrido con protocolos de seguridad e higiene, y respeto por los espacios productivos.', seg3: 'Ficha para docentes con contenidos y actividades antes y después de la visita:', seg4: 'Transporte:', altFoto: 'Estudiantes elaborando jugo de naranja', propuesta: 'Pedí una propuesta', preguntas: 'Preguntas de docentes',
+    tambien: [
+      { titulo: 'La naranja en Salto', texto: 'La historia completa, de 1864 a hoy, para preparar la visita.', href: r.naranja },
+      { titulo: 'La experiencia', texto: 'Las cinco etapas de la visita y las modalidades según la época.', href: r.azahar },
+      { titulo: 'Planificá tu visita', texto: 'Temporada, clima y cómo llegar a Colonia Osimani.', href: r.planifica },
+    ],
+  },
+  pt: {
+    meta: 'Grupos e escolas', desc: 'Saída de estudo para escolas em uma chácara citrícola de Salto, no Uruguai: ciências naturais, geografia, história, economia e meio ambiente para estudantes de 11 a 15 anos. Tarifa proposta: $U 500 por estudante.',
+    titulo: 'Uma aula que dá para sentir o cheiro', intro: 'Uma saída de estudo em uma chácara citrícola em funcionamento, pensada para estudantes do ensino médio de 11 a 15 anos. O currículo ao ar livre e com as mãos na fruta.',
+    alt: 'Grupo de estudantes na Chacra La Victoria', pedir: 'Peça uma proposta', ver: 'Ver conteúdos', paraQuien: 'Para quem é',
+    bloques: [
+      { titulo: 'Escolas de Salto', texto: 'Uma saída fora da sala de aula para trabalhar a identidade produtiva do departamento. Salto tem 21 centros de ensino médio (ANEP, 2022).' },
+      { titulo: 'Viagens de formatura', texto: 'Para grupos que visitam Salto: uma atividade diferente para incluir no roteiro.' },
+      { titulo: 'Grupos organizados', texto: 'Com 15 pessoas ou mais vale a tarifa de grupo: $U 675 por pessoa (proposta, com 10 % de desconto).' },
+    ],
+    asigTitulo: 'Cinco matérias em um mesmo laranjal', asigTexto: 'Cada etapa da visita se conecta com conteúdos do currículo. Os professores escolhem o foco e adaptamos o percurso.',
+    asignaturas: [
+      { nombre: 'Ciências naturais', temas: ['O ciclo da laranjeira: floração, crescimento e colheita.', 'O enxerto sobre porta-enxerto trifoliata e por que ele protege a planta do frio e de doenças do solo.', 'A sanidade vegetal e a vigilância do HLB (greening), a doença que mais preocupa o setor.'] },
+      { nombre: 'Geografia', temas: ['Por que a região norte do Uruguai concentra cerca de 91 % da área citrícola do país.', 'A faixa produtiva junto ao rio Uruguai, seus solos arenosos e o rio como regulador das geadas.', 'Salto e Concordia: duas margens citrícolas unidas pela represa de Salto Grande.'] },
+      { nombre: 'História', temas: ['A sementeira de Pedro Gallino em La Amarilla, por volta de 1864.', 'A imigração italiana e as laranjeiras que Pedro Benito Solari plantou nas ruas de Salto em 1926.', 'O edifício de Eladio Dieste para a Citrícola Salteña, patrimônio da citricultura.'] },
+      { nombre: 'Economia', temas: ['A cadeia produtiva: cultivo, colheita, seleção, embalagem, indústria e exportação.', 'A produção na contraestação e os mercados do hemisfério norte.', 'O trabalho na safra e seu peso na economia de Salto.'] },
+      { nombre: 'Meio ambiente', temas: ['Irrigação por gotejamento e curvas de nível para cuidar da água e do solo.', 'Resíduos da visita: separação, compostagem com a casca e zero plástico descartável.', 'O uso responsável de defensivos agrícolas.'] },
+    ],
+    visitaTitulo: 'A visita, adaptada a cada turma', visitaTexto: 'As mesmas cinco etapas, com linguagem e tempos ajustados à idade do grupo. A duração pode ser reduzida conforme o planejamento da escola.',
+    segTitulo: 'Segurança e materiais', seg1: 'Os grupos vêm acompanhados pelos professores. Proporção de adultos por estudante:', seg2: 'Percurso com protocolos de segurança e higiene, e respeito pelos espaços produtivos.', seg3: 'Ficha para professores com conteúdos e atividades antes e depois da visita:', seg4: 'Transporte:', altFoto: 'Estudantes preparando suco de laranja', propuesta: 'Peça uma proposta', preguntas: 'Perguntas de professores',
+    tambien: [
+      { titulo: 'A laranja em Salto', texto: 'A história completa, de 1864 até hoje, para preparar a visita.', href: r.naranja },
+      { titulo: 'A experiência', texto: 'As cinco etapas da visita e as modalidades conforme a época.', href: r.azahar },
+      { titulo: 'Planeje sua visita', texto: 'Temporada, clima e como chegar a Colonia Osimani.', href: r.planifica },
+    ],
+  },
+  en: {
+    meta: 'Groups and schools', desc: 'A school trip to a working citrus farm in Salto, Uruguay: science, geography, history, economics and the environment for students aged 11 to 15. Proposed price: $U 500 per student.',
+    titulo: 'A lesson you can smell', intro: 'A field trip to a working citrus farm, designed for secondary school students aged 11 to 15. The curriculum, outdoors and hands-on.',
+    alt: 'A group of students at Chacra La Victoria', pedir: 'Request a proposal', ver: 'See the content', paraQuien: "Who it's for",
+    bloques: [
+      { titulo: 'Schools in Salto', texto: "A trip outside the classroom to explore the region's farming identity. Salto has 21 secondary schools (ANEP, 2022)." },
+      { titulo: 'Graduation and school trips', texto: 'For groups visiting Salto: something different to add to the itinerary.' },
+      { titulo: 'Organised groups', texto: 'Groups of 15 or more get the group price: $U 675 per person (proposed, 10% discount).' },
+    ],
+    asigTitulo: 'Five subjects in one orange grove', asigTexto: 'Each stage of the visit links to the curriculum. Teachers choose the focus and we adapt the visit.',
+    asignaturas: [
+      { nombre: 'Science', temas: ['The orange tree’s life cycle: blossom, growth and harvest.', 'Grafting onto trifoliate rootstock, and why it protects the tree from cold and soil diseases.', 'Plant health and the watch against HLB (citrus greening), the disease that worries growers most.'] },
+      { nombre: 'Geography', temas: ["Why Uruguay's northern region holds about 91% of the country's citrus land.", 'The farming strip along the Uruguay River, its sandy soils and the river as a buffer against frost.', 'Salto and Concordia: two citrus towns on either side of the river, linked by the Salto Grande dam.'] },
+      { nombre: 'History', temas: ["Pedro Gallino's seedbed at La Amarilla, around 1864.", 'Italian immigration and the orange trees Pedro Benito Solari planted in the streets of Salto in 1926.', "Eladio Dieste's packing house for Citrícola Salteña, part of the region's citrus heritage."] },
+      { nombre: 'Economics', temas: ['The supply chain: growing, harvesting, sorting, packing, processing and export.', 'Selling during the northern hemisphere’s off-season.', "Seasonal harvest work and its weight in Salto's economy."] },
+      { nombre: 'Environment', temas: ['Drip irrigation and contour planting to protect water and soil.', 'Waste on the visit: sorting, composting the peel and no single-use plastics.', 'Responsible use of crop protection products.'] },
+    ],
+    visitaTitulo: 'The visit, adapted to each class', visitaTexto: "The same five stages, with language and timing adjusted to the group's age. The visit can be shortened to fit the school's schedule.",
+    segTitulo: 'Safety and materials', seg1: 'Groups are accompanied by their teachers. Required adult-to-student ratio:', seg2: 'Safety and hygiene protocols throughout, and respect for the working farm.', seg3: 'Teacher sheet with content and activities for before and after the visit:', seg4: 'Transport:', altFoto: 'Students making orange juice', propuesta: 'Request a proposal', preguntas: 'Questions from teachers',
+    tambien: [
+      { titulo: 'Oranges in Salto', texto: 'The full story, from 1864 to today, to prepare the visit.', href: r.naranja },
+      { titulo: 'The experience', texto: 'The five stages of the visit and the options by season.', href: r.azahar },
+      { titulo: 'Plan your visit', texto: 'Season, weather and getting to Colonia Osimani.', href: r.planifica },
+    ],
+  },
+});
+---
+<Base titulo={`${T.meta} · Camino de Azahar`} descripcion={T.desc} idioma={idioma} clave="azaharGrupos" encabezadoFlotante tema="azahar" cta={{ texto: t(idioma, 'nav.reservar'), href: rutaReservar(idioma) }}>
+  <CabeceraPagina idioma={idioma} antetitulo={T.meta} titulo={T.titulo} intro={T.intro} migas={[{ texto: t(idioma, 'nav.experiencias'), href: r.experiencias }, { texto: 'Camino de Azahar', href: r.azahar }, { texto: T.meta }]} imagen={{ toma: 'Grupo recorriendo la chacra', ...foto('recorrido-visitantes', idioma) }}>
+    <div class="flex flex-wrap gap-3">
+      <a href="#propuesta" class="btn btn-luz">{T.pedir}</a>
+      <a href="#asignaturas" class="btn btn-contorno-claro">{T.ver}</a>
+    </div>
+  </CabeceraPagina>
+  <NavExperiencia idioma={idioma} actual={Astro.url.pathname} />
+
+  <section class="contenedor grid gap-10 py-[clamp(4rem,12vh,8rem)] lg:grid-cols-3" aria-label={T.paraQuien}>
+    {T.bloques.map((b, i) => (
+      <article class="revelar grid content-start gap-3 border-t-2 border-deco pt-6" style={`transition-delay:${i * 100}ms`}>
+        <h2 class="font-display text-2xl">{b.titulo}</h2>
+        <p class="text-lg text-muted">{b.texto}</p>
+      </article>
+    ))}
+  </section>
+
+  <section id="asignaturas" class="bg-deep py-[clamp(5rem,14vh,10rem)] text-[#fbf2e1]" aria-labelledby="asignaturas-titulo">
+    <div class="contenedor grid gap-12">
+      <div class="grid gap-4">
+        <h2 id="asignaturas-titulo" class="max-w-[16ch] !text-[clamp(1.6rem,3.4vw,3.1rem)] !text-[#fbf2e1]">{T.asigTitulo}</h2>
+        <p class="max-w-[56ch] text-lg text-on-deep-muted">{T.asigTexto}</p>
+      </div>
+      <ul class="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+        {T.asignaturas.map((a, i) => (
+          <li class="revelar grid content-start gap-4 rounded-[var(--ca-radius-lg)] bg-[#fbf2e1] p-6 text-[#231c16]" style={`transition-delay:${i * 80}ms`}>
+            <span class="h-1.5 w-12 rounded-full" style={`background:${colores[i]}`} aria-hidden="true"></span>
+            <h3 class="font-display text-2xl !text-[#1f3a2b]">{a.nombre}</h3>
+            <ul class="grid gap-3 text-[#4a3f36]">
+              {a.temas.map((tm) => <li class="border-t border-[#e3d7c1] pt-3">{tm}</li>)}
+            </ul>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="contenedor grid gap-12 py-[clamp(4rem,12vh,8rem)]" aria-labelledby="visita-grupos">
+    <div class="grid gap-3">
+      <h2 id="visita-grupos" class="max-w-[18ch] text-[clamp(1.6rem,3vw,2.6rem)]">{T.visitaTitulo}</h2>
+      <p class="max-w-[60ch] text-lg text-muted">{T.visitaTexto}</p>
+    </div>
+    <LineaEtapas idioma={idioma} />
+  </section>
+
+  <section class="contenedor grid gap-10 pb-[clamp(4rem,12vh,8rem)] lg:grid-cols-2" aria-labelledby="seguridad-titulo">
+    <div class="grid content-start gap-6">
+      <h2 id="seguridad-titulo" class="text-[clamp(1.7rem,3.2vw,2.7rem)]">{T.segTitulo}</h2>
+      <ul class="grid gap-4 text-lg">
+        <li class="border-b border-line pb-4">{T.seg1} <Pendiente texto="proporción mínima requerida" /></li>
+        <li class="border-b border-line pb-4">{T.seg2}</li>
+        <li class="border-b border-line pb-4">{T.seg3} <Pendiente tipo="ARCHIVO" texto="ficha para docentes en PDF" /></li>
+        <li>{T.seg4} <Pendiente texto="si se coordina traslado para grupos y su costo" /></li>
+      </ul>
+    </div>
+    <div class="grid content-start gap-6">
+      <Imagen proporcion="3/2" toma="Mesa de degustación" {...foto('mesa-degustacion', idioma)} revelar />
+      <AvisoAccesibilidad idioma={idioma} id="aviso-grupos" />
+    </div>
+  </section>
+
+  <section id="propuesta" class="bg-surface-2 py-[clamp(5rem,12vh,9rem)]" aria-label={T.propuesta}>
+    <div class="contenedor max-w-4xl"><FormularioGrupos idioma={idioma} /></div>
+  </section>
+
+  <div class="contenedor grid gap-24 py-[clamp(4rem,12vh,8rem)]">
+    <PreguntasFrecuentes idioma={idioma} temas={['grupos']} titulo={T.preguntas} />
+    <TambienTeInteresa idioma={idioma} enlaces={T.tambien} />
+  </div>
+</Base>

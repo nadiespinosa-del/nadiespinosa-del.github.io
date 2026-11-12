@@ -1,0 +1,84 @@
+---
+// Mapa interactivo (Leaflet + OpenStreetMap) con los puntos del destino.
+// Si el mapa no carga (sin conexión), se muestra la lista de lugares, que siempre está disponible.
+import destinos from '../data/destinos.json';
+import Pendiente from './Pendiente.astro';
+import { elegir, type Idioma } from '../i18n/ui';
+
+interface Props { idioma?: Idioma }
+const { idioma = 'es' } = Astro.props;
+const T = elegir(idioma, {
+  es: { region: 'Mapa de Salto y alrededores con los lugares de la ruta', error: 'El mapa no se pudo cargar. Revisá tu conexión; al lado tenés la lista de lugares.', lugares: 'Lugares en el mapa', encuentro: 'Punto de encuentro de la visita.', llegar: 'Cómo llegar', nota: 'Ubicaciones aproximadas, a escala regional. Mapa: © colaboradores de OpenStreetMap.' },
+  pt: { region: 'Mapa de Salto e arredores com os lugares da rota', error: 'Não foi possível carregar o mapa. Verifique sua conexão; ao lado está a lista de lugares.', lugares: 'Lugares no mapa', encuentro: 'Ponto de encontro da visita.', llegar: 'Como chegar', nota: 'Localizações aproximadas, em escala regional. Mapa: © colaboradores do OpenStreetMap.' },
+  en: { region: 'Map of Salto and surroundings with the places on the route', error: "The map couldn't load. Check your connection; the list of places is next to it.", lugares: 'Places on the map', encuentro: 'Meeting point for the visit.', llegar: 'Get directions', nota: 'Approximate locations, at regional scale. Map: © OpenStreetMap contributors.' },
+});
+const lugares = destinos.lugares.map((l) => ({ id: l.id, tipo: l.tipo, lat: l.lat, lng: l.lng, nombre: l.nombre[idioma], texto: l.texto[idioma] }));
+const datosMapa = { lugares, chacra: destinos.chacra, encuentro: T.encuentro, llegar: T.llegar };
+---
+<div class="mapa-destino grid gap-6 lg:grid-cols-[1.4fr_0.6fr]">
+  <div class="relative overflow-hidden rounded-[var(--ca-radius-lg)] border border-line bg-surface-2">
+    <div class="mapa-lienzo h-[440px] w-full sm:h-[520px]" data-destinos={JSON.stringify(datosMapa)} role="region" aria-label={T.region}></div>
+    <p class="mapa-error absolute inset-0 hidden items-center justify-center p-8 text-center text-muted">{T.error}</p>
+  </div>
+  <div class="grid content-start gap-4">
+    <h3 class="font-body text-lg font-semibold text-ink">{T.lugares}</h3>
+    <ul class="grid gap-3">
+      <li class="rounded-[var(--ca-radius)] border-2 border-dashed border-line-strong p-4">
+        <p class="font-semibold">Chacra La Victoria, Colonia Osimani</p>
+        <p class="text-sm text-muted">{destinos.chacra ? T.encuentro : <Pendiente texto="ubicación exacta de la chacra" />}</p>
+      </li>
+      {lugares.map((l) => (
+        <li class="rounded-[var(--ca-radius)] border border-line bg-surface p-4">
+          <p class="font-semibold">{l.nombre}</p>
+          <p class="text-sm text-muted">{l.texto}</p>
+          <a class="text-sm font-semibold" href={`https://www.google.com/maps/dir/?api=1&destination=${l.lat},${l.lng}`} target="_blank" rel="noopener">{T.llegar}</a>
+        </li>
+      ))}
+    </ul>
+    <p class="text-xs text-muted">{T.nota}</p>
+  </div>
+</div>
+
+<script>
+  import 'leaflet/dist/leaflet.css';
+  const contenedor = document.querySelector<HTMLElement>('.mapa-lienzo');
+  if (contenedor) {
+    const iniciar = async () => {
+      try {
+        const L = (await import('leaflet')).default;
+        const datos = JSON.parse(contenedor.dataset.destinos || '{}');
+        const mapa = L.map(contenedor, { scrollWheelZoom: false, attributionControl: true }).setView([-31.3, -57.85], 9);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 18,
+          attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        }).addTo(mapa);
+        const icono = (tipo: string) => L.divIcon({ className: '', html: `<span class="pin-mapa pin-${tipo}" aria-hidden="true"></span>`, iconSize: [26, 26], iconAnchor: [13, 13] });
+        const puntos = [...datos.lugares, ...(datos.chacra ? [{ ...datos.chacra, nombre: 'Chacra La Victoria', tipo: 'chacra', texto: datos.encuentro }] : [])];
+        puntos.forEach((p: { lat: number; lng: number; nombre: string; texto: string; tipo: string }) => {
+          L.marker([p.lat, p.lng], { icon: icono(p.tipo), title: p.nombre, keyboard: true })
+            .addTo(mapa)
+            .bindPopup(`<strong>${p.nombre}</strong><br>${p.texto}<br><a href="https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lng}" target="_blank" rel="noopener">${datos.llegar}</a>`);
+        });
+        mapa.on('focus', () => mapa.scrollWheelZoom.enable());
+        mapa.on('blur', () => mapa.scrollWheelZoom.disable());
+      } catch {
+        contenedor.parentElement?.querySelector('.mapa-error')?.classList.replace('hidden', 'flex');
+      }
+    };
+    new IntersectionObserver((entradas, obs) => {
+      if (entradas[0].isIntersecting) {
+        obs.disconnect();
+        iniciar();
+      }
+    }, { rootMargin: '300px' }).observe(contenedor);
+  }
+</script>
+
+<style is:global>
+  .pin-mapa { display: block; width: 26px; height: 26px; border-radius: 999px; border: 3px solid #fbf2e1; box-shadow: 0 4px 14px rgba(16, 35, 26, 0.35); }
+  .pin-destino { background: #1f3a2b; }
+  .pin-termas { background: #2f6b3f; }
+  .pin-chacra { background: #e07a2e; width: 34px; height: 34px; }
+  .mapa-destino .leaflet-container { font-family: var(--ca-font-body); }
+  .mapa-destino .leaflet-popup-content { font-size: 15px; line-height: 1.5; }
+</style>

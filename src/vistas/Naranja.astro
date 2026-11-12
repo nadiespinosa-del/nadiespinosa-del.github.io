@@ -1,0 +1,240 @@
+---
+// La naranja en Salto (tres idiomas): historia y patrimonio, Dieste, del árbol a la mesa, el lugar y su cultura.
+import Base from '../layouts/Base.astro';
+import CabeceraPagina from '../components/CabeceraPagina.astro';
+import NavExperiencia from '../components/NavExperiencia.astro';
+import LineaTiempo from '../components/inmersivo/LineaTiempo.astro';
+import DelArbolALaMesa from '../components/inmersivo/DelArbolALaMesa.astro';
+import Imagen from '../components/Imagen.astro';
+import Llamado from '../components/Llamado.astro';
+import TambienTeInteresa from '../components/TambienTeInteresa.astro';
+import { elegir, rutas, rutaReservar, t, type Idioma } from '../i18n/ui';
+import { fotoArchivo, creditosArchivo, type ClaveArchivo } from '../lib/fotos';
+// La ciudad, la cosecha y la industria: fotos de época de la Biblioteca Nacional
+const fotosCultura: ClaveArchivo[] = ['calle-uruguay-1900', 'jovenes-recolectando-1960', 'fabrica-solari-1960'];
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const r = rutas[idioma];
+const bovedas = Array.from({ length: 17 }, (_, i) => {
+  const ancho = 1000 / 17;
+  const x0 = i * ancho;
+  return `M ${x0.toFixed(1)} 200 Q ${(x0 + ancho / 2).toFixed(1)} ${i % 2 ? 30 : 46} ${(x0 + ancho).toFixed(1)} 200`;
+});
+// Referencias bibliográficas (se citan en su idioma original)
+const fuentes = [
+  'Museo del Hombre y la Tecnología de Salto. Reseña histórica de la citricultura (s. f.).',
+  'Padrón Favre, O. (2008).',
+  'Taborda, E. S. Crónica de la primera cosecha (s. f.).',
+  'Redacción El Pueblo (2021). Testimonio de Carlos Orihuela.',
+  'Archivo Isidra Solari (s. f.).',
+  'Facultad de Arquitectura, Diseño y Urbanismo (FADU), Universidad de la República. Ficha del edificio de Citrícola Salteña S.A. (s. f.).',
+  'Ministerio de Ganadería, Agricultura y Pesca (MGAP). Información sobre la producción citrícola y el Programa de prevención del HLB.',
+  'OPYPA-MGAP e Instituto Uruguay XXI (2021–2024). Exportaciones citrícolas.',
+  'INIA Salto Grande. Boletines técnicos de poscosecha y cadena de frío.',
+];
+const T = elegir(idioma, {
+  es: {
+    meta: 'La naranja en Salto · Historia y patrimonio',
+    desc: 'De 1864 a hoy: la historia de la citricultura en Salto, los naranjos de Pedro Benito Solari, las bóvedas de Eladio Dieste y el camino de la fruta del árbol a la mesa.',
+    ante: 'Historia y patrimonio', titulo: 'La naranja que hizo a Salto',
+    intro: 'Desde un almácigo en el siglo XIX hasta los barcos refrigerados de hoy, la naranja cambió la economía, el paisaje y la identidad del departamento.',
+    fotoAlt: 'Quinta citrícola histórica de Salto',
+    lugar: 'Un lugar hecho para el citrus',
+    lugar1: ['La región norte, con Salto y Paysandú, concentra cerca del ', '91 % de la superficie citrícola', ' de Uruguay y alrededor del 90 % de sus exportaciones de cítricos.'],
+    lugar2: 'Los naranjos se concentran en una franja de unos 20 kilómetros junto al río Uruguay, sobre suelos livianos, arenosos y profundos. El río modera las heladas y la amplitud térmica equilibra azúcares y acidez: por eso la fruta toma un color tan intenso.',
+    fuentesCortas: 'Fuentes: MGAP; OPYPA-MGAP e Instituto Uruguay XXI.',
+    historia: 'Más de 150 años de historia',
+    diesteTitulo: 'Diecisiete bóvedas para la fruta',
+    diesteTexto: 'En avenida Paraguay y Ferreira, el edificio de Citrícola Salteña S.A. se pensó para depositar, clasificar y empacar naranjas que viajaban al puerto de Montevideo para su exportación. El ingeniero Eladio Dieste lo cubrió con bóvedas de cerámica armada que hoy son patrimonio de la citricultura salteña.',
+    datos: [['Bóvedas de doble curvatura', '17'], ['Luz libre entre apoyos', '45 m'], ['Superficie cubierta', '4.200 m²'], ['Columnas intermedias', 'Ninguna']],
+    diesteNota: 'Mortero blanco que refleja el sol y lucernarios en cada bóveda para iluminar con luz natural. Fuente: FADU, Universidad de la República.',
+    diesteAlt: 'Bóvedas de cerámica armada del edificio de Citrícola Salteña',
+    arbol: 'Del árbol a la mesa', arbolTexto: 'Detrás de cada naranja hay una cadena de trabajo y conocimiento. Estos son sus pasos.',
+    cultura: 'Más que un cultivo',
+    culturas: [
+      ['Naranjos en la ciudad', 'Desde 1926, los naranjos forman parte del arbolado de Salto, Belén y Constitución: la producción se volvió paisaje cotidiano.'],
+      ['La palabra de Víctor Lima', 'La obra del poeta Víctor Rolando Lima y sus referencias a Salto y sus paisajes ayudan a pensar la memoria y el sentido de pertenencia.'],
+      ['Fiestas de la Citricultura', 'Las celebraciones históricas reunieron a la comunidad y a visitantes con gastronomía, exposiciones y espectáculos. En Concordia, la otra orilla, se celebra la Fiesta Nacional de la Citricultura.'],
+    ],
+    llamado: 'Escuchá esta historia entre los naranjos', llamadoTexto: 'En la visita, la historia de la citricultura salteña se cuenta en el lugar donde sucede.', verExp: 'Ver la experiencia', escuelas: 'Grupos y escuelas',
+    fuentes: 'Fuentes', experiencia: 'La experiencia',
+    enlaces: ['Patricia Real, la Chacra La Victoria y la feria de Colonia Osimani.', 'Cinco etapas en un naranjal en funcionamiento.', 'Esta historia, contada para estudiantes de 11 a 15 años.'],
+  },
+  pt: {
+    meta: 'A laranja em Salto · História e patrimônio',
+    desc: 'De 1864 até hoje: a história da citricultura em Salto, as laranjeiras de Pedro Benito Solari, as abóbadas de Eladio Dieste e o caminho da fruta da árvore à mesa.',
+    ante: 'História e patrimônio', titulo: 'A laranja que fez Salto',
+    intro: 'De um viveiro no século XIX aos navios refrigerados de hoje, a laranja mudou a economia, a paisagem e a identidade do departamento de Salto.',
+    fotoAlt: 'Pomar cítrico histórico de Salto',
+    lugar: 'Um lugar feito para os citros',
+    lugar1: ['A região norte, com Salto e Paysandú, concentra cerca de ', '91 % da área cítrica', ' do Uruguai e cerca de 90 % das exportações de citros.'],
+    lugar2: 'As laranjeiras se concentram em uma faixa de uns 20 quilômetros junto ao rio Uruguai, em solos leves, arenosos e profundos. O rio modera as geadas e a amplitude térmica equilibra açúcares e acidez: por isso a fruta ganha uma cor tão intensa.',
+    fuentesCortas: 'Fontes: MGAP; OPYPA-MGAP e Instituto Uruguay XXI.',
+    historia: 'Mais de 150 anos de história',
+    diesteTitulo: 'Dezessete abóbadas para a fruta',
+    diesteTexto: 'Na avenida Paraguay com Ferreira, o edifício da Citrícola Salteña S.A. foi pensado para armazenar, classificar e embalar laranjas que seguiam para o porto de Montevidéu para exportação. O engenheiro Eladio Dieste o cobriu com abóbadas de cerâmica armada que hoje são patrimônio da citricultura de Salto.',
+    datos: [['Abóbadas de dupla curvatura', '17'], ['Vão livre entre apoios', '45 m'], ['Área coberta', '4.200 m²'], ['Colunas intermediárias', 'Nenhuma']],
+    diesteNota: 'Argamassa branca que reflete o sol e claraboias em cada abóbada para iluminar com luz natural. Fonte: FADU, Universidad de la República.',
+    diesteAlt: 'Abóbadas de cerâmica armada do edifício da Citrícola Salteña',
+    arbol: 'Da árvore à mesa', arbolTexto: 'Por trás de cada laranja há uma cadeia de trabalho e conhecimento. Estes são os seus passos.',
+    cultura: 'Mais que um cultivo',
+    culturas: [
+      ['Laranjeiras na cidade', 'Desde 1926, as laranjeiras fazem parte da arborização de Salto, Belén e Constitución: a produção virou paisagem do dia a dia.'],
+      ['A palavra de Víctor Lima', 'A obra do poeta Víctor Rolando Lima e suas referências a Salto e suas paisagens ajudam a pensar a memória e o sentimento de pertencimento.'],
+      ['Festas da Citricultura', 'As celebrações históricas reuniram a comunidade e visitantes com gastronomia, exposições e espetáculos. Em Concordia, na outra margem, acontece a Festa Nacional da Citricultura argentina.'],
+    ],
+    llamado: 'Ouça esta história entre as laranjeiras', llamadoTexto: 'Na visita, a história da citricultura de Salto é contada no lugar onde ela acontece.', verExp: 'Ver a experiência', escuelas: 'Grupos e escolas',
+    fuentes: 'Fontes', experiencia: 'A experiência',
+    enlaces: ['Patricia Real, a Chacra La Victoria e a feira de Colonia Osimani.', 'Cinco etapas em um laranjal em funcionamento.', 'Esta história, contada para estudantes de 11 a 15 anos.'],
+  },
+  en: {
+    meta: 'Oranges in Salto · History and heritage',
+    desc: 'From 1864 to today: the history of citrus farming in Salto, the orange trees of Pedro Benito Solari, the vaults of Eladio Dieste and the journey of the fruit from tree to table.',
+    ante: 'History and heritage', titulo: 'The orange that made Salto',
+    intro: 'From a nineteenth-century nursery to today\'s refrigerated ships, the orange changed the economy, the landscape and the identity of Salto.',
+    fotoAlt: 'A historic citrus farm in Salto',
+    lugar: 'A place made for citrus',
+    lugar1: ['The northern region, with Salto and Paysandú, holds about ', '91 % of the citrus-growing area', ' in Uruguay and around 90 % of its citrus exports.'],
+    lugar2: 'The orange groves sit in a strip of about 20 kilometres along the Uruguay River, on light, sandy, deep soils. The river softens the frosts and the gap between day and night temperatures balances sugar and acidity: that is why the fruit takes on such an intense colour.',
+    fuentesCortas: 'Sources: MGAP; OPYPA-MGAP and Uruguay XXI.',
+    historia: 'More than 150 years of history',
+    diesteTitulo: 'Seventeen vaults for the fruit',
+    diesteTexto: 'On Paraguay and Ferreira avenues, the Citrícola Salteña S.A. building was designed to store, grade and pack oranges bound for the port of Montevideo for export. Engineer Eladio Dieste covered it with reinforced-brick vaults that are now part of the heritage of citrus farming in Salto.',
+    datos: [['Double-curvature vaults', '17'], ['Clear span between supports', '45 m'], ['Covered area', '4,200 m²'], ['Intermediate columns', 'None']],
+    diesteNota: 'White mortar that reflects the sun, and skylights in every vault for natural light. Source: FADU, Universidad de la República.',
+    diesteAlt: 'Reinforced-brick vaults of the Citrícola Salteña building',
+    arbol: 'From tree to table', arbolTexto: 'Behind every orange there is a chain of work and knowledge. These are its steps.',
+    cultura: 'More than a crop',
+    culturas: [
+      ['Orange trees in town', 'Since 1926, orange trees have lined the streets of Salto, Belén and Constitución: farming became part of everyday scenery.'],
+      ['The words of Víctor Lima', 'The work of poet Víctor Rolando Lima, with its references to Salto and its landscapes, helps us think about memory and belonging.'],
+      ['Citrus festivals', 'Historic celebrations brought the community and visitors together with food, exhibitions and shows. Across the river in Concordia, Argentina holds its National Citrus Festival.'],
+    ],
+    llamado: 'Hear this story among the orange trees', llamadoTexto: 'On the visit, the story of citrus farming in Salto is told where it happens.', verExp: 'See the experience', escuelas: 'Groups and schools',
+    fuentes: 'Sources', experiencia: 'The experience',
+    enlaces: ['Patricia Real, Chacra La Victoria and the Colonia Osimani market.', 'Five stages in a working orange grove.', 'This story, told for students aged 11 to 15.'],
+  },
+});
+---
+<Base
+  titulo={T.meta}
+  descripcion={T.desc}
+  idioma={idioma}
+  encabezadoFlotante tema="azahar" clave="naranja" cta={{ texto: t(idioma, 'nav.reservar'), href: rutaReservar(idioma) }}
+>
+  <CabeceraPagina
+    idioma={idioma}
+    antetitulo={T.ante}
+    titulo={T.titulo}
+    intro={T.intro}
+    migas={[{ texto: t(idioma, 'nav.experiencias'), href: r.experiencias }, { texto: 'Camino de Azahar', href: r.azahar }, { texto: t(idioma, 'nav.naranja') }]}
+    imagen={{ toma: 'Fotografía de archivo de una quinta citrícola salteña', ...fotoArchivo('recolectando-1960', idioma) }}
+  />
+  <NavExperiencia idioma={idioma} actual={Astro.url.pathname} />
+
+  <section class="contenedor grid gap-6 py-[clamp(4rem,12vh,8rem)] lg:grid-cols-[1fr_1fr] lg:items-end" aria-labelledby="lugar-titulo">
+    <h2 id="lugar-titulo" class="max-w-[14ch] text-[clamp(1.6rem,3.4vw,3.1rem)] leading-[0.98]">{T.lugar}</h2>
+    <div class="grid gap-5 text-lg text-muted">
+      <p>{T.lugar1[0]}<strong class="text-ink">{T.lugar1[1]}</strong>{T.lugar1[2]}</p>
+      <p>{T.lugar2}</p>
+      <p class="text-sm">{T.fuentesCortas}</p>
+    </div>
+  </section>
+
+  <section class="contenedor pb-[clamp(4rem,12vh,8rem)]" aria-labelledby="linea-titulo">
+    <h2 id="linea-titulo" class="mb-16 max-w-[16ch] text-[clamp(1.6rem,3.4vw,3.1rem)] leading-[0.98]">{T.historia}</h2>
+    <LineaTiempo idioma={idioma} />
+  </section>
+
+  <section class="dieste relative overflow-hidden bg-[#fbf2e1] py-[clamp(5rem,14vh,10rem)] text-[#231c16]" aria-labelledby="dieste-titulo">
+    <svg class="dieste-bovedas absolute inset-x-0 top-0 h-[30vh] w-full" viewBox="0 0 1000 210" fill="none" stroke="#9c4a2f" stroke-width="1.8" aria-hidden="true" preserveAspectRatio="none">
+      {bovedas.map((d) => <path d={d} pathLength="1" />)}
+      <line x1="0" y1="200" x2="1000" y2="200" />
+    </svg>
+    <div class="contenedor relative grid gap-12 pt-[18vh] lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+      <div class="grid gap-6">
+        <p class="font-display text-xl italic text-[#9c4a2f]">1971–1972 · Eladio Dieste</p>
+        <h2 id="dieste-titulo" class="max-w-[13ch] !text-[clamp(1.8rem,3.7vw,3.3rem)] !leading-[0.98] !text-[#1f3a2b]">{T.diesteTitulo}</h2>
+        <p class="max-w-[52ch] text-lg text-[#4a3f36]">{T.diesteTexto}</p>
+        <dl class="grid grid-cols-2 gap-x-8 gap-y-6 border-t border-[#e3d7c1] pt-6">
+          {T.datos.map(([dt, dd]) => (
+            <div class="grid content-start gap-1"><dt class="text-sm text-[#5e5248]">{dt}</dt><dd class="font-display text-3xl text-[#1f3a2b] sm:text-4xl">{dd}</dd></div>
+          ))}
+        </dl>
+        <p class="text-sm text-[#5e5248]">{T.diesteNota}</p>
+      </div>
+      <figure class="grid gap-2">
+        <Imagen proporcion="4/5" toma="Interior del edificio de Dieste" {...fotoArchivo('dieste-bovedas-vertical', idioma)} revelar />
+        <figcaption class="text-xs text-[#5e5248]">{fotoArchivo('dieste-bovedas-vertical', idioma).credito}.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="contenedor grid gap-12 py-[clamp(4rem,12vh,8rem)]" aria-labelledby="arbol-titulo">
+    <div class="grid gap-3">
+      <h2 id="arbol-titulo" class="max-w-[14ch] text-[clamp(1.6rem,3.4vw,3.1rem)] leading-[0.98]">{T.arbol}</h2>
+      <p class="max-w-[56ch] text-lg text-muted">{T.arbolTexto}</p>
+    </div>
+    <DelArbolALaMesa idioma={idioma} />
+  </section>
+
+  <section class="bg-surface-2 py-[clamp(4rem,12vh,8rem)]" aria-labelledby="cultura-titulo">
+    <div class="contenedor grid gap-10 lg:grid-cols-3">
+      <h2 id="cultura-titulo" class="text-[clamp(1.7rem,3.2vw,2.7rem)] lg:col-span-3">{T.cultura}</h2>
+      <div class="grid gap-6 sm:grid-cols-3 lg:col-span-3">
+        {fotosCultura.map((clave) => {
+          const f = fotoArchivo(clave, idioma);
+          return (
+            <figure class="grid content-start gap-2">
+              <Imagen proporcion="1/1" toma={f.alt} src={f.src} alt={f.alt} revelar />
+              <figcaption class="text-xs text-muted">{f.alt}. {f.credito.replace(/, [^,]+$/, '')}.</figcaption>
+            </figure>
+          );
+        })}
+      </div>
+      {T.culturas.map(([titulo, texto]) => (
+        <article class="grid content-start gap-3">
+          <h3 class="text-2xl">{titulo}</h3>
+          <p class="text-muted">{texto}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <div class="contenedor grid gap-20 py-[clamp(4rem,12vh,8rem)]">
+    <Llamado
+      antetitulo="Camino de Azahar"
+      titulo={T.llamado}
+      texto={T.llamadoTexto}
+      boton={{ texto: T.verExp, href: r.azahar }}
+      secundario={{ texto: T.escuelas, href: r.azaharGrupos }}
+    />
+    <section aria-labelledby="fuentes-titulo" class="grid gap-4">
+      <h2 id="fuentes-titulo" class="font-body text-lg font-semibold text-ink">{T.fuentes}</h2>
+      <ul class="grid gap-1.5 text-sm text-muted md:grid-cols-2" lang="es">
+        {fuentes.map((f) => <li>{f}</li>)}
+        {creditosArchivo.map((c) => <li>Fotografía: {c}.</li>)}
+      </ul>
+    </section>
+    <TambienTeInteresa
+      idioma={idioma}
+      enlaces={[
+        { titulo: t(idioma, 'nav.chacra'), texto: T.enlaces[0], href: r.chacra },
+        { titulo: T.experiencia, texto: T.enlaces[1], href: r.azahar },
+        { titulo: T.escuelas, texto: T.enlaces[2], href: r.azaharGrupos },
+      ]}
+    />
+  </div>
+</Base>
+
+<style>
+  .dieste-bovedas path { stroke-dasharray: 1; stroke-dashoffset: 0; }
+</style>
+
+<script>
+  import { gsap, reducido } from '../scripts/movimiento';
+  if (!reducido) {
+    gsap.fromTo('.dieste-bovedas path', { strokeDashoffset: 1 }, { strokeDashoffset: 0, ease: 'none', stagger: 0.06, scrollTrigger: { trigger: '.dieste', start: 'top 85%', end: 'top 15%', scrub: true } });
+  }
+</script>

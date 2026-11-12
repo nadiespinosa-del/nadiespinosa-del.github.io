@@ -1,0 +1,80 @@
+---
+// Sabores: cintas de texto que corren con el scroll.
+// Completo (página de la chacra): título grande y dos cintas en direcciones opuestas.
+// Compacto (dentro de «Conocé, descubrí, producí, probá»): un subtítulo y una sola cinta, más liviana.
+// La velocidad aumenta un poco con el scroll. Con movimiento reducido quedan quietas.
+import Rodaja from '../Rodaja.astro';
+import { elegir, type Idioma } from '../../i18n/ui';
+interface Props { idioma?: Idioma; compacto?: boolean }
+const { idioma = 'es', compacto = false } = Astro.props;
+const T = elegir(idioma, {
+  es: { titulo: 'Lo que se prueba en la chacra', bajada: 'En la degustación y en la muestra de emprendedores de la Feria de Colonia Osimani y Llerena.', fila1: ['Jugo recién exprimido', 'Mermeladas', 'Budines', 'Tortas de naranja'], fila2: ['Dulces', 'Licores', 'Productos de emprendedores locales'] },
+  pt: { titulo: 'O que se prova na chácara', bajada: 'Na degustação e na mostra de empreendedores da Feira de Colonia Osimani e Llerena.', fila1: ['Suco espremido na hora', 'Geleias', 'Bolos de laranja'], fila2: ['Doces', 'Licores', 'Produtos de empreendedores locais'] },
+  en: { titulo: 'What you taste at the farm', bajada: 'At the tasting and at the showcase of makers from the Colonia Osimani and Llerena market.', fila1: ['Freshly squeezed juice', 'Marmalades', 'Loaf cakes', 'Orange cakes'], fila2: ['Sweets', 'Liqueurs', 'Products from local makers'] },
+});
+// En la versión compacta, una sola cinta que alterna los sabores de las dos filas
+const filas = compacto ? [T.fila1.flatMap((p, i) => (T.fila2[i] ? [p, T.fila2[i]] : [p])).concat(T.fila2.slice(T.fila1.length))] : [T.fila1, T.fila2];
+---
+{compacto ? (
+  <div class="sabores sabores-compacto relative overflow-hidden bg-[#e07a2e] py-[clamp(2rem,5vh,3rem)] text-[#2a1406]" role="group" aria-labelledby="sabores-titulo">
+    <div class="contenedor mb-5 flex flex-wrap items-baseline gap-x-6 gap-y-1">
+      <h3 id="sabores-titulo" class="!text-[clamp(1.4rem,2.2vw,1.9rem)] !text-[#2a1406]">{T.titulo}</h3>
+      <p class="max-w-[52ch]">{T.bajada}</p>
+    </div>
+    <div class="cinta flex w-max select-none" data-direccion="-1">
+      {[0, 1].map((copia) => (
+        <ul class="flex shrink-0 items-center" aria-hidden={copia === 1 ? 'true' : undefined}>
+          {filas[0].map((palabra, i) => (
+            <li class="flex items-center gap-[2.4vw] pr-[2.4vw] font-display text-[clamp(2rem,5vw,4.2rem)] leading-[1.1]" style={i % 2 ? 'font-style:italic;color:#1f3a2b' : ''}>
+              {palabra}
+              <Rodaja tamano={60} grosor={3} class="h-[0.55em] w-[0.55em] shrink-0" />
+            </li>
+          ))}
+        </ul>
+      ))}
+    </div>
+  </div>
+) : (
+  <section id="sabores" class="sabores relative overflow-hidden bg-[#e07a2e] py-[clamp(4rem,10vh,7rem)] text-[#2a1406]" aria-labelledby="sabores-titulo">
+    <div class="contenedor mb-10 grid gap-3">
+      <h2 id="sabores-titulo" class="max-w-[16ch] !text-[clamp(2.2rem,4.5vw,4rem)] !text-[#2a1406]">{T.titulo}</h2>
+      <p class="max-w-[48ch] text-lg">{T.bajada}</p>
+    </div>
+    {filas.map((fila, f) => (
+      <div class="cinta flex w-max select-none" data-direccion={f === 0 ? -1 : 1} aria-hidden={f === 1 ? 'true' : undefined}>
+        {[0, 1].map((copia) => (
+          <ul class="flex shrink-0 items-center" aria-hidden={copia === 1 ? 'true' : undefined}>
+            {fila.map((palabra) => (
+              <li class="flex items-center gap-[3vw] pr-[3vw] font-display text-[clamp(3rem,9vw,8.5rem)] leading-[1.05]" style={f === 1 ? 'font-style:italic;color:#1f3a2b' : ''}>
+                {palabra}
+                <Rodaja tamano={80} grosor={3} class="h-[0.6em] w-[0.6em] shrink-0" />
+              </li>
+            ))}
+          </ul>
+        ))}
+      </div>
+    ))}
+  </section>
+)}
+
+<script>
+  import { gsap, ScrollTrigger, reducido } from '../../scripts/movimiento';
+  if (!reducido) {
+    const cintas = gsap.utils.toArray<HTMLElement>('.cinta');
+    const tweens = cintas.map((cinta) => {
+      const dir = Number(cinta.dataset.direccion);
+      return gsap.fromTo(cinta, { xPercent: dir < 0 ? 0 : -50 }, { xPercent: dir < 0 ? -50 : 0, ease: 'none', duration: 38, repeat: -1 });
+    });
+    if (document.querySelector('.sabores')) {
+      ScrollTrigger.create({
+        trigger: '.sabores',
+        start: 'top bottom',
+        end: 'bottom top',
+        onUpdate: (self) => {
+          const v = Math.min(4, 1 + Math.abs(self.getVelocity()) / 900);
+          tweens.forEach((t) => gsap.to(t, { timeScale: v, duration: 0.3, overwrite: true }));
+        },
+      });
+    }
+  }
+</script>

@@ -1,0 +1,10 @@
+---
+// Marca visible de un dato que todavía falta. Formato: [TIPO: descripción].
+// Buscá "Pendiente" en el código para encontrar todos los datos por completar.
+interface Props {
+  tipo?: 'DATO' | 'CITA' | 'TEXTO PROVISORIO' | 'CALENDARIO_A_CONFIRMAR' | 'ARCHIVO';
+  texto: string;
+}
+const { tipo = 'DATO', texto } = Astro.props;
+---
+<span class="ph" data-pendiente={tipo}>[{tipo}: {texto}]</span>

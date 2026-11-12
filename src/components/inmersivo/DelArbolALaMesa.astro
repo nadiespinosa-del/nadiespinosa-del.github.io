@@ -1,0 +1,73 @@
+---
+// Del árbol a la mesa: seis pasos en tarjetas que se apilan con el scroll (sticky).
+import Imagen from '../Imagen.astro';
+import { elegir, type Idioma } from '../../i18n/ui';
+import { foto, fotoArchivo, type ClaveFoto } from '../../lib/fotos';
+interface Props { idioma?: Idioma }
+const { idioma = 'es' } = Astro.props;
+// Fotos reales de la chacra, su galpón de selección y la feria (el puerto espera su foto)
+const fotosPasos: (ClaveFoto | null)[] = ['filas-naranjos', 'mano-naranjas', 'fruta-seleccion', 'galpon-seleccion', null, 'feria-frascos']
+// La exportación: el puerto de Salto hacia 1920 (Biblioteca Nacional de Uruguay)
+const puerto = fotoArchivo('puerto-salto-1920', idioma);;
+const tomas = [
+  'Filas de naranjos con riego por goteo, plano general, mañana',
+  'Cosechero con bolso de cosecha en una escalera, plano medio, hora dorada',
+  'Manos seleccionando naranjas sobre una mesa, primer plano',
+  'Línea de empaque con naranjas, plano general, luz natural',
+  'Contenedores refrigerados en un puerto, plano general, atardecer',
+  'Mesa con jugo, mermelada y budín de naranja, bodegón cenital',
+];
+const T = elegir(idioma, {
+  es: {
+    paso: 'Paso',
+    pasos: [
+      { titulo: 'La quinta', texto: 'Los naranjos crecen injertados sobre un portainjerto trifoliado, que entra en reposo en invierno y ayuda a resistir el frío y algunas enfermedades del suelo. El riego por goteo y las curvas de nivel cuidan el agua y el suelo.' },
+      { titulo: 'La cosecha', texto: 'La fruta se cosecha según su madurez: el índice de color y la relación entre azúcares y acidez. La zafra va aproximadamente de mayo a noviembre y genera miles de puestos de trabajo.' },
+      { titulo: 'La selección', texto: 'Se separa la fruta según su calidad. El viento puede marcar la cáscara con el roce de las ramas ("rameo"): no afecta el interior, pero sí el valor en mercados exigentes.' },
+      { titulo: 'El empaque', texto: 'En los packings se clasifica y se empaca. La trazabilidad digital permite seguir cada fruta desde el lote donde se cosechó hasta su destino.' },
+      { titulo: 'La exportación', texto: 'Por mar, en contenedores refrigerados, hacia Estados Unidos, Europa y China. El viaje puede superar los 30 días: la cadena de frío es indispensable.' },
+      { titulo: 'La mesa', texto: 'Fruta fresca, jugo, mermeladas, budines, dulces y licores. En la chacra, la última etapa la hacés vos: exprimís tu propio jugo.' },
+    ],
+  },
+  pt: {
+    paso: 'Passo',
+    pasos: [
+      { titulo: 'O pomar', texto: 'As laranjeiras crescem enxertadas sobre um porta-enxerto trifoliata, que entra em repouso no inverno e ajuda a resistir ao frio e a algumas doenças do solo. A irrigação por gotejamento e as curvas de nível protegem a água e o solo.' },
+      { titulo: 'A colheita', texto: 'A fruta é colhida de acordo com a maturação: o índice de cor e a relação entre açúcares e acidez. A safra vai aproximadamente de maio a novembro e gera milhares de empregos.' },
+      { titulo: 'A seleção', texto: 'A fruta é separada por qualidade. O vento pode marcar a casca com o atrito dos galhos: isso não afeta o interior, mas reduz o valor em mercados exigentes.' },
+      { titulo: 'A embalagem', texto: 'Nos packings, a fruta é classificada e embalada. A rastreabilidade digital permite acompanhar cada fruta desde o lote onde foi colhida até o destino.' },
+      { titulo: 'A exportação', texto: 'Por mar, em contêineres refrigerados, para os Estados Unidos, a Europa e a China. A viagem pode passar de 30 dias: a cadeia de frio é indispensável.' },
+      { titulo: 'A mesa', texto: 'Fruta fresca, suco, geleias, bolos, doces e licores. Na chácara, a última etapa é com você: você espreme o próprio suco.' },
+    ],
+  },
+  en: {
+    paso: 'Step',
+    pasos: [
+      { titulo: 'The grove', texto: 'Orange trees are grafted onto trifoliate rootstock, which goes dormant in winter and helps the tree withstand cold and some soil diseases. Drip irrigation and contour planting protect water and soil.' },
+      { titulo: 'The harvest', texto: 'Fruit is picked according to ripeness: colour and the balance between sugar and acidity. The harvest season runs roughly from May to November and creates thousands of jobs.' },
+      { titulo: 'Sorting', texto: 'Fruit is sorted by quality. Wind can mark the peel as branches rub against it: it does not affect the inside, but it lowers the value in demanding markets.' },
+      { titulo: 'Packing', texto: 'In packing houses the fruit is graded and packed. Digital traceability follows each fruit from the block where it was picked to its destination.' },
+      { titulo: 'Export', texto: 'By sea, in refrigerated containers, to the United States, Europe and China. The voyage can take more than 30 days, so the cold chain is essential.' },
+      { titulo: 'The table', texto: 'Fresh fruit, juice, marmalade, cakes, sweets and liqueurs. At the farm, the last step is yours: you squeeze your own juice.' },
+    ],
+  },
+});
+---
+<ol class="arbol-mesa relative grid gap-6">
+  {T.pasos.map((p, i) => (
+    <li class="am-paso sticky grid items-center gap-8 overflow-hidden rounded-[var(--ca-radius-lg)] border border-line bg-surface p-6 shadow-card sm:p-10 lg:grid-cols-[auto_1fr_0.8fr]" style={`top:${88 + i * 18}px`}>
+      <span class="font-display text-[clamp(4rem,9vw,8rem)] leading-none text-deco" aria-hidden="true">{i + 1}</span>
+      <div class="grid gap-3">
+        <h3 class="text-[clamp(1.8rem,3.4vw,3rem)]"><span class="solo-lectores">{T.paso} {i + 1}: </span>{p.titulo}</h3>
+        <p class="max-w-[52ch] text-lg text-muted">{p.texto}</p>
+      </div>
+      <div class="hidden lg:block"><Imagen proporcion="3/2" toma={tomas[i]} alt={p.titulo} {...(fotosPasos[i] ? foto(fotosPasos[i]!, idioma) : i === 4 ? { src: puerto.src, alt: puerto.alt } : {})} /></div>
+    </li>
+  ))}
+</ol>
+
+<style>
+  @media (prefers-reduced-motion: reduce) {
+    .am-paso { position: relative; top: auto !important; }
+  }
+</style>

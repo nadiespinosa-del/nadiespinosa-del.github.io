@@ -1,0 +1,52 @@
+---
+// Tarjeta de una modalidad de la experiencia (con fruto, interpretativa o educativa).
+import Imagen from './Imagen.astro';
+import site from '../data/site.json';
+import { textos } from '../lib/datos';
+import { formatoDuracion, formatoPrecio, precioDesde } from '../lib/util';
+import { elegir, rutas, type Idioma } from '../i18n/ui';
+import { foto, type ClaveFoto } from '../lib/fotos';
+
+interface Props {
+  idioma?: Idioma;
+  modalidad: {
+    id: string;
+    titulo: string;
+    temporada: string;
+    meses: string;
+    resumen: string;
+    publico: string;
+    foto: string;
+  };
+  href?: string;
+}
+const { idioma = 'es', modalidad } = Astro.props;
+const r = rutas[idioma];
+const href = Astro.props.href ?? (modalidad.id === 'educativa' ? r.azaharGrupos : modalidad.id === 'con-fruto' ? r.conFruto : r.interpretativa);
+const chip = modalidad.temporada === 'fruto' ? 'chip-fruto' : modalidad.temporada === 'interpretativa' ? 'chip-interp' : 'chip';
+const desde = modalidad.id === 'educativa' ? 500 : precioDesde();
+// Fotos reales de la chacra por modalidad
+const fotosModalidad: Record<string, ClaveFoto> = { 'con-fruto': 'mandarino-cargado', interpretativa: 'arbol-c7', educativa: 'huerta-visitantes' };
+const real = fotosModalidad[modalidad.id] ? foto(fotosModalidad[modalidad.id], idioma) : undefined;
+const T = elegir(idioma, {
+  es: { datos: 'Datos clave', personas: 'personas', a: 'a', desde: 'Desde' },
+  pt: { datos: 'Dados principais', personas: 'pessoas', a: 'a', desde: 'A partir de' },
+  en: { datos: 'Key details', personas: 'people', a: 'to', desde: 'From' },
+});
+---
+<article class="tarjeta revelar group relative grid overflow-hidden">
+  <Imagen proporcion="4/5" toma={modalidad.foto} src={real?.src} alt={real?.alt ?? modalidad.resumen} class="!rounded-none" />
+  <div class="grid gap-3 p-6">
+    <p><span class={`chip ${chip}`}>{modalidad.meses}</span></p>
+    <h3 class="text-2xl">
+      <a href={href} class="text-heading no-underline after:absolute after:inset-0 group-hover:underline">{modalidad.titulo}</a>
+    </h3>
+    <p class="text-muted">{modalidad.resumen}</p>
+    <ul class="mt-1 flex flex-wrap gap-2 text-sm" aria-label={T.datos}>
+      <li class="chip">{formatoDuracion(site.duracionMinutos)}</li>
+      <li class="chip">{site.cupo.minimo} {T.a} {site.cupo.maximo} {T.personas}</li>
+      <li class="chip">{T.desde} {formatoPrecio(desde, idioma)}*</li>
+    </ul>
+    <p class="text-xs text-muted">* {textos(idioma).leyenda}.</p>
+  </div>
+</article>

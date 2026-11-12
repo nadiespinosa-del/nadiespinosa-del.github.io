@@ -1,0 +1,213 @@
+---
+// La chacra y la comunidad (tres idiomas): Chacra La Victoria, Patricia Real, la feria, emprendedores y oficios.
+import Base from '../layouts/Base.astro';
+import CabeceraPagina from '../components/CabeceraPagina.astro';
+import NavExperiencia from '../components/NavExperiencia.astro';
+import CitaGrande from '../components/inmersivo/CitaGrande.astro';
+import MarqueeSabores from '../components/inmersivo/MarqueeSabores.astro';
+import Imagen from '../components/Imagen.astro';
+import Pendiente from '../components/Pendiente.astro';
+import Llamado from '../components/Llamado.astro';
+import PreguntasFrecuentes from '../components/PreguntasFrecuentes.astro';
+import TambienTeInteresa from '../components/TambienTeInteresa.astro';
+import DatosEstructurados from '../components/DatosEstructurados.astro';
+import site from '../data/site.json';
+import { textos } from '../lib/datos';
+import { foto, fotoArchivo } from '../lib/fotos';
+import { elegir, idiomas, rutas, rutaReservar, t, type Idioma } from '../i18n/ui';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const r = rutas[idioma];
+const feria = textos(idioma).feria;
+const T = elegir(idioma, {
+  es: {
+    meta: 'La chacra y la comunidad · Camino de Azahar',
+    desc: 'La Chacra La Victoria, en Colonia Osimani (Salto): 28 hectáreas de citrus, la voz de Patricia Real y la Feria de Productos Locales de Colonia Osimani y Llerena.',
+    intro: 'Treinta y dos hectáreas en Colonia Osimani, veintiocho de ellas plantadas con citrus. Acá empieza y termina el Camino de Azahar.',
+    ld: 'Chacra citrícola en Colonia Osimani, Salto: 32 hectáreas, 28 de ellas plantadas con citrus. Espacio central de Camino de Azahar.',
+    funcionamiento: 'Una chacra en funcionamiento',
+    funcionamientoTexto: 'La Chacra La Victoria está «…en una zona citrícola…», como cuenta su encargada, Patricia Real, y dedica «…veintiocho hectáreas de las treinta y dos…» a la plantación de citrus. No es un decorado: es un espacio productivo que abre sus puertas para mostrar cómo se trabaja.',
+    historia: 'Historia de la chacra y de quienes la trabajan:',
+    ficha: [['Ubicación', 'Colonia Osimani, departamento de Salto'], ['Superficie', '32 hectáreas'], ['Plantadas con citrus', '28 hectáreas'], ['Encargada', 'Patricia Real'], ['Se visita con', 'reserva previa']],
+    variedades: 'Variedades',
+    feriaAnte: `Desde ${site.feria.desde}, cada segundo sábado`, feriaTitulo: 'La feria de Colonia Osimani y Llerena',
+    feriaTexto: (n: string) => `La ${n} se hace en la sede de la Sociedad de Fomento Rural. Es un espacio de encuentro donde la comunidad pone en valor sus productos, sus saberes y sus emprendimientos. Fue declarada de interés departamental por la Junta Departamental de Salto (Decreto N.º 7.423/2022).`,
+    proxima: 'Próxima feria', proximaValor: 'El segundo sábado del mes',
+    feriaNota: 'No hace falta ir el día de la feria: en cada visita de Camino de Azahar hay una muestra de productos de sus emprendedores.',
+    emprendedores: 'Quienes elaboran lo que probás', emprendedoresTexto: 'Jugos, mermeladas, budines, tortas de naranja, dulces y licores: en la degustación y la muestra participan emprendedores de la zona.',
+    emprendedorAlt: (n: number) => `Emprendedor o emprendedora ${n} de la feria`,
+    oficios: 'Personas y oficios',
+    oficios1: 'Productores, cosecheros, técnicos, trabajadoras y trabajadores del empaque, emprendedores. La citricultura es una cadena de saberes que se transmiten entre generaciones.',
+    oficios2: 'La zafra genera miles de puestos de trabajo y es una de las principales fuentes de empleo de Salto. Reconocer ese trabajo, con sus logros y sus dificultades, también es parte de la visita.',
+    llamado: 'Conocé la chacra desde adentro', llamadoTexto: 'Recorrido, jugo, degustación y la historia contada por quien la vive.', reservar: 'Reservá tu lugar',
+    experiencia: 'La experiencia', enlaces: ['Las cinco etapas de la visita.', 'La historia de la citricultura salteña.', 'Cómo llegar a Colonia Osimani y qué llevar.'],
+  },
+  pt: {
+    meta: 'A chácara e a comunidade · Camino de Azahar',
+    desc: 'A Chacra La Victoria, em Colonia Osimani (Salto, Uruguai): 28 hectares de citros, a voz de Patricia Real e a Feira de Produtos Locais de Colonia Osimani e Llerena.',
+    intro: 'Trinta e dois hectares em Colonia Osimani, vinte e oito deles plantados com citros. Aqui começa e termina o Camino de Azahar.',
+    ld: 'Chácara de citros em Colonia Osimani, Salto (Uruguai): 32 hectares, 28 deles plantados com citros. Espaço central do Camino de Azahar.',
+    funcionamiento: 'Uma chácara em funcionamento',
+    funcionamientoTexto: 'A Chacra La Victoria fica "…em uma zona cítrica…", como conta sua responsável, Patricia Real, e dedica "…vinte e oito hectares dos trinta e dois…" ao plantio de citros. Não é um cenário: é um espaço produtivo que abre suas portas para mostrar como se trabalha.',
+    historia: 'História da chácara e de quem trabalha nela:',
+    ficha: [['Localização', 'Colonia Osimani, departamento de Salto'], ['Área', '32 hectares'], ['Plantados com citros', '28 hectares'], ['Responsável', 'Patricia Real'], ['Visitas com', 'reserva antecipada']],
+    variedades: 'Variedades',
+    feriaAnte: `Desde ${site.feria.desde}, todo segundo sábado`, feriaTitulo: 'A feira de Colonia Osimani e Llerena',
+    feriaTexto: (n: string) => `A ${n} acontece na sede da Sociedad de Fomento Rural. É um espaço de encontro onde a comunidade valoriza seus produtos, seus saberes e seus empreendimentos. Foi declarada de interesse departamental pela Junta Departamental de Salto (Decreto n.º 7.423/2022).`,
+    proxima: 'Próxima feira', proximaValor: 'O segundo sábado do mês',
+    feriaNota: 'Não é preciso ir no dia da feira: em cada visita do Camino de Azahar há uma mostra de produtos dos seus empreendedores.',
+    emprendedores: 'Quem prepara o que você prova', emprendedoresTexto: 'Sucos, geleias, bolos, tortas de laranja, doces e licores: empreendedores da região participam da degustação e da mostra.',
+    emprendedorAlt: (n: number) => `Empreendedor ou empreendedora ${n} da feira`,
+    oficios: 'Pessoas e ofícios',
+    oficios1: 'Produtores, colhedores, técnicos, trabalhadoras e trabalhadores das embalagens, empreendedores. A citricultura é uma cadeia de saberes transmitidos entre gerações.',
+    oficios2: 'A safra gera milhares de empregos e é uma das principais fontes de trabalho de Salto. Reconhecer esse trabalho, com suas conquistas e dificuldades, também faz parte da visita.',
+    llamado: 'Conheça a chácara por dentro', llamadoTexto: 'Percurso, suco, degustação e a história contada por quem a vive.', reservar: 'Reserve sua vaga',
+    experiencia: 'A experiência', enlaces: ['As cinco etapas da visita.', 'A história da citricultura de Salto.', 'Como chegar a Colonia Osimani e o que levar.'],
+  },
+  en: {
+    meta: 'The farm and community · Camino de Azahar',
+    desc: 'Chacra La Victoria, in Colonia Osimani (Salto, Uruguay): 28 hectares of citrus, the voice of Patricia Real and the Colonia Osimani and Llerena local produce market.',
+    intro: 'Thirty-two hectares in Colonia Osimani, twenty-eight of them planted with citrus. This is where Camino de Azahar begins and ends.',
+    ld: 'A citrus farm in Colonia Osimani, Salto, Uruguay: 32 hectares, 28 of them planted with citrus. The heart of Camino de Azahar.',
+    funcionamiento: 'A working farm',
+    funcionamientoTexto: 'Chacra La Victoria is "…in a citrus-growing area…", as its manager Patricia Real puts it, and devotes "…twenty-eight hectares out of thirty-two…" to citrus. It is not a stage set: it is a working farm that opens its gates to show how things are done.',
+    historia: 'The history of the farm and the people who work it:',
+    ficha: [['Location', 'Colonia Osimani, Salto department'], ['Size', '32 hectares'], ['Planted with citrus', '28 hectares'], ['Farm manager', 'Patricia Real'], ['Visits', 'by advance booking']],
+    variedades: 'Varieties',
+    feriaAnte: `Since ${site.feria.desde}, every second Saturday`, feriaTitulo: 'The Colonia Osimani and Llerena market',
+    feriaTexto: (n: string) => `The ${n} is held at the Sociedad de Fomento Rural, the local rural association. It is a meeting place where the community showcases its produce, know-how and small businesses. The Salto departmental council declared it of departmental interest (Decree No. 7,423/2022).`,
+    proxima: 'Next market', proximaValor: 'The second Saturday of the month',
+    feriaNota: 'You don\'t need to come on market day: every Camino de Azahar visit includes a display of its makers\' products.',
+    emprendedores: 'The people who make what you taste', emprendedoresTexto: 'Juices, marmalades, cakes, orange tarts, sweets and liqueurs: local makers take part in the tasting and the display.',
+    emprendedorAlt: (n: number) => `Market maker ${n}`,
+    oficios: 'People and trades',
+    oficios1: 'Growers, pickers, technicians, packing-house workers and local makers. Citrus farming is a chain of know-how passed down through generations.',
+    oficios2: 'The harvest creates thousands of jobs and is one of the main sources of work in Salto. Recognising that work, with its achievements and its hardships, is also part of the visit.',
+    llamado: 'Get to know the farm from the inside', llamadoTexto: 'A walk, juice, tasting and the story told by the people who live it.', reservar: 'Book your spot',
+    experiencia: 'The experience', enlaces: ['The five stages of the visit.', 'The history of citrus farming in Salto.', 'Getting to Colonia Osimani and what to bring.'],
+  },
+});
+const chacraLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Place',
+  name: 'Chacra La Victoria',
+  description: T.ld,
+  address: { '@type': 'PostalAddress', addressLocality: 'Colonia Osimani', addressRegion: 'Salto', addressCountry: 'UY' },
+};
+---
+<Base titulo={T.meta} descripcion={T.desc} idioma={idioma} encabezadoFlotante tema="azahar" clave="chacra" cta={{ texto: t(idioma, 'nav.reservar'), href: rutaReservar(idioma) }}>
+  <CabeceraPagina
+    idioma={idioma}
+    antetitulo={t(idioma, 'nav.chacra')}
+    titulo="Chacra La Victoria"
+    intro={T.intro}
+    migas={[{ texto: t(idioma, 'nav.experiencias'), href: r.experiencias }, { texto: 'Camino de Azahar', href: r.azahar }, { texto: t(idioma, 'nav.chacra') }]}
+    imagen={{ toma: 'Vista general de la Chacra La Victoria con sus filas de naranjos, hora dorada', ...foto('entrada', idioma) }}
+  />
+  <NavExperiencia idioma={idioma} actual={Astro.url.pathname} />
+
+  <section class="contenedor grid gap-12 py-[clamp(4rem,12vh,8rem)] lg:grid-cols-[1fr_1fr]" aria-labelledby="chacra-titulo">
+    <div class="grid content-start gap-6">
+      <h2 id="chacra-titulo" class="max-w-[14ch] text-[clamp(1.6rem,3.4vw,2.9rem)] leading-[0.98]">{T.funcionamiento}</h2>
+      <p class="text-lg text-muted">{T.funcionamientoTexto}</p>
+      <p class="text-lg text-muted">{T.historia} <Pendiente texto="relato de la historia de la chacra" /></p>
+    </div>
+    <dl class="tarjeta grid content-start gap-0 self-start p-2">
+      {T.ficha.map(([dt, dd], i) => (
+        <div class="grid gap-0.5 border-b border-line px-5 py-4 last:border-0">
+          <dt class="text-sm text-muted">{dt}</dt>
+          <dd class="font-display text-2xl text-heading">{i === 4 ? `${site.agencia}, ${dd}` : dd}</dd>
+        </div>
+      ))}
+      <div class="grid gap-0.5 px-5 py-4">
+        <dt class="text-sm text-muted">{T.variedades}</dt>
+        <dd><Pendiente texto="variedades plantadas en la chacra" /></dd>
+      </div>
+    </dl>
+  </section>
+
+  <CitaGrande idioma={idioma} />
+
+  <section id="feria" class="feria relative overflow-hidden bg-deep py-[clamp(5rem,14vh,10rem)] text-[#fbf2e1]" aria-labelledby="feria-titulo">
+    <div class="contenedor grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+      <div class="grid gap-6">
+        <p class="font-display text-xl italic text-[#f2c14e]">{T.feriaAnte}</p>
+        <h2 id="feria-titulo" class="max-w-[14ch] !text-[clamp(1.8rem,3.7vw,3.3rem)] !leading-[0.98] !text-[#fbf2e1]">{T.feriaTitulo}</h2>
+        <p class="max-w-[52ch] text-lg text-on-deep-muted">{T.feriaTexto(feria.nombre)}</p>
+        <div class="flex flex-wrap items-center gap-4 rounded-[var(--ca-radius-lg)] border border-white/15 p-5">
+          <p class="text-on-deep-muted">{T.proxima}</p>
+          <p class="proxima-feria font-display text-2xl text-[#fbf2e1]" data-locale={idiomas[idioma].locale}>{T.proximaValor}</p>
+        </div>
+        <p class="text-on-deep-muted">{T.feriaNota}</p>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div class="col-span-2"><Imagen proporcion="3/2" toma="Puestos de la feria" {...foto('feria-visitantes', idioma)} revelar /></div>
+        <Imagen proporcion="1/1" toma="Productos de la feria" {...foto('feria-miel-huevos', idioma)} revelar />
+        <Imagen proporcion="1/1" toma="Mesa de la feria" {...foto('feria-mesa', idioma)} revelar />
+      </div>
+    </div>
+  </section>
+
+  <section class="contenedor grid gap-10 py-[clamp(4rem,12vh,8rem)]" aria-labelledby="emprendedores-titulo">
+    <div class="grid gap-3">
+      <h2 id="emprendedores-titulo" class="max-w-[16ch] text-[clamp(1.6rem,3.4vw,2.9rem)] leading-[0.98]">{T.emprendedores}</h2>
+      <p class="max-w-[58ch] text-lg text-muted">{T.emprendedoresTexto}</p>
+    </div>
+    <ul class="grid gap-6 md:grid-cols-3">
+      {[1, 2, 3].map((n) => (
+        <li class="grid gap-4">
+          <Imagen proporcion="4/5" toma={`Retrato de emprendedor/a ${n} de la feria con sus productos, plano medio, luz natural`} alt={T.emprendedorAlt(n)} />
+          <p class="font-display text-xl text-heading"><Pendiente texto={`nombre y emprendimiento ${n}`} /></p>
+          <p class="text-muted"><Pendiente texto="qué elabora y una frase en primera persona" /></p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <MarqueeSabores idioma={idioma} />
+
+  <section class="contenedor grid gap-10 py-[clamp(4rem,12vh,8rem)] lg:grid-cols-[0.9fr_1.1fr] lg:items-center" aria-labelledby="oficios-titulo">
+    <figure class="grid gap-2">
+      <Imagen proporcion="3/2" toma="Cosecheros en Salto, 1961" {...fotoArchivo('cosecheros-1961', idioma)} revelar />
+      <figcaption class="text-xs text-muted">{fotoArchivo('cosecheros-1961', idioma).credito}</figcaption>
+    </figure>
+    <div class="grid gap-5">
+      <h2 id="oficios-titulo" class="max-w-[14ch] text-[clamp(1.6rem,3.4vw,2.9rem)] leading-[0.98]">{T.oficios}</h2>
+      <p class="text-lg text-muted">{T.oficios1}</p>
+      <p class="text-lg text-muted">{T.oficios2}</p>
+    </div>
+  </section>
+
+  <div class="contenedor grid gap-24 pb-[clamp(4rem,12vh,8rem)]">
+    <Llamado antetitulo="Camino de Azahar" titulo={T.llamado} texto={T.llamadoTexto} boton={{ texto: T.reservar, href: rutaReservar(idioma) }} />
+    <PreguntasFrecuentes idioma={idioma} temas={['chacra']} />
+    <TambienTeInteresa
+      idioma={idioma}
+      enlaces={[
+        { titulo: T.experiencia, texto: T.enlaces[0], href: r.azahar },
+        { titulo: t(idioma, 'nav.naranja'), texto: T.enlaces[1], href: r.naranja },
+        { titulo: t(idioma, 'nav.planifica'), texto: T.enlaces[2], href: r.planifica },
+      ]}
+    />
+  </div>
+  <DatosEstructurados datos={chacraLd} />
+</Base>
+
+<script>
+  // Calcula la fecha de la próxima feria (segundo sábado de cada mes), en el idioma de la página
+  const destino = document.querySelector<HTMLElement>('.proxima-feria');
+  if (destino) {
+    const segundoSabado = (anio: number, mes: number) => {
+      const primero = new Date(anio, mes, 1);
+      const dia = 1 + ((6 - primero.getDay() + 7) % 7) + 7;
+      return new Date(anio, mes, dia);
+    };
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    let fecha = segundoSabado(hoy.getFullYear(), hoy.getMonth());
+    if (fecha < hoy) fecha = segundoSabado(hoy.getFullYear(), hoy.getMonth() + 1);
+    const texto = fecha.toLocaleDateString(destino.dataset.locale || 'es-UY', { weekday: 'long', day: 'numeric', month: 'long' });
+    destino.textContent = texto.charAt(0).toUpperCase() + texto.slice(1);
+  }
+</script>

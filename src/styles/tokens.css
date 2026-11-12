@@ -1,0 +1,162 @@
+/*
+  Tokens de diseño · Camino de Azahar
+  Dirección A · "Luz de quinta" (aprobada el 10/11/2026)
+
+  Regla: los componentes usan los ROLES (--ca-bg, --ca-text, --ca-primary…),
+  nunca los colores de marca directamente. Así el modo oscuro funciona solo.
+
+  Contrastes verificados (WCAG 2.2):
+  - Tinta #231C16 sobre crema #FAF4E8 ........ 15,4:1
+  - Verde #1F3A2B sobre crema ................. 11,3:1
+  - Texto secundario #5E5248 sobre crema ...... 6,9:1
+  - Tierra #9C4A2F sobre crema ................ 5,6:1
+  - Blanco sobre naranja #B54E17 (botón) ...... 5,2:1
+  - Crema sobre verde (secciones profundas) ... 11,3:1
+  - Tinta sobre dorado #F2C14E ................ 10,1:1
+  El dorado y el naranja vivo (#E07A2E) son SOLO decorativos en modo claro: nunca texto.
+*/
+
+:root {
+  /* El sitio se ve siempre en claro (beige y verde yerba), aunque el dispositivo esté en modo oscuro */
+  color-scheme: light;
+  /* — Colores de marca — */
+  --ca-naranja: #b54e17;
+  --ca-naranja-hover: #9a4213;
+  --ca-naranja-vivo: #e07a2e;
+  --ca-verde: #1f3a2b;
+  --ca-verde-claro: #2a4a38;
+  --ca-crema: #faf4e8;
+  --ca-crema-2: #f3eada;
+  --ca-tierra: #9c4a2f;
+  --ca-dorado: #f2c14e;
+  --ca-tinta: #231c16;
+
+  /* — Roles (modo claro) — */
+  --ca-bg: var(--ca-crema);
+  --ca-surface: #fffdf8;
+  --ca-surface-2: var(--ca-crema-2);
+  --ca-text: var(--ca-tinta);
+  --ca-text-muted: #5e5248;
+  --ca-heading: var(--ca-verde);
+  /* VÍA (marca general): verde bosque y dorado. Cada experiencia redefine estos tres roles. */
+  --ca-primary: #24533f;          /* blanco encima: 8,4:1 */
+  --ca-primary-hover: #1b4232;
+  --ca-on-primary: #ffffff;
+  --ca-accent: #2f6b4f;           /* sobre crema: 5,7:1 */
+  --ca-deco: #c9973a;             /* solo decorativo */
+  /* Verde yerba (11/11/2026): las secciones profundas de todo el sitio usan un verde oliva suave que
+     combina con el beige y con los naranjas. Crema #FBF2E1 sobre #56673A: 5,4:1 · #F1E8D6 sobre #56673A: 4,8:1 */
+  --ca-deep: #56673a;
+  --ca-deep-2: #6c7d48;
+  --ca-deep-3: #46562f;
+  --ca-on-deep: var(--ca-crema);
+  --ca-on-deep-muted: #f1e8d6;
+  --ca-highlight: var(--ca-dorado);
+  --ca-on-highlight: var(--ca-tinta);
+  --ca-border: #e3d7c1;
+  --ca-border-strong: #cbb894;
+  --ca-focus: var(--ca-verde);
+  --ca-fruto-bg: #f8dcc4;
+  --ca-fruto-text: #7a3410;
+  --ca-interp-bg: #dde7dc;
+  --ca-interp-text: #1f3a2b;
+  --ca-success-bg: #e6f0e3;
+  --ca-success-text: #24532f;
+  --ca-error-bg: #fbe9e6;
+  --ca-error-text: #a3271f;
+  --ca-warning-bg: #fbefcf;
+  --ca-warning-text: #6b4a06;
+  --ca-placeholder-bg: #f1e6d0;
+  --ca-placeholder-text: #6b5a40;
+
+  /* — Tipografía — */
+  --ca-font-display: 'Gloock', Georgia, 'Times New Roman', serif;
+  --ca-font-body: 'Figtree Variable', 'Segoe UI', system-ui, sans-serif;
+
+  /* Escala modular (≈1,25) fluida con clamp(); el texto base nunca baja de 17 px */
+  --ca-text-xs: clamp(0.8125rem, 0.8rem + 0.05vw, 0.875rem);
+  --ca-text-sm: clamp(0.9375rem, 0.92rem + 0.1vw, 1rem);
+  --ca-text-base: clamp(1.0625rem, 1.03rem + 0.15vw, 1.125rem);
+  --ca-text-lg: clamp(1.25rem, 1.18rem + 0.3vw, 1.4rem);
+  --ca-text-xl: clamp(1.5rem, 1.35rem + 0.6vw, 1.85rem);
+  --ca-text-2xl: clamp(1.6rem, 1.45rem + 0.8vw, 2.2rem);
+  --ca-text-3xl: clamp(1.9rem, 1.6rem + 1.5vw, 3rem);
+  --ca-text-4xl: clamp(2.2rem, 1.8rem + 2.4vw, 4rem);
+  --ca-leading-body: 1.65;
+  --ca-leading-tight: 1.1;
+  --ca-measure: 66ch;
+
+  /* — Forma, sombra y movimiento — */
+  --ca-radius-sm: 6px;
+  --ca-radius: 12px;
+  --ca-radius-lg: 20px;
+  --ca-radius-pill: 999px;
+  --ca-shadow-card: 0 1px 2px rgb(35 28 22 / 0.06), 0 10px 28px rgb(35 28 22 / 0.07);
+  --ca-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ca-dur-fast: 300ms;
+  --ca-dur-base: 500ms;
+  --ca-dur-slow: 700ms;
+}
+
+:root[data-theme='dark'] {
+  --ca-bg: #121e17;
+  --ca-surface: #1a2a21;
+  --ca-surface-2: #22352a;
+  --ca-text: #f5eedf;
+  --ca-text-muted: #c9bfae;
+  --ca-heading: #f7e9cc;
+  --ca-primary: #8fcba8;
+  --ca-primary-hover: #a6d8bb;
+  --ca-on-primary: #10231a;
+  --ca-accent: #9fd1b4;
+  --ca-deco: #d9ad55;
+  --ca-deep: #0d1711;
+  --ca-deep-2: #17271d;
+  --ca-deep-3: #0a120d;
+  --ca-on-deep-muted: #d9cfbc;
+  --ca-border: #34483b;
+  --ca-border-strong: #4c6455;
+  --ca-focus: #f2c14e;
+  --ca-fruto-bg: #4a2a14;
+  --ca-fruto-text: #f8c9a3;
+  --ca-interp-bg: #24392c;
+  --ca-interp-text: #cfe3d2;
+  --ca-success-bg: #1e3626;
+  --ca-success-text: #9fd8ab;
+  --ca-error-bg: #3a1c18;
+  --ca-error-text: #f4a39a;
+  --ca-warning-bg: #3a2f12;
+  --ca-warning-text: #f2d58a;
+  --ca-placeholder-bg: #2a2b20;
+  --ca-placeholder-text: #d8c9a6;
+}
+
+/* Modo oscuro: solo si se activa a mano con data-theme="dark" (hoy no se usa) */
+
+/* — Tema de experiencia: Camino de Azahar (naranja, azahar y tierra salteña) —
+   Se activa con data-tema="azahar" en <html>. Solo cambia los roles de acento:
+   la base (fondos, tipografía, verde profundo) es la común de VÍA. */
+:root[data-tema='azahar'] {
+  --ca-primary: var(--ca-naranja);        /* blanco encima: 5,2:1 */
+  --ca-primary-hover: var(--ca-naranja-hover);
+  --ca-on-primary: #ffffff;
+  --ca-accent: var(--ca-tierra);          /* sobre crema: 5,6:1 */
+  --ca-deco: var(--ca-naranja-vivo);
+  /* Verde yerba (11/11/2026): las secciones profundas de Camino de Azahar usan un verde oliva
+     más suave que el verde bosque de VÍA, para combinar con el beige.
+     Crema #FBF2E1 sobre #56673A: 5,4:1 · texto secundario #F1E8D6 sobre #56673A: 4,8:1 */
+  --ca-deep: #56673a;
+  --ca-deep-2: #6c7d48;
+  --ca-deep-3: #46562f;
+  --ca-on-deep-muted: #f1e8d6;
+}
+:root[data-tema='azahar'][data-theme='dark'] {
+  --ca-primary: #e07a2e;
+  --ca-primary-hover: #ec8c42;
+  --ca-on-primary: #231c16;
+  --ca-accent: #e8a07f;
+  --ca-deco: #e07a2e;
+  --ca-deep: #2a3320;
+  --ca-deep-2: #36412a;
+  --ca-deep-3: #1f2618;
+}

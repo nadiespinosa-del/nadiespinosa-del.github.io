@@ -1,0 +1,43 @@
+---
+// Preguntas frecuentes en acordeón accesible (<details>) + datos estructurados FAQPage.
+import DatosEstructurados from './DatosEstructurados.astro';
+import { preguntas } from '../lib/datos';
+import { elegir, type Idioma } from '../i18n/ui';
+
+interface Props {
+  idioma?: Idioma;
+  temas?: string[];
+  titulo?: string;
+}
+const { idioma = 'es', temas, titulo = elegir(idioma, { es: 'Preguntas frecuentes', pt: 'Perguntas frequentes', en: 'Frequently asked questions' }) } = Astro.props;
+const todas = preguntas(idioma) as { temas: string[]; pregunta: string; respuesta: string; pendiente?: string }[];
+const lista = temas ? todas.filter((p) => p.temas.some((t) => temas.includes(t))) : todas;
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  inLanguage: idioma,
+  mainEntity: lista.map((p) => ({ '@type': 'Question', name: p.pregunta, acceptedAnswer: { '@type': 'Answer', text: p.respuesta } })),
+};
+---
+<section class="preguntas grid gap-8" aria-labelledby="preguntas-titulo">
+  <h2 id="preguntas-titulo" class="text-[clamp(1.4rem,2.4vw,2rem)]">{titulo}</h2>
+  <div class="grid border-t border-line-strong">
+    {lista.map((p) => (
+      <details class="pregunta group border-b border-line-strong">
+        <summary class="flex cursor-pointer list-none items-start justify-between gap-5 py-4 font-display text-lg text-heading sm:text-xl">
+          <span>{p.pregunta}</span>
+          <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line-strong text-primary transition-transform duration-300 group-open:rotate-45" aria-hidden="true">+</span>
+        </summary>
+        <div class="max-w-[64ch] pb-5 text-base text-muted">
+          <p>{p.respuesta}</p>
+          {p.pendiente && <p class="mt-2 text-sm"><span class="ph">[DATO: {p.pendiente}]</span></p>}
+        </div>
+      </details>
+    ))}
+  </div>
+</section>
+<DatosEstructurados datos={faqLd} />
+
+<style>
+  .pregunta summary::-webkit-details-marker { display: none; }
+</style>

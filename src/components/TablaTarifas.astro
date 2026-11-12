@@ -1,0 +1,44 @@
+---
+// Tabla de tarifas por persona, con la leyenda obligatoria de "tarifa propuesta" y lo que incluye.
+import { tarifas, textos } from '../lib/datos';
+import { formatoPrecio } from '../lib/util';
+import { elegir, type Idioma } from '../i18n/ui';
+interface Props { idioma?: Idioma }
+const { idioma = 'es' } = Astro.props;
+const tx = textos(idioma);
+const items = tarifas(idioma);
+const T = elegir(idioma, {
+  es: { publico: 'Público', tarifa: 'Tarifa por persona', incluye: 'Incluye', moneda: '' },
+  pt: { publico: 'Público', tarifa: 'Tarifa por pessoa', incluye: 'Inclui', moneda: 'Valores em pesos uruguaios ($U).' },
+  en: { publico: 'Visitor', tarifa: 'Price per person', incluye: "What's included", moneda: 'Prices in Uruguayan pesos ($U).' },
+});
+---
+<div class="tarjeta overflow-hidden">
+  <table class="w-full border-collapse text-left">
+    <caption class="border-b border-line bg-warn px-6 py-3 text-left text-sm font-semibold text-on-warn">
+      {tx.leyenda}{T.moneda && <span class="font-normal"> {T.moneda}</span>}
+    </caption>
+    <thead class="solo-lectores">
+      <tr><th scope="col">{T.publico}</th><th scope="col">{T.tarifa}</th></tr>
+    </thead>
+    <tbody>
+      {items.map((item) => (
+        <tr class="border-b border-line last:border-0">
+          <th scope="row" class="px-6 py-4 font-semibold">
+            {item.nombre}
+            {item.nota && <span class="block text-sm font-normal text-muted">{item.nota}</span>}
+          </th>
+          <td class="whitespace-nowrap px-6 py-4 text-right font-display text-xl text-heading">{formatoPrecio(item.precio, idioma)}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+  <div class="border-t border-line bg-surface-2 px-6 py-5">
+    <p class="mb-2 font-semibold">{T.incluye}</p>
+    <ul class="grid gap-1.5 sm:grid-cols-2">
+      {tx.incluye.map((linea) => (
+        <li class="flex gap-2"><span class="text-deco" aria-hidden="true">✓</span>{linea}</li>
+      ))}
+    </ul>
+  </div>
+</div>

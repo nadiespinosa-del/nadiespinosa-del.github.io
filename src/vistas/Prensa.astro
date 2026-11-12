@@ -1,0 +1,108 @@
+---
+// Prensa y aliados (B2B, tres idiomas): datos verificados, material y contacto.
+import Base from '../layouts/Base.astro';
+import CabeceraPagina from '../components/CabeceraPagina.astro';
+import Pendiente from '../components/Pendiente.astro';
+import BotonWhatsApp from '../components/BotonWhatsApp.astro';
+import EnlaceEmail from '../components/EnlaceEmail.astro';
+import TablaTarifas from '../components/TablaTarifas.astro';
+import site from '../data/site.json';
+import { elegir, t, type Idioma } from '../i18n/ui';
+
+interface Props { idioma: Idioma }
+const { idioma } = Astro.props;
+const valores = ['2 h 50 min', null, '≈ 91 %', '≈ 90 %', 'c. 1864', '17'];
+const T = elegir(idioma, {
+  es: {
+    desc: 'Información verificada, material y contacto para prensa, agencias, alojamientos y operadores turísticos sobre VÍA y sus experiencias.',
+    titulo: 'Material para contar VÍA', intro: 'Datos verificados con su fuente, condiciones para agencias y alojamientos, y contacto directo.',
+    hectareas: '28 de 32 ha', cifrasTitulo: 'Datos clave de Camino de Azahar', fuente: 'Fuente',
+    cifras: [
+      ['Duración de la experiencia, en cinco etapas', 'Proyecto Camino de Azahar'],
+      ['Superficie con citrus en la Chacra La Victoria', 'Entrevista a Patricia Real, encargada'],
+      ['De la superficie citrícola nacional está en la región norte', 'MGAP'],
+      ['De las exportaciones de cítricos sale del litoral norte', 'OPYPA-MGAP y Uruguay XXI'],
+      ['Primer almácigo de cítricos de Salto, en La Amarilla', 'Museo del Hombre y la Tecnología de Salto'],
+      ['Bóvedas de Dieste en el edificio de Citrícola Salteña', 'FADU, Universidad de la República'],
+    ],
+    kit: 'Kit de prensa', dossier: 'Dossier de la propuesta', imagenes: 'Banco de imágenes con créditos y licencia', logo: 'Logo en alta', ficha: 'Ficha técnica para agencias',
+    contacto: 'Contacto', comercializacion: 'Comercialización y reservas', waBoton: 'Escribir por WhatsApp', waMensaje: 'Hola, escribo por prensa o alianzas sobre VÍA.',
+    emailBoton: 'Escribir por email', asunto: 'Prensa y alianzas · VÍA', tarifas: 'Tarifas de referencia',
+  },
+  pt: {
+    desc: 'Informações verificadas, material e contato para imprensa, agências, hospedagens e operadores turísticos sobre a VÍA e suas experiências.',
+    titulo: 'Material para falar da VÍA', intro: 'Dados verificados com fonte, condições para agências e hospedagens, e contato direto.',
+    hectareas: '28 de 32 ha', cifrasTitulo: 'Dados principais do Camino de Azahar', fuente: 'Fonte',
+    cifras: [
+      ['Duração da experiência, em cinco etapas', 'Projeto Camino de Azahar'],
+      ['Área com citros na Chacra La Victoria', 'Entrevista com Patricia Real, responsável'],
+      ['Da área cítrica do Uruguai fica na região norte', 'MGAP'],
+      ['Das exportações de citros do Uruguai sai do litoral norte', 'OPYPA-MGAP e Uruguay XXI'],
+      ['Primeiro viveiro de citros de Salto, em La Amarilla', 'Museo del Hombre y la Tecnología de Salto'],
+      ['Abóbadas de Dieste no edifício da Citrícola Salteña', 'FADU, Universidad de la República'],
+    ],
+    kit: 'Kit de imprensa', dossier: 'Dossiê da proposta', imagenes: 'Banco de imagens com créditos e licença', logo: 'Logo em alta resolução', ficha: 'Ficha técnica para agências',
+    contacto: 'Contato', comercializacion: 'Comercialização e reservas', waBoton: 'Escrever pelo WhatsApp', waMensaje: 'Olá, escrevo sobre imprensa ou parcerias com a VÍA.',
+    emailBoton: 'Escrever por e-mail', asunto: 'Imprensa e parcerias · VÍA', tarifas: 'Tarifas de referência',
+  },
+  en: {
+    desc: 'Verified information, media kit and contact details for press, travel agencies, accommodation and tour operators about VÍA and its experiences.',
+    titulo: 'Material to tell the VÍA story', intro: 'Verified facts with sources, terms for agencies and accommodation, and direct contact.',
+    hectareas: '28 of 32 ha', cifrasTitulo: 'Key facts about Camino de Azahar', fuente: 'Source',
+    cifras: [
+      ['Length of the experience, in five stages', 'Camino de Azahar project'],
+      ['Area planted with citrus at Chacra La Victoria', 'Interview with Patricia Real, farm manager'],
+      ["Of Uruguay's citrus-growing area is in the north", 'MGAP'],
+      ["Of Uruguay's citrus exports leave from the northern coast", 'OPYPA-MGAP and Uruguay XXI'],
+      ["Salto's first citrus nursery, at La Amarilla", 'Museo del Hombre y la Tecnología de Salto'],
+      ['Dieste vaults in the Citrícola Salteña building', 'FADU, Universidad de la República'],
+    ],
+    kit: 'Press kit', dossier: 'Experience dossier', imagenes: 'Image library with credits and licence', logo: 'High-resolution logo', ficha: 'Fact sheet for agencies',
+    contacto: 'Contact', comercializacion: 'Sales and bookings', waBoton: 'Message us on WhatsApp', waMensaje: 'Hi, I am writing about press or partnerships with VÍA.',
+    emailBoton: 'Send an email', asunto: 'Press and partnerships · VÍA', tarifas: 'Reference prices',
+  },
+});
+const cifras = T.cifras.map(([texto, fuente], i) => ({ valor: valores[i] ?? T.hectareas, texto, fuente }));
+---
+<Base titulo={t(idioma, 'pie.prensa')} descripcion={T.desc} idioma={idioma} clave="prensa" encabezadoFlotante>
+  <CabeceraPagina idioma={idioma} antetitulo={t(idioma, 'pie.prensa')} titulo={T.titulo} intro={T.intro} migas={[{ texto: t(idioma, 'pie.prensa') }]} />
+  <div class="contenedor grid gap-20 py-[clamp(4rem,12vh,8rem)]">
+    <section class="grid gap-8" aria-labelledby="cifras-titulo">
+      <h2 id="cifras-titulo" class="text-[clamp(1.6rem,3vw,2.6rem)]">{T.cifrasTitulo}</h2>
+      <ul class="grid gap-px overflow-hidden rounded-[var(--ca-radius-lg)] border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
+        {cifras.map((c) => (
+          <li class="grid content-start gap-2 bg-surface p-7">
+            <p class="font-display text-5xl text-heading">{c.valor}</p>
+            <p class="text-lg">{c.texto}</p>
+            <p class="text-sm text-muted">{T.fuente}: {c.fuente}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="grid gap-10 lg:grid-cols-2" aria-labelledby="kit-titulo">
+      <div class="grid content-start gap-5">
+        <h2 id="kit-titulo" class="text-[clamp(1.7rem,3.2vw,2.7rem)]">{T.kit}</h2>
+        <ul class="grid gap-4 text-lg">
+          <li class="border-b border-line pb-4">{T.dossier}: <Pendiente tipo="ARCHIVO" texto="dossier en PDF" /></li>
+          <li class="border-b border-line pb-4">{T.imagenes}: <Pendiente tipo="ARCHIVO" texto="fotografías en alta resolución" /></li>
+          <li class="border-b border-line pb-4">{T.logo}: <Pendiente tipo="ARCHIVO" texto="logo vectorial y variantes" /></li>
+          <li>{T.ficha}: <Pendiente texto="comisiones y condiciones de comercialización" /></li>
+        </ul>
+      </div>
+      <div class="grid content-start gap-5">
+        <h2 class="text-[clamp(1.7rem,3.2vw,2.7rem)]">{T.contacto}</h2>
+        <p class="text-lg text-muted">{T.comercializacion}: {site.agencia}.</p>
+        <div class="flex flex-wrap gap-3">
+          <BotonWhatsApp idioma={idioma} variante="primario" texto={T.waBoton} mensaje={T.waMensaje} />
+          <EnlaceEmail idioma={idioma} class="btn btn-secundario" texto={T.emailBoton} asunto={T.asunto} />
+        </div>
+      </div>
+    </section>
+
+    <section class="grid gap-6" aria-labelledby="tarifas-b2b">
+      <h2 id="tarifas-b2b" class="text-[clamp(1.7rem,3.2vw,2.7rem)]">{T.tarifas}</h2>
+      <div class="max-w-2xl"><TablaTarifas idioma={idioma} /></div>
+    </section>
+  </div>
+</Base>

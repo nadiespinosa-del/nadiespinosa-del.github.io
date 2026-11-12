@@ -1,0 +1,38 @@
+---
+// Selector de idioma: lleva a la misma página en el otro idioma y recuerda la elección.
+// Los idiomas con "disponible: false" en src/i18n/ui.ts se muestran como "en traducción".
+import { idiomas, listaIdiomas, t, type Idioma } from '../i18n/ui';
+
+interface Props {
+  actual?: Idioma;
+  alternos: Record<Idioma, string>;
+  claro?: boolean;
+}
+const { actual = 'es', alternos, claro = false } = Astro.props;
+---
+<nav aria-label={t(actual, 'idioma.etiqueta')} class="selector-idioma flex items-center gap-1 text-sm">
+  {listaIdiomas.map((codigo) =>
+    codigo === actual ? (
+      <span aria-current="true" lang={codigo} class={`rounded-full px-2.5 py-1 font-semibold ${claro ? 'bg-on-deep text-deep' : 'bg-heading text-bg'}`} title={idiomas[codigo].nombre}>
+        {idiomas[codigo].corto}<span class="solo-lectores"> ({idiomas[codigo].nombre})</span>
+      </span>
+    ) : idiomas[codigo].disponible ? (
+      <a href={alternos[codigo]} lang={codigo} hreflang={idiomas[codigo].locale} data-idioma={codigo} class={`rounded-full px-2.5 py-1 font-semibold no-underline ${claro ? 'text-on-deep' : 'text-ink'} hover:bg-surface-2`} title={idiomas[codigo].nombre}>
+        {idiomas[codigo].corto}<span class="solo-lectores"> ({idiomas[codigo].nombre})</span>
+      </a>
+    ) : (
+      <span lang={codigo} class={`rounded-full px-2.5 py-1 ${claro ? 'text-on-deep-muted' : 'text-muted'}`} title={`${idiomas[codigo].nombre}: en traducción`}>
+        {idiomas[codigo].corto}<span class="solo-lectores"> ({idiomas[codigo].nombre}, en traducción)</span>
+      </span>
+    )
+  )}
+</nav>
+
+<script>
+  // Guarda el idioma elegido para la próxima visita a la raíz del sitio
+  document.querySelectorAll<HTMLAnchorElement>('.selector-idioma a[data-idioma]').forEach((a) => {
+    a.addEventListener('click', () => {
+      try { localStorage.setItem('ca-idioma', a.dataset.idioma || 'es'); } catch {}
+    });
+  });
+</script>

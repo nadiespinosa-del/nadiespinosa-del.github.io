@@ -1,0 +1,38 @@
+{
+  "etapas": [
+    { "numero": 1, "titulo": "Recepção", "minutos": 20, "texto": "Boas-vindas e apresentação da chácara e do ambiente rural de Colonia Osimani e Llerena." },
+    { "numero": 2, "titulo": "Percurso interpretativo", "minutos": 50, "texto": "Cultivo, variedades, tarefas do dia a dia e a história da citricultura de Salto." },
+    { "numero": 3, "titulo": "Suco feito por você", "minutos": 30, "texto": "Atividade prática: você transforma a fruta com as próprias mãos." },
+    { "numero": 4, "titulo": "Degustação e mostra local", "minutos": 45, "texto": "Geleias, bolos e outras preparações; produtos de empreendedores da feira local." },
+    { "numero": 5, "titulo": "Conversa e encerramento", "minutos": 25, "texto": "O relato de Patricia Real, responsável pela chácara, uma reflexão em grupo e uma pesquisa de satisfação." }
+  ],
+  "modalidades": [
+    {
+      "id": "con-fruto",
+      "titulo": "Circuito com fruta",
+      "temporada": "fruto",
+      "meses": "De maio a novembro",
+      "resumen": "Em plena safra: você percorre o laranjal, reconhece as árvores e os frutos, colhe quando as condições permitem e espreme o próprio suco.",
+      "publico": "Famílias, casais, grupos",
+      "foto": "Manos tomando una naranja madura del árbol, hora dorada, primer plano, luz lateral"
+    },
+    {
+      "id": "interpretativa",
+      "titulo": "Modalidade interpretativa",
+      "temporada": "interpretativa",
+      "meses": "De dezembro a abril",
+      "resumen": "Fora da safra, o percurso se concentra no ciclo da laranjeira, no cuidado das árvores e na história. Elaboração e degustação com frutas de produtores locais.",
+      "publico": "Famílias, casais, grupos",
+      "foto": "Filas de naranjos verdes al atardecer, plano general, luz rasante"
+    },
+    {
+      "id": "educativa",
+      "titulo": "Versão educativa",
+      "temporada": "todo-el-ano",
+      "meses": "Durante o ano letivo",
+      "resumen": "Para estudantes de 11 a 15 anos: ciências naturais, geografia, história, economia e meio ambiente aprendidos em uma chácara em funcionamento.",
+      "publico": "Escolas e grupos de formatura",
+      "foto": "Grupo de estudiantes escuchando a la encargada entre los naranjos, plano medio, mañana"
+    }
+  ]
+}

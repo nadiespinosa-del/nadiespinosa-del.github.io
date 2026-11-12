@@ -1,0 +1,47 @@
+{
+  "_nota": "Catálogo de experiencias de VÍA. Para sumar una experiencia nueva: agregar un objeto con los mismos campos, crear su carpeta en src/pages/es/experiencias/<id>/ y, si tiene un color propio, un tema en src/styles/tokens.css. 'foto' describe la toma pendiente (nota para el equipo).",
+  "experiencias": [
+    {
+      "id": "camino-de-azahar",
+      "nombre": "Camino de Azahar",
+      "lema": "Cultivando identidad, cosechando experiencia",
+      "destino": "Salto",
+      "lugar": "Chacra La Victoria, Colonia Osimani",
+      "region": "Litoral norte",
+      "tipos": ["Rural", "Gastronomía", "Cultura e identidad", "Educativa"],
+      "resumen": "Una experiencia para descubrir el vínculo entre Salto y su producción citrícola, recorriendo historias, paisajes y formas de producción que hicieron de la naranja parte de la identidad del lugar.",
+      "frase": "Una experiencia para conocer, vivir y conectar.",
+      "duracion": "2 h 50 min",
+      "desde": 500,
+      "temporada": "Todo el año (con fruto de mayo a noviembre)",
+      "tema": "azahar",
+      "color": "#e07a2e",
+      "href": "/es/experiencias/camino-de-azahar/",
+      "foto": "Naranjal de la Chacra La Victoria al atardecer con fruta madura, plano general",
+      "imagen": "/fotos/camino-de-azahar/filas-naranjos.jpg",
+      "estado": "disponible",
+      "traducciones": {
+        "pt": {
+          "lema": "Cultivando identidade, colhendo experiência",
+          "region": "Litoral norte",
+          "tipos": ["Rural", "Gastronomia", "Cultura e identidade", "Educativa"],
+          "resumen": "Uma experiência para descobrir o vínculo entre Salto e sua produção cítrica, percorrendo histórias, paisagens e formas de produção que fizeram da laranja parte da identidade do lugar.",
+          "frase": "Uma experiência para conhecer, viver e se conectar.",
+          "duracion": "2 h 50 min",
+          "temporada": "O ano todo (com fruta de maio a novembro)",
+          "href": "/pt/experiencias/camino-de-azahar/"
+        },
+        "en": {
+          "lema": "Growing identity, harvesting experience",
+          "region": "Northern coast",
+          "tipos": ["Rural", "Food", "Culture and identity", "Educational"],
+          "resumen": "An experience to discover the bond between Salto and its citrus farming, through the stories, landscapes and ways of growing that made the orange part of the identity of the place.",
+          "frase": "An experience to discover, live and connect.",
+          "duracion": "2 h 50 min",
+          "temporada": "Year-round (with fruit from May to November)",
+          "href": "/en/experiences/camino-de-azahar/"
+        }
+      }
+    }
+  ]
+}

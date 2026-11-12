@@ -1,0 +1,85 @@
+---
+// Encabezado general de VÍA: marca, menú principal, botón de acción y selector de idioma.
+// En móvil el menú se despliega con <details>, sin JavaScript.
+import MarcaVia from './MarcaVia.astro';
+import SelectorIdioma from './SelectorIdioma.astro';
+import { t, rutas, type Idioma } from '../i18n/ui';
+
+interface Props {
+  idioma?: Idioma;
+  actual?: string;
+  alternos: Record<Idioma, string>;
+  /** Flota transparente sobre la zona oscura inicial y se vuelve sólido después. */
+  flotante?: boolean;
+  /** Botón destacado: en las páginas de una experiencia lleva a su reserva. */
+  cta?: { texto: string; href: string };
+}
+const { idioma = 'es', actual = '', alternos, flotante = false } = Astro.props;
+const r = rutas[idioma];
+const cta = Astro.props.cta ?? { texto: t(idioma, 'nav.disena'), href: r.disena };
+// En celulares angostos un botón largo empujaría el menú fuera de la pantalla: pasa adentro del menú
+const ctaLargo = cta.texto.length > 12;
+const enlaces = [
+  { href: r.inicio, texto: t(idioma, 'nav.inicio') },
+  { href: r.experiencias, texto: t(idioma, 'nav.experiencias') },
+  { href: r.grupos, texto: t(idioma, 'nav.grupos') },
+  { href: r.nosotros, texto: t(idioma, 'nav.nosotros') },
+  { href: r.contacto, texto: t(idioma, 'nav.contacto') },
+];
+// La sección actual queda marcada (Experiencias incluye todas sus subpáginas)
+const activo = (href: string) => (href === r.inicio ? actual === href : actual.startsWith(href));
+---
+<a href="#contenido" class="btn btn-primario absolute left-4 top-2 z-50 -translate-y-24 focus:translate-y-0">{t(idioma, 'saltar')}</a>
+
+<header
+  class="encabezado sticky top-0 z-40 border-b border-line bg-surface-2/95 shadow-[0_1px_0_rgb(0_0_0/0.03)] backdrop-blur supports-[backdrop-filter]:bg-surface-2/90"
+  data-flotante={flotante ? '' : undefined}
+>
+  <div class="contenedor flex min-h-[72px] items-center justify-between gap-4">
+    <a href={r.inicio} class="text-heading no-underline" aria-label={`VÍA, ${t(idioma, 'nav.inicio').toLowerCase()}`}>
+      <MarcaVia idioma={idioma} lema="encabezado" />
+    </a>
+
+    <nav aria-label={t(idioma, 'nav.principal')} class="hidden lg:block">
+      <ul class="flex items-center gap-1">
+        {enlaces.slice(1).map((e) => (
+          <li>
+            <a
+              href={e.href}
+              class="whitespace-nowrap rounded-full px-3 py-2 text-sm font-semibold text-ink no-underline hover:bg-surface-2 hover:text-heading aria-[current=page]:underline aria-[current=page]:decoration-2 aria-[current=page]:underline-offset-8"
+              aria-current={activo(e.href) ? 'page' : undefined}
+            >{e.texto}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <div class="hidden sm:block"><SelectorIdioma actual={idioma} alternos={alternos} /></div>
+      <a href={cta.href} class={`btn btn-primario btn-pequeno whitespace-nowrap ${ctaLargo ? 'hidden sm:inline-flex' : ''}`}>{cta.texto}</a>
+      <details class="menu-movil relative lg:hidden">
+        <summary class="btn btn-secundario btn-pequeno list-none" aria-label={t(idioma, 'nav.menu')}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+          <span class="hidden sm:inline">{t(idioma, 'nav.menu')}</span>
+        </summary>
+        <div class="tarjeta absolute right-0 top-[calc(100%+0.75rem)] w-[min(20rem,calc(100vw-2rem))] p-3">
+          <nav aria-label={`${t(idioma, 'nav.principal')} (${t(idioma, 'nav.menu').toLowerCase()})`}>
+            <ul class="grid gap-1">
+              {enlaces.map((e) => (
+                <li>
+                  <a href={e.href} class="block rounded-xl px-4 py-3 font-semibold text-ink no-underline hover:bg-surface-2" aria-current={activo(e.href) ? 'page' : undefined}>{e.texto}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+          {ctaLargo && <a href={cta.href} class="btn btn-primario mt-2 w-full sm:hidden">{cta.texto}</a>}
+          <div class="mt-2 border-t border-line px-4 pt-3 sm:hidden"><SelectorIdioma actual={idioma} alternos={alternos} /></div>
+        </div>
+      </details>
+    </div>
+  </div>
+</header>
+
+<style>
+  .menu-movil summary::-webkit-details-marker { display: none; }
+</style>

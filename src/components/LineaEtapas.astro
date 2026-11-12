@@ -1,0 +1,39 @@
+---
+// Las cinco etapas de la experiencia con sus minutos. Horizontal en escritorio, vertical en móvil.
+import { experiencia } from '../lib/datos';
+import site from '../data/site.json';
+import { formatoDuracion } from '../lib/util';
+import { elegir, type Idioma } from '../i18n/ui';
+
+interface Props { idioma?: Idioma }
+const { idioma = 'es' } = Astro.props;
+const { etapas } = experiencia(idioma);
+const total = etapas.reduce((s, e) => s + e.minutos, 0);
+if (total !== site.duracionMinutos) {
+  console.warn(`[LineaEtapas] La suma de etapas (${total} min) no coincide con duracionMinutos (${site.duracionMinutos}).`);
+}
+const T = elegir(idioma, {
+  es: { minutos: 'minutos', total: 'Duración total' },
+  pt: { minutos: 'minutos', total: 'Duração total' },
+  en: { minutos: 'minutes', total: 'Total time' },
+});
+---
+<div>
+  <ol class="relative grid gap-6 lg:grid-cols-5 lg:gap-7">
+    <span class="absolute bottom-6 left-[1.4rem] top-6 w-px bg-line-strong lg:bottom-auto lg:left-6 lg:right-6 lg:top-[1.4rem] lg:h-px lg:w-auto" aria-hidden="true"></span>
+    {etapas.map((etapa) => (
+      <li class="revelar relative grid grid-cols-[auto_1fr] content-start items-start gap-4 lg:grid-cols-1">
+        <span class="relative z-10 flex h-11 w-11 items-center justify-center rounded-full border-2 border-deco bg-bg font-display text-lg text-heading">{etapa.numero}</span>
+        <div class="grid gap-1">
+          <p class="antetitulo">{etapa.minutos} {T.minutos}</p>
+          <h3 class="text-xl">{etapa.titulo}</h3>
+          <p class="text-muted">{etapa.texto}</p>
+        </div>
+      </li>
+    ))}
+  </ol>
+  <p class="mt-8 flex flex-wrap items-baseline gap-x-3 border-t border-line pt-5">
+    <span class="antetitulo">{T.total}</span>
+    <span class="font-display text-2xl text-heading">{formatoDuracion(total)}</span>
+  </p>
+</div>

@@ -1,0 +1,78 @@
+---
+// Pie de página de VÍA: experiencias, empresa, contacto, legales, idioma y créditos.
+import MarcaVia from './MarcaVia.astro';
+import SelectorIdioma from './SelectorIdioma.astro';
+import EnlaceEmail from './EnlaceEmail.astro';
+import Pendiente from './Pendiente.astro';
+import site from '../data/site.json';
+import { catalogo } from '../lib/datos';
+import { t, rutas, type Idioma } from '../i18n/ui';
+import { enlaceWhatsApp } from '../lib/util';
+
+interface Props { idioma?: Idioma; alternos: Record<Idioma, string> }
+const { idioma = 'es', alternos } = Astro.props;
+const r = rutas[idioma];
+const wa = enlaceWhatsApp(t(idioma, 'whatsapp.mensajeVia'));
+const { instagram, facebook } = site.contacto;
+const anio = new Date().getFullYear();
+const titulo = 'mb-4 font-body text-sm font-semibold uppercase tracking-[0.14em] text-highlight';
+---
+<footer class="on-deep border-t border-line bg-deep text-on-deep">
+  <div class="contenedor grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1fr]">
+    <div class="grid content-start gap-4">
+      <a href={r.inicio} class="text-on-deep no-underline"><MarcaVia claro lema idioma={idioma} /></a>
+      <p class="max-w-[34ch] text-on-deep-muted">{t(idioma, 'marca.descripcion')}</p>
+      <SelectorIdioma actual={idioma} alternos={alternos} claro />
+    </div>
+
+    <nav aria-label={t(idioma, 'pie.experiencias')}>
+      <h2 class={titulo}>{t(idioma, 'pie.experiencias')}</h2>
+      <ul class="grid gap-2">
+        {catalogo(idioma).map((e) => (
+          <li><a class="text-on-deep" href={e.href}>{e.nombre} <span class="text-on-deep-muted">· {e.destino}</span></a></li>
+        ))}
+        <li><a class="text-on-deep" href={r.experiencias}>{t(idioma, 'nav.verExperiencias')}</a></li>
+        <li><a class="text-on-deep" href={r.grupos}>{t(idioma, 'nav.grupos')}</a></li>
+        <li><a class="text-on-deep" href={r.disena}>{t(idioma, 'nav.disena')}</a></li>
+      </ul>
+    </nav>
+
+    <nav aria-label={t(idioma, 'pie.empresa')}>
+      <h2 class={titulo}>{t(idioma, 'pie.empresa')}</h2>
+      <ul class="grid gap-2">
+        <li><a class="text-on-deep" href={r.nosotros}>{t(idioma, 'nav.nosotros')}</a></li>
+        <li><a class="text-on-deep" href={r.sostenibilidad}>{t(idioma, 'pie.sostenibilidad')}</a></li>
+        <li><a class="text-on-deep" href={r.prensa}>{t(idioma, 'pie.prensa')}</a></li>
+        <li><a class="text-on-deep" href={r.accesibilidad}>{t(idioma, 'pie.accesibilidad')}</a></li>
+      </ul>
+    </nav>
+
+    <div>
+      <h2 class={titulo}>{t(idioma, 'pie.contacto')}</h2>
+      <ul class="grid gap-2">
+        {wa && <li><a class="text-on-deep" href={wa} target="_blank" rel="noopener">WhatsApp <span class="whitespace-nowrap">{site.contacto.whatsapp.mostrar}</span></a></li>}
+        <li><EnlaceEmail idioma={idioma} class="text-on-deep" texto={t(idioma, 'pie.escribinos')} asunto="Consulta VÍA" /></li>
+        <li><a class="text-on-deep" href={r.contacto}>{t(idioma, 'nav.contacto')}</a></li>
+        {instagram && <li><a class="text-on-deep" href={`https://instagram.com/${instagram}`} target="_blank" rel="noopener">Instagram</a></li>}
+        {facebook && <li><a class="text-on-deep" href={facebook} target="_blank" rel="noopener">Facebook</a></li>}
+      </ul>
+    </div>
+  </div>
+
+  <div class="border-t border-white/15">
+    <div class="contenedor grid gap-4 py-8 text-sm text-on-deep-muted">
+      <p>
+        {t(idioma, 'pie.diseno')}: {site.creditos.diseno ?? <Pendiente texto="crédito de diseño y desarrollo" />}.
+        {t(idioma, 'pie.fotografia')}: {site.creditos.fotografia ?? <Pendiente texto="créditos fotográficos" />}.
+        Logo de VÍA: <Pendiente tipo="ARCHIVO" texto="logo oficial de VÍA" />
+      </p>
+      <ul class="flex flex-wrap gap-x-5 gap-y-2">
+        <li><a class="text-on-deep-muted" href={r.privacidad}>{t(idioma, 'pie.privacidad')}</a></li>
+        <li><a class="text-on-deep-muted" href={r.terminos}>{t(idioma, 'pie.terminos')}</a></li>
+        <li><a class="text-on-deep-muted" href={r.accesibilidad}>{t(idioma, 'pie.accesibilidad')}</a></li>
+        <li><a class="text-on-deep-muted" href={r.mapa}>{t(idioma, 'pie.mapa')}</a></li>
+        <li>© {anio} VÍA</li>
+      </ul>
+    </div>
+  </div>
+</footer>

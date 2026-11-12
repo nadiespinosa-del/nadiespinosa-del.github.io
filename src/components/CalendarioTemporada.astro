@@ -1,0 +1,42 @@
+---
+// Calendario anual: mayo–noviembre con fruto, diciembre–abril modalidad interpretativa.
+// El mes actual se marca en el navegador. Los meses vienen de site.json.
+import Pendiente from './Pendiente.astro';
+import site from '../data/site.json';
+import { MESES, temporadaDelMes } from '../lib/util';
+
+const meses = MESES.map((nombre, i) => ({ nombre, numero: i + 1, temporada: temporadaDelMes(i + 1) }));
+const floracion = site.temporada.floracion as number[] | null;
+---
+<div class="grid gap-5">
+  <ol class="calendario grid grid-cols-3 gap-2 sm:grid-cols-6 lg:grid-cols-12" aria-label="Temporadas del año">
+    {meses.map((m) => (
+      <li
+        data-mes={m.numero}
+        class={`relative grid gap-1 rounded-[var(--ca-radius)] px-3 py-3 ${m.temporada === 'fruto' ? 'bg-fruto text-on-fruto' : 'bg-interp text-on-interp'}`}
+      >
+        <span class="font-display text-lg leading-none">{m.nombre.slice(0, 3)}</span>
+        <span class="solo-lectores">{m.nombre}: </span>
+        <span class="text-xs font-semibold">{m.temporada === 'fruto' ? 'Con fruto' : 'Interpretativa'}</span>
+        {floracion?.includes(m.numero) && <span class="text-xs">Azahar en flor</span>}
+        <span data-hoy hidden class="absolute -top-2 right-2 rounded-full bg-heading px-2 py-0.5 text-[0.7rem] font-semibold text-bg">Hoy</span>
+      </li>
+    ))}
+  </ol>
+  <ul class="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+    <li class="flex items-center gap-2"><span class="h-3 w-3 rounded-full bg-fruto ring-1 ring-on-fruto" aria-hidden="true"></span>Con fruto (zafra): cosecha, elaboración y degustación</li>
+    <li class="flex items-center gap-2"><span class="h-3 w-3 rounded-full bg-interp ring-1 ring-on-interp" aria-hidden="true"></span>Interpretativa: ciclo del naranjo, historia y degustación</li>
+    <li>Feria de Colonia Osimani y Llerena: {site.feria.cuando.toLowerCase()}</li>
+    {!floracion && <li>Floración del azahar: <Pendiente tipo="CALENDARIO_A_CONFIRMAR" texto="meses de floración en la chacra" /></li>}
+  </ul>
+</div>
+
+<script>
+  // Marca el mes actual del visitante.
+  const mes = new Date().getMonth() + 1;
+  document.querySelectorAll<HTMLElement>(`.calendario [data-mes="${mes}"]`).forEach((li) => {
+    li.setAttribute('aria-current', 'date');
+    li.classList.add('ring-2', 'ring-heading', 'ring-offset-2', 'ring-offset-bg');
+    li.querySelector<HTMLElement>('[data-hoy]')?.removeAttribute('hidden');
+  });
+</script>

@@ -1,0 +1,38 @@
+{
+  "etapas": [
+    { "numero": 1, "titulo": "Welcome", "minutos": 20, "texto": "An introduction to the farm and to the rural community of Colonia Osimani and Llerena." },
+    { "numero": 2, "titulo": "Guided walk", "minutos": 50, "texto": "How oranges are grown, the varieties, the daily work and the history of citrus farming in Salto." },
+    { "numero": 3, "titulo": "Make your own juice", "minutos": 30, "texto": "A hands-on moment: you turn the fruit into juice yourself." },
+    { "numero": 4, "titulo": "Tasting and local market", "minutos": 45, "texto": "Marmalades, cakes and other treats, plus products from local makers." },
+    { "numero": 5, "titulo": "Conversation and farewell", "minutos": 25, "texto": "Patricia Real, who runs the farm, shares its story, followed by a group conversation and a short survey." }
+  ],
+  "modalidades": [
+    {
+      "id": "con-fruto",
+      "titulo": "Harvest season visit",
+      "temporada": "fruto",
+      "meses": "May to November",
+      "resumen": "At the height of the harvest: walk the orange grove, get to know the trees and their fruit, pick oranges when conditions allow and squeeze your own juice.",
+      "publico": "Families, couples, groups",
+      "foto": "Manos tomando una naranja madura del árbol, hora dorada, primer plano, luz lateral"
+    },
+    {
+      "id": "interpretativa",
+      "titulo": "Interpretive visit",
+      "temporada": "interpretativa",
+      "meses": "December to April",
+      "resumen": "Outside the harvest, the walk focuses on the life cycle of the orange tree, its care and its history. Tasting and juice-making use fruit from local growers.",
+      "publico": "Families, couples, groups",
+      "foto": "Filas de naranjos verdes al atardecer, plano general, luz rasante"
+    },
+    {
+      "id": "educativa",
+      "titulo": "School visit",
+      "temporada": "todo-el-ano",
+      "meses": "During the school year",
+      "resumen": "For students aged 11 to 15: science, geography, history, economics and the environment, learned on a working farm.",
+      "publico": "Secondary schools and graduation trips",
+      "foto": "Grupo de estudiantes escuchando a la encargada entre los naranjos, plano medio, mañana"
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "nombre": "Camino de Azahar",
+  "lema": "Cultivando identidad, cosechando experiencia",
+  "dominio": "https://nadiespinosa-del.github.io",
+  "agencia": "Agencia turística Vía",
+  "contacto": {
+    "whatsapp": {
+      "contacto": "Nadia Espinosa",
+      "mostrar": "+598 91 453 608",
+      "numero": "59891453608"
+    },
+    "email": {
+      "usuario": "nadiespinosa",
+      "dominio": "gmail.com"
+    },
+    "instagram": null,
+    "facebook": null,
+    "_pendiente": "Instagram y Facebook: cuando existan, escribir el usuario o la URL en lugar de null. Mientras sean null, los íconos no se muestran."
+  },
+  "tarifas": {
+    "leyenda": "Tarifa propuesta, a confirmar al reservar",
+    "moneda": "$U",
+    "items": [
+      { "id": "general", "nombre": "General (circuito completo)", "precio": 750 },
+      { "id": "estudiante", "nombre": "Estudiantes de educación media", "precio": 500 },
+      { "id": "grupo", "nombre": "Grupos de 15 o más personas", "precio": 675, "nota": "10 % de descuento" },
+      { "id": "menor", "nombre": "Menores de 5 años", "precio": 0 }
+    ],
+    "minimoParaTarifaGrupo": 15,
+    "incluye": ["Recorrido interpretativo por el naranjal", "Elaboración de jugo de naranja", "Degustación de productos derivados", "Muestra de productos de emprendedores locales"]
+  },
+  "cupo": { "minimo": 10, "maximo": 25 },
+  "duracionMinutos": 170,
+  "temporada": {
+    "mesesConFruto": [5, 6, 7, 8, 9, 10, 11],
+    "floracion": null,
+    "_pendiente": "floracion: meses de floración del azahar a confirmar con la chacra (por ejemplo [9, 10])."
+  },
+  "feria": {
+    "nombre": "Feria de Productos Locales de Colonia Osimani y Llerena",
+    "cuando": "Segundo sábado de cada mes",
+    "donde": "Sede de la Sociedad de Fomento Rural",
+    "desde": 2016,
+    "reconocimiento": "Declarada de interés departamental (Decreto N.º 7.423/2022, Junta Departamental de Salto)"
+  },
+  "creditos": {
+    "contenido": "Nadia Espinosa y Sthefanie Machado",
+    "programa": "Proyecto de egreso, Tecnólogo en Diseño de Itinerarios Turísticos Sostenibles Culturales, Polo Educativo Tecnológico de Salto (DGETP-UTU), 2026",
+    "diseno": null,
+    "fotografia": null
+  }
+}
