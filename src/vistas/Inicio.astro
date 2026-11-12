@@ -62,6 +62,8 @@ const fotos = [
   { celda: 'col-span-2 col-start-5 row-span-3 row-start-2', ...foto('plaza-33', idioma) },
   { celda: 'col-span-3 col-start-2 row-span-2 row-start-5', ...foto('fogon', idioma) },
 ];
+// Fondo de VÍA Educa: estudiantes recorriendo un lugar en un viaje institucional (foto propia)
+const educa = foto('viaje-institucional', idioma);
 const orgLd = {
   '@context': 'https://schema.org',
   '@type': 'TravelAgency',
@@ -101,6 +103,9 @@ const orgLd = {
     </div>
 
     <section class="via-educa on-deep relative overflow-hidden bg-deep py-[clamp(5rem,14vh,9rem)] text-[#fbf2e1]" aria-labelledby="educa-titulo">
+      <!-- Fondo: estudiantes recorriendo un lugar en un viaje institucional (foto propia), difuminados bajo un velo verde yerba -->
+      <img src={educa.src} alt="" aria-hidden="true" loading="lazy" decoding="async" class="educa-foto absolute inset-0 h-full w-full object-cover" />
+      <div class="educa-velo absolute inset-0" aria-hidden="true"></div>
       <div class="contenedor relative grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center" data-parada>
         <div class="grid gap-6">
           <p class="font-display text-2xl font-semibold text-[#f2c14e]">VÍA Educa</p>
@@ -140,6 +145,9 @@ const orgLd = {
   }
   .via-titulo :global(.linea) { overflow-x: visible; overflow-y: clip; padding-bottom: 0.2em; margin-bottom: -0.14em; }
   .via-foto :global(figure) { height: 100%; }
+  /* VÍA Educa: la foto de estudiantes, desenfocada; el velo deja leer el texto */
+  .educa-foto { filter: blur(6px) saturate(1.1); transform: scale(1.08); opacity: 0.85; }
+  .educa-velo { background: linear-gradient(90deg, color-mix(in srgb, var(--ca-deep-3) 86%, transparent) 0%, color-mix(in srgb, var(--ca-deep) 66%, transparent) 55%, color-mix(in srgb, var(--ca-deep) 38%, transparent) 100%); }
   @media (max-width: 1023px) { .via-mosaico { height: 460px; } }
 </style>
 
