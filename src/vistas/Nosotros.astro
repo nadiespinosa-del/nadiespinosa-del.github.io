@@ -6,13 +6,15 @@ import Imagen from '../components/Imagen.astro';
 import Llamado from '../components/Llamado.astro';
 import TambienTeInteresa from '../components/TambienTeInteresa.astro';
 import { elegir, rutas, t, type Idioma } from '../i18n/ui';
-import { foto } from '../lib/fotos';
+import { foto, type ClaveFoto } from '../lib/fotos';
 
 interface Props { idioma: Idioma }
 const { idioma } = Astro.props;
 const r = rutas[idioma];
 // Fotos propias y generales (no de una experiencia en particular): un camino rural y, en el collage, el río, un sendero y los brotes
 const camino = foto('camino-rural', idioma);
+// Retratos de las guías
+const retratos: Record<string, ClaveFoto | undefined> = { 'Nadia Espinosa': 'retrato-nadia', 'Sthefanie Machado': 'retrato-sthefanie' };
 const collage = [
   { ...foto('atardecer-rio', idioma), celda: 'row-span-2' },
   { ...foto('sendero-chacra', idioma), celda: '' },
@@ -114,7 +116,7 @@ const T = elegir(idioma, {
     <ul class="grid max-w-2xl gap-6 sm:grid-cols-2">
       {T.personas.map(([nombre, ...roles]) => (
         <li class="tarjeta grid max-w-[20rem] content-start overflow-hidden">
-          <Imagen proporcion="1/1" toma={`Retrato de ${nombre}, plano medio, luz natural, en la chacra`} alt={T.retrato(nombre)} class="!rounded-none" />
+          <Imagen proporcion="1/1" toma={`Retrato de ${nombre}`} src={retratos[nombre] ? foto(retratos[nombre]!, idioma).src : undefined} alt={T.retrato(nombre)} class="!rounded-none" />
           <div class="grid gap-1 p-6">
             <h3 class="text-2xl">{nombre}</h3>
             {roles.map((rol) => <p class="text-muted">{rol}</p>)}
