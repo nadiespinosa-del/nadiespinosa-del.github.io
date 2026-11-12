@@ -73,7 +73,7 @@ const activo = (href: string) => (href === r.inicio ? actual === href : actual.s
             </ul>
           </nav>
           {ctaLargo && <a href={cta.href} class="btn btn-primario mt-2 w-full sm:hidden">{cta.texto}</a>}
-          <div class="mt-2 border-t border-line px-4 pt-3 sm:hidden"><SelectorIdioma actual={idioma} alternos={alternos} /></div>
+          <div class="mt-2 border-t border-line px-4 pt-3 sm:hidden"><SelectorIdioma actual={idioma} alternos={alternos} alinear="izquierda" /></div>
         </div>
       </details>
     </div>

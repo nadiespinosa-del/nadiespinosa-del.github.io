@@ -22,7 +22,7 @@ const titulo = 'mb-4 font-body text-sm font-semibold uppercase tracking-[0.14em]
     <div class="grid content-start gap-4">
       <a href={r.inicio} class="text-on-deep no-underline"><MarcaVia claro lema idioma={idioma} /></a>
       <p class="max-w-[34ch] text-on-deep-muted">{t(idioma, 'marca.descripcion')}</p>
-      <SelectorIdioma actual={idioma} alternos={alternos} claro />
+      <SelectorIdioma actual={idioma} alternos={alternos} claro alinear="izquierda" />
     </div>
 
     <nav aria-label={t(idioma, 'pie.experiencias')}>

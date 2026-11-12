@@ -53,7 +53,7 @@ const T = elegir(idioma, {
       <p class="max-w-[52ch] text-lg text-muted">{T.comienza[0]}<span class="font-semibold text-primary">Salto</span>{T.comienza[1]}</p>
     </div>
 
-    <div class="grid gap-6 lg:grid-cols-[1.6fr_0.8fr]">
+    <div class="grid items-start gap-6 lg:grid-cols-[1fr_16rem]">
       <div class="lista-exp grid gap-6">
         {lista.map((e) => <TarjetaExperiencia experiencia={e} destacada idioma={idioma} />)}
       </div>
