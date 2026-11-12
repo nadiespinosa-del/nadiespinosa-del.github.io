@@ -2,7 +2,6 @@
 // Hero inmersivo: naranja 3D que se abre con el scroll y deja ver los gajos.
 // La sección mide 280vh: el contenido queda fijo (sticky) mientras la naranja se abre.
 // Sin WebGL o con movimiento reducido: imagen fija de la naranja abierta (o la rodaja en SVG).
-import IndicadorTemporada from '../IndicadorTemporada.astro';
 import Rodaja from '../Rodaja.astro';
 import { elegir, type Idioma } from '../../i18n/ui';
 interface Props { idioma?: Idioma }
@@ -23,7 +22,6 @@ const T = elegir(idioma, {
 
     <div class="on-deep relative z-10 flex h-full flex-col justify-end pb-[max(2rem,6vh)] pt-28">
       <div class="contenedor grid gap-6">
-        <div class="hero-entrada"><IndicadorTemporada idioma={idioma} /></div>
         <h1 id="hero-titulo" class="hero-titulo max-w-[11ch] !text-[clamp(2.3rem,6.5vw,6.3rem)] !leading-[0.92] !text-[#fbf2e1]">
           {T.titulo}
         </h1>

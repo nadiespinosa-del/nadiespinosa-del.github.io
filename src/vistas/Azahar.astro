@@ -12,6 +12,10 @@ import InfoPractica from '../components/azahar/InfoPractica.astro';
 import RuedaAnio from '../components/inmersivo/RuedaAnio.astro';
 import HistoriaApilada from '../components/inmersivo/HistoriaApilada.astro';
 import CitaGrande from '../components/inmersivo/CitaGrande.astro';
+import DelArbolALaMesa from '../components/inmersivo/DelArbolALaMesa.astro';
+import TarjetaSeguir from '../components/TarjetaSeguir.astro';
+import Imagen from '../components/Imagen.astro';
+import { foto, fotoArchivo } from '../lib/fotos';
 import ListaSalidas from '../components/ListaSalidas.astro';
 import TablaTarifas from '../components/TablaTarifas.astro';
 import FormularioReserva from '../components/FormularioReserva.astro';
@@ -36,7 +40,12 @@ const T = elegir(idioma, {
     modalidades: 'Una experiencia para cada época', modalidadesTexto: 'Con fruto en la zafra, interpretativa el resto del año, y una versión para escuelas.',
     reservar: 'Reservá tu lugar en el naranjal', reservarTexto: 'Fechas y horarios coordinables. Te confirmamos todo por WhatsApp.',
     escuelas: 'Escuelas', escuelasTitulo: 'Una clase de historia, geografía y ciencias que se puede oler', escuelasTexto: 'Versión educativa para estudiantes de 11 a 15 años. Tarifa propuesta: $U 500 por estudiante.', escuelasBoton: 'Ver la propuesta educativa',
-    enlaces: ['De 1864 a hoy: la historia que vas a escuchar en la chacra.', 'Patricia Real, la Chacra La Victoria y la feria de Colonia Osimani.', 'Otras propuestas de VÍA en Uruguay.'], mas: 'Más experiencias',
+    enlaces: ['Cómo llegar a Colonia Osimani y qué llevar.', 'Propuestas educativas a medida para instituciones.', 'Otras propuestas de VÍA en Uruguay.'], mas: 'Más experiencias',
+    arbol: 'Del árbol a la mesa', arbolTexto: 'Detrás de cada naranja hay una cadena de trabajo y conocimiento. Estos son sus pasos.', seguir: 'Para seguir leyendo',
+    naranjaTitulo: 'La naranja en Salto', naranjaTexto: 'Las bóvedas de Eladio Dieste, los naranjos en las calles y las fiestas de la citricultura: la historia completa, con fotos de época.', naranjaBoton: 'Leer la historia completa',
+    feriaTitulo: 'La feria de Colonia Osimani y Llerena', feriaTexto: 'Cada segundo sábado, los emprendedores de la zona ofrecen sus mermeladas, dulces, miel y panes en la Sociedad de Fomento Rural. En cada visita hay una muestra de sus productos.',
+    chacraTitulo: 'La chacra y la comunidad', chacraTexto: 'La Chacra La Victoria, sus 28 hectáreas de citrus, la feria completa y las personas y oficios detrás de cada fruta.', chacraBoton: 'Conocer la chacra',
+    planificaPregunta: '¿Cómo llegar y qué llevar?', planificaBoton: 'Planificá tu visita',
   },
   pt: {
     meta: 'Camino de Azahar · Experiências',
@@ -45,7 +54,12 @@ const T = elegir(idioma, {
     modalidades: 'Uma experiência para cada época', modalidadesTexto: 'Com fruta na safra, interpretativa no resto do ano, e uma versão para escolas.',
     reservar: 'Reserve seu lugar no laranjal', reservarTexto: 'Datas e horários a combinar. Confirmamos tudo pelo WhatsApp.',
     escuelas: 'Escolas', escuelasTitulo: 'Uma aula de história, geografia e ciências que dá para sentir o cheiro', escuelasTexto: 'Versão educativa para estudantes de 11 a 15 anos. Tarifa proposta: $U 500 por estudante.', escuelasBoton: 'Ver a proposta educativa',
-    enlaces: ['De 1864 até hoje: a história que você vai ouvir na chácara.', 'Patricia Real, a Chacra La Victoria e a feira de Colonia Osimani.', 'Outras propostas da VÍA no Uruguai.'], mas: 'Mais experiências',
+    enlaces: ['Como chegar a Colonia Osimani e o que levar.', 'Propostas educativas sob medida para instituições.', 'Outras propostas da VÍA no Uruguai.'], mas: 'Mais experiências',
+    arbol: 'Da árvore à mesa', arbolTexto: 'Por trás de cada laranja há uma cadeia de trabalho e conhecimento. Estes são os seus passos.', seguir: 'Para continuar lendo',
+    naranjaTitulo: 'A laranja em Salto', naranjaTexto: 'As abóbadas de Eladio Dieste, as laranjeiras nas ruas e as festas da citricultura: a história completa, com fotos de época.', naranjaBoton: 'Ler a história completa',
+    feriaTitulo: 'A feira de Colonia Osimani e Llerena', feriaTexto: 'Todo segundo sábado do mês, os empreendedores da região oferecem geleias, doces, mel e pães na Sociedad de Fomento Rural. Em cada visita há uma mostra dos seus produtos.',
+    chacraTitulo: 'A chácara e a comunidade', chacraTexto: 'A Chacra La Victoria, seus 28 hectares de citros, a feira completa e as pessoas e ofícios por trás de cada fruta.', chacraBoton: 'Conhecer a chácara',
+    planificaPregunta: 'Como chegar e o que levar?', planificaBoton: 'Planeje sua visita',
   },
   en: {
     meta: 'Camino de Azahar · Experiences',
@@ -54,9 +68,18 @@ const T = elegir(idioma, {
     modalidades: 'An experience for every season', modalidadesTexto: 'With fruit during the harvest, interpretive the rest of the year, and a version for schools.',
     reservar: 'Book your place in the orange grove', reservarTexto: 'Flexible dates and times. We confirm everything on WhatsApp.',
     escuelas: 'Schools', escuelasTitulo: 'A history, geography and science lesson you can smell', escuelasTexto: 'School version for students aged 11 to 15. Proposed price: $U 500 per student.', escuelasBoton: 'See the school visit',
-    enlaces: ['From 1864 to today: the story you will hear at the farm.', 'Patricia Real, Chacra La Victoria and the Colonia Osimani market.', 'Other VÍA experiences in Uruguay.'], mas: 'More experiences',
+    enlaces: ['How to get to Colonia Osimani and what to bring.', 'Tailor-made school trips for institutions.', 'Other VÍA experiences in Uruguay.'], mas: 'More experiences',
+    arbol: 'From tree to table', arbolTexto: 'Behind every orange there is a chain of work and knowledge. These are its steps.', seguir: 'Keep reading',
+    naranjaTitulo: 'The orange in Salto', naranjaTexto: "Eladio Dieste's vaults, orange trees lining the streets and the citrus festivals: the full story, with archive photos.", naranjaBoton: 'Read the full story',
+    feriaTitulo: 'The Colonia Osimani and Llerena market', feriaTexto: 'Every second Saturday, local makers sell their jams, sweets, honey and bread at the Sociedad de Fomento Rural. Every visit includes a showcase of their products.',
+    chacraTitulo: 'The farm and community', chacraTexto: 'Chacra La Victoria, its 28 hectares of citrus, the full market and the people and trades behind every fruit.', chacraBoton: 'Discover the farm',
+    planificaPregunta: 'How to get there and what to bring?', planificaBoton: 'Plan your visit',
   },
 });
+// Adelantos de las páginas internas (opción mixta: lo principal acá, lo profundo adentro)
+const dieste = fotoArchivo('dieste-bovedas', idioma);
+const fotosFeria = [foto('feria-visitantes', idioma), foto('feria-frascos', idioma), foto('feria-miel-huevos', idioma)];
+const entradaChacra = foto('entrada', idioma);
 const viajeLd = {
   '@context': 'https://schema.org',
   '@type': 'TouristTrip',
@@ -83,6 +106,32 @@ const viajeLd = {
   <Manifiesto idioma={idioma} />
   <!-- La historia (1864 → 1926 → 1972) va pegada a la presentación: es el camino que llevó a la naranja a ser lo que es hoy en Salto -->
   <HistoriaApilada idioma={idioma} />
+
+  <!-- Del árbol a la mesa: antes solo estaba dentro de «La naranja en Salto» -->
+  <section class="contenedor grid gap-10 py-[clamp(5rem,12vh,8rem)]" aria-labelledby="arbol-titulo">
+    <div class="grid gap-3">
+      <h2 id="arbol-titulo" class="text-[clamp(1.6rem,3.2vw,2.8rem)]">{T.arbol}</h2>
+      <p class="max-w-[52ch] text-lg text-muted">{T.arbolTexto}</p>
+    </div>
+    <DelArbolALaMesa idioma={idioma} />
+    <TarjetaSeguir href={r.naranja} antetitulo={T.seguir} titulo={T.naranjaTitulo} texto={T.naranjaTexto} boton={T.naranjaBoton} src={dieste.src} alt={dieste.alt} />
+  </section>
+
+  <!-- La chacra y su gente: Patricia y la feria, en versión corta -->
+  <CitaGrande idioma={idioma} />
+  <section class="contenedor grid gap-10 pb-[clamp(5rem,12vh,8rem)]" aria-labelledby="feria-titulo">
+    <div class="grid items-end gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+      <div class="grid gap-3">
+        <h2 id="feria-titulo" class="text-[clamp(1.6rem,3vw,2.6rem)]">{T.feriaTitulo}</h2>
+        <p class="max-w-[48ch] text-lg text-muted">{T.feriaTexto}</p>
+      </div>
+      <div class="grid grid-cols-3 gap-3">
+        {fotosFeria.map((f) => <Imagen proporcion="1/1" toma={f.alt} src={f.src} alt={f.alt} revelar />)}
+      </div>
+    </div>
+    <TarjetaSeguir href={r.chacra} antetitulo={T.seguir} titulo={T.chacraTitulo} texto={T.chacraTexto} boton={T.chacraBoton} src={entradaChacra.src} alt={entradaChacra.alt} />
+  </section>
+
   <QueIncluye idioma={idioma} />
   <SlidesEtapas idioma={idioma} />
 
@@ -98,13 +147,13 @@ const viajeLd = {
 
   <InfoPractica idioma={idioma} />
   <RuedaAnio idioma={idioma} />
-  <CitaGrande idioma={idioma} />
 
   <section id="reservar" class="relative bg-surface-2 py-[clamp(5rem,12vh,9rem)]" aria-labelledby="reservar-titulo">
     <div class="contenedor grid gap-12">
       <div class="grid gap-4">
         <h2 id="reservar-titulo" class="max-w-[14ch] text-[clamp(1.8rem,3.4vw,3.1rem)] leading-[0.98]">{T.reservar}</h2>
         <p class="max-w-[52ch] text-lg text-muted">{T.reservarTexto}</p>
+        <p class="flex flex-wrap items-center gap-3 text-muted">{T.planificaPregunta} <a href={r.planifica} class="btn btn-secundario btn-pequeno">{T.planificaBoton}</a></p>
       </div>
       <div class="grid items-start gap-10 lg:grid-cols-[0.9fr_1.1fr]">
         <div class="grid gap-8">
@@ -123,8 +172,8 @@ const viajeLd = {
     <TambienTeInteresa
       idioma={idioma}
       enlaces={[
-        { titulo: t(idioma, 'nav.naranja'), texto: T.enlaces[0], href: r.naranja },
-        { titulo: t(idioma, 'nav.chacra'), texto: T.enlaces[1], href: r.chacra },
+        { titulo: T.planificaBoton, texto: T.enlaces[0], href: r.planifica },
+        { titulo: 'VÍA Educa', texto: T.enlaces[1], href: r.grupos },
         { titulo: T.mas, texto: T.enlaces[2], href: r.experiencias },
       ]}
     />

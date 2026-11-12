@@ -1,0 +1,36 @@
+---
+// Tarjeta grande para seguir leyendo en una página interna: foto, título, texto y botón.
+// Toda la tarjeta es un enlace (el título la cubre entera), así nadie tiene que apuntar al botón.
+import Imagen from './Imagen.astro';
+interface Props {
+  href: string;
+  antetitulo?: string;
+  titulo: string;
+  texto: string;
+  boton: string;
+  src: string;
+  alt: string;
+  credito?: string;
+}
+const { href, antetitulo, titulo, texto, boton, src, alt, credito } = Astro.props;
+---
+<article class="tarjeta-seguir tarjeta group relative grid overflow-hidden md:grid-cols-[1fr_1.1fr]">
+  <Imagen proporcion="3/2" toma={alt} src={src} alt={alt} class="h-full !rounded-none" />
+  <div class="grid content-center gap-4 p-6 sm:p-10">
+    {antetitulo && <p class="font-display text-lg italic text-primary">{antetitulo}</p>}
+    <h3 class="text-[clamp(1.6rem,2.8vw,2.4rem)] leading-tight">
+      <a href={href} class="text-heading no-underline after:absolute after:inset-0 group-hover:underline">{titulo}</a>
+    </h3>
+    <p class="max-w-[46ch] text-lg text-muted">{texto}</p>
+    <span class="btn btn-primario w-max" aria-hidden="true">{boton}</span>
+    {credito && <p class="text-xs text-muted">{credito}</p>}
+  </div>
+</article>
+
+<style>
+  .tarjeta-seguir { transition: transform 400ms cubic-bezier(0.23, 1, 0.32, 1); }
+  @media (hover: hover) and (pointer: fine) {
+    .tarjeta-seguir:hover { transform: translateY(-4px); }
+  }
+  @media (prefers-reduced-motion: reduce) { .tarjeta-seguir { transition: none; } }
+</style>

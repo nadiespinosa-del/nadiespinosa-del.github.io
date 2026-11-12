@@ -1,5 +1,6 @@
 ---
 // Del árbol a la mesa: seis pasos en tarjetas que se apilan con el scroll (sticky).
+// Se detienen debajo del encabezado (72 px) y de la barra de Camino de Azahar.
 import Imagen from '../Imagen.astro';
 import { elegir, type Idioma } from '../../i18n/ui';
 import { foto, fotoArchivo, type ClaveFoto } from '../../lib/fotos';
@@ -55,7 +56,7 @@ const T = elegir(idioma, {
 ---
 <ol class="arbol-mesa relative grid gap-6">
   {T.pasos.map((p, i) => (
-    <li class="am-paso sticky grid items-center gap-8 overflow-hidden rounded-[var(--ca-radius-lg)] border border-line bg-surface p-6 shadow-card sm:p-10 lg:grid-cols-[auto_1fr_0.8fr]" style={`top:${88 + i * 18}px`}>
+    <li class="am-paso sticky grid items-center gap-8 overflow-hidden rounded-[var(--ca-radius-lg)] border border-line bg-surface p-6 shadow-card sm:p-10 lg:grid-cols-[auto_1fr_0.8fr]" style={`top:${136 + i * 18}px`}>
       <span class="font-display text-[clamp(4rem,9vw,8rem)] leading-none text-deco" aria-hidden="true">{i + 1}</span>
       <div class="grid gap-3">
         <h3 class="text-[clamp(1.8rem,3.4vw,3rem)]"><span class="solo-lectores">{T.paso} {i + 1}: </span>{p.titulo}</h3>

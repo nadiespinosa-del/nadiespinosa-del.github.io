@@ -9,6 +9,12 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://nadiespinosa-del.github.io',
   trailingSlash: 'always',
+  // La versión para escuelas de Camino de Azahar pasó a VÍA Educa: las direcciones viejas redirigen a la nueva
+  redirects: {
+    '/es/experiencias/camino-de-azahar/grupos-y-escuelas': '/es/via-educa/camino-de-azahar/',
+    '/pt/experiencias/camino-de-azahar/grupos-e-escolas': '/pt/via-educa/camino-de-azahar/',
+    '/en/experiences/camino-de-azahar/groups-and-schools': '/en/via-educa/camino-de-azahar/',
+  },
   integrations: [
     // Sitemap XML: excluye la página interna del sistema de diseño
     sitemap({ filter: (pagina) => !pagina.includes('/sistema/') }),

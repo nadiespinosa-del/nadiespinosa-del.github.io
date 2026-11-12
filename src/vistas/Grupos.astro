@@ -19,7 +19,7 @@ const r = rutas[idioma];
 const colores = ['#2f6b3f', '#9c4a2f', '#b54e17', '#6b4a06', '#1f3a2b'];
 const T = elegir(idioma, {
   es: {
-    meta: 'Grupos y escuelas', desc: 'Salida didáctica para liceos y UTU en una chacra citrícola de Salto: ciencias naturales, geografía, historia, economía y ambiente para estudiantes de 11 a 15 años. Tarifa propuesta: $U 500 por estudiante.',
+    meta: 'Camino de Azahar para escuelas', desc: 'Salida didáctica para liceos y UTU en una chacra citrícola de Salto: ciencias naturales, geografía, historia, economía y ambiente para estudiantes de 11 a 15 años. Tarifa propuesta: $U 500 por estudiante.',
     titulo: 'Una clase que se puede oler', intro: 'Una salida didáctica en una chacra citrícola en funcionamiento, pensada para estudiantes de educación media de 11 a 15 años. El currículo, al aire libre y con las manos en la fruta.',
     alt: 'Grupo de estudiantes en la Chacra La Victoria', pedir: 'Pedí una propuesta', ver: 'Ver contenidos', paraQuien: 'Para quién es',
     bloques: [
@@ -44,7 +44,7 @@ const T = elegir(idioma, {
     ],
   },
   pt: {
-    meta: 'Grupos e escolas', desc: 'Saída de estudo para escolas em uma chácara citrícola de Salto, no Uruguai: ciências naturais, geografia, história, economia e meio ambiente para estudantes de 11 a 15 anos. Tarifa proposta: $U 500 por estudante.',
+    meta: 'Camino de Azahar para escolas', desc: 'Saída de estudo para escolas em uma chácara citrícola de Salto, no Uruguai: ciências naturais, geografia, história, economia e meio ambiente para estudantes de 11 a 15 anos. Tarifa proposta: $U 500 por estudante.',
     titulo: 'Uma aula que dá para sentir o cheiro', intro: 'Uma saída de estudo em uma chácara citrícola em funcionamento, pensada para estudantes do ensino médio de 11 a 15 anos. O currículo ao ar livre e com as mãos na fruta.',
     alt: 'Grupo de estudantes na Chacra La Victoria', pedir: 'Peça uma proposta', ver: 'Ver conteúdos', paraQuien: 'Para quem é',
     bloques: [
@@ -69,7 +69,7 @@ const T = elegir(idioma, {
     ],
   },
   en: {
-    meta: 'Groups and schools', desc: 'A school trip to a working citrus farm in Salto, Uruguay: science, geography, history, economics and the environment for students aged 11 to 15. Proposed price: $U 500 per student.',
+    meta: 'Camino de Azahar for schools', desc: 'A school trip to a working citrus farm in Salto, Uruguay: science, geography, history, economics and the environment for students aged 11 to 15. Proposed price: $U 500 per student.',
     titulo: 'A lesson you can smell', intro: 'A field trip to a working citrus farm, designed for secondary school students aged 11 to 15. The curriculum, outdoors and hands-on.',
     alt: 'A group of students at Chacra La Victoria', pedir: 'Request a proposal', ver: 'See the content', paraQuien: "Who it's for",
     bloques: [
@@ -95,8 +95,8 @@ const T = elegir(idioma, {
   },
 });
 ---
-<Base titulo={`${T.meta} · Camino de Azahar`} descripcion={T.desc} idioma={idioma} clave="azaharGrupos" encabezadoFlotante tema="azahar" cta={{ texto: t(idioma, 'nav.reservar'), href: rutaReservar(idioma) }}>
-  <CabeceraPagina idioma={idioma} antetitulo={T.meta} titulo={T.titulo} intro={T.intro} migas={[{ texto: t(idioma, 'nav.experiencias'), href: r.experiencias }, { texto: 'Camino de Azahar', href: r.azahar }, { texto: T.meta }]} imagen={{ toma: 'Grupo recorriendo la chacra', ...foto('recorrido-visitantes', idioma) }}>
+<Base titulo={`${T.meta} · VÍA Educa`} descripcion={T.desc} idioma={idioma} clave="azaharGrupos" encabezadoFlotante tema="azahar" cta={{ texto: t(idioma, 'nav.reservar'), href: rutaReservar(idioma) }}>
+  <CabeceraPagina idioma={idioma} antetitulo={T.meta} titulo={T.titulo} intro={T.intro} migas={[{ texto: 'VÍA Educa', href: r.grupos }, { texto: T.meta }]} imagen={{ toma: 'Grupo recorriendo la chacra', ...foto('recorrido-visitantes', idioma) }}>
     <div class="flex flex-wrap gap-3">
       <a href="#propuesta" class="btn btn-luz">{T.pedir}</a>
       <a href="#asignaturas" class="btn btn-contorno-claro">{T.ver}</a>
