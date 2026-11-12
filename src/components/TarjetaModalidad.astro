@@ -24,7 +24,9 @@ const { idioma = 'es', modalidad } = Astro.props;
 const r = rutas[idioma];
 const href = Astro.props.href ?? (modalidad.id === 'educativa' ? r.azaharGrupos : modalidad.id === 'con-fruto' ? r.conFruto : r.interpretativa);
 const chip = modalidad.temporada === 'fruto' ? 'chip-fruto' : modalidad.temporada === 'interpretativa' ? 'chip-interp' : 'chip';
-const desde = modalidad.id === 'educativa' ? 500 : precioDesde();
+// La versión educativa no tiene monto fijo: descuentos especiales para estudiantes
+const desde = modalidad.id === 'educativa' ? null : precioDesde();
+const etiquetaEducativa = textos(idioma).tarifas.estudiante.etiqueta;
 // Fotos reales de la chacra por modalidad
 const fotosModalidad: Record<string, ClaveFoto> = { 'con-fruto': 'mandarino-cargado', interpretativa: 'arbol-c7', educativa: 'huerta-visitantes' };
 const real = fotosModalidad[modalidad.id] ? foto(fotosModalidad[modalidad.id], idioma) : undefined;
@@ -45,7 +47,7 @@ const T = elegir(idioma, {
     <ul class="mt-1 flex flex-wrap gap-2 text-sm" aria-label={T.datos}>
       <li class="chip">{formatoDuracion(site.duracionMinutos)}</li>
       <li class="chip">{site.cupo.minimo} {T.a} {site.cupo.maximo} {T.personas}</li>
-      <li class="chip">{T.desde} {formatoPrecio(desde, idioma)}*</li>
+      <li class="chip">{desde === null ? etiquetaEducativa : `${T.desde} ${formatoPrecio(desde, idioma)}`}*</li>
     </ul>
     <p class="text-xs text-muted">* {textos(idioma).leyenda}.</p>
   </div>

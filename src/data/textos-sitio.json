@@ -4,8 +4,8 @@
     "leyenda": "Tarifa propuesta, a confirmar al reservar",
     "tarifas": {
       "general": { "nombre": "General (circuito completo)" },
-      "estudiante": { "nombre": "Estudiantes de educación media" },
-      "grupo": { "nombre": "Grupos de 15 o más personas", "nota": "10 % de descuento" },
+      "estudiante": { "nombre": "Estudiantes de educación media", "etiqueta": "Descuentos especiales" },
+      "grupo": { "nombre": "Grupos de 15 o más personas", "etiqueta": "Consultar" },
       "menor": { "nombre": "Menores de 5 años" }
     },
     "incluye": ["Recorrido interpretativo por el naranjal", "Elaboración de jugo de naranja", "Degustación de productos derivados", "Muestra de productos de emprendedores locales"],
@@ -16,8 +16,8 @@
     "leyenda": "Tarifa proposta, confirmada na reserva",
     "tarifas": {
       "general": { "nombre": "Geral (circuito completo)" },
-      "estudiante": { "nombre": "Estudantes do ensino médio" },
-      "grupo": { "nombre": "Grupos de 15 pessoas ou mais", "nota": "10 % de desconto" },
+      "estudiante": { "nombre": "Estudantes do ensino médio", "etiqueta": "Descontos especiais" },
+      "grupo": { "nombre": "Grupos de 15 pessoas ou mais", "etiqueta": "Consultar" },
       "menor": { "nombre": "Crianças menores de 5 anos" }
     },
     "incluye": ["Percurso interpretativo pelo laranjal", "Preparo do suco de laranja", "Degustação de produtos derivados", "Mostra de produtos de empreendedores locais"],
@@ -28,8 +28,8 @@
     "leyenda": "Proposed price, confirmed when you book",
     "tarifas": {
       "general": { "nombre": "Standard (full visit)" },
-      "estudiante": { "nombre": "Secondary school students" },
-      "grupo": { "nombre": "Groups of 15 or more", "nota": "10% discount" },
+      "estudiante": { "nombre": "Secondary school students", "etiqueta": "Special discounts" },
+      "grupo": { "nombre": "Groups of 15 or more", "etiqueta": "Ask us" },
       "menor": { "nombre": "Children under 5" }
     },
     "incluye": ["Guided walk through the orange grove", "Making your own orange juice", "Tasting of orange products", "Showcase of products from local makers"],

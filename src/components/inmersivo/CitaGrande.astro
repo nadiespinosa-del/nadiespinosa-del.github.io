@@ -3,8 +3,9 @@
 // En portugués e inglés se muestra la traducción y, debajo, la cita original en español.
 import Imagen from '../Imagen.astro';
 import { elegir, type Idioma } from '../../i18n/ui';
-interface Props { idioma?: Idioma }
-const { idioma = 'es' } = Astro.props;
+// compacta: versión breve para ir dentro de otra sección (la feria y la comunidad), sin retrato ni sección propia.
+interface Props { idioma?: Idioma; compacta?: boolean }
+const { idioma = 'es', compacta = false } = Astro.props;
 const original = '«…tocar, arrancar, oler (…) y apreciar el aroma del azahar (…) es muy importante…»';
 const T = elegir(idioma, {
   es: { titulo: 'Las personas detrás de la naranja', cita: original, rol: 'Encargada de la Chacra La Victoria, Colonia Osimani', texto: 'Al final de la visita, Patricia cuenta la historia de la chacra y los cambios en la forma de producir. Detrás de cada fruto hay personas, saberes y trayectorias.', alt: 'Retrato de Patricia Real, encargada de la Chacra La Victoria', original: '' },
@@ -12,6 +13,21 @@ const T = elegir(idioma, {
   en: { titulo: 'The people behind the orange', cita: '“…touching, picking, smelling (…) and taking in the scent of orange blossom (…) is very important…”', rol: 'Runs Chacra La Victoria, Colonia Osimani', texto: 'At the end of the visit, Patricia tells the story of the farm and how growing has changed. Behind every fruit there are people, knowledge and life stories.', alt: 'Portrait of Patricia Real, who runs Chacra La Victoria', original: 'Original in Spanish' },
 });
 ---
+{compacta ? (
+  <figure class="cita-compacta grid gap-5 rounded-[var(--ca-radius-lg)] border-l-4 border-deco bg-surface-2 p-6 sm:p-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center lg:gap-12">
+    <blockquote class="grid gap-3">
+      <p class="cita-texto font-display text-[clamp(1.35rem,2.4vw,2.1rem)] italic leading-[1.12] text-heading">{T.cita}</p>
+      {T.original && <p class="text-sm text-muted">{T.original}: <span lang="es">{original}</span></p>}
+    </blockquote>
+    <div class="grid gap-3">
+      <figcaption class="grid gap-1">
+        <span class="text-lg font-semibold">Patricia Real</span>
+        <span class="text-muted">{T.rol}</span>
+      </figcaption>
+      <p class="text-muted">{T.texto}</p>
+    </div>
+  </figure>
+) : (
 <section id="personas" class="cita-grande relative bg-bg py-[clamp(6rem,16vh,12rem)]" aria-labelledby="personas-titulo">
   <div class="contenedor grid items-center gap-12 lg:grid-cols-[0.75fr_1.25fr] lg:gap-20">
     <Imagen proporcion="4/5" toma="Patricia Real entre los naranjos, mirada a cámara, hora dorada" alt={T.alt} encuadre="Plano medio" revelar />
@@ -29,6 +45,7 @@ const T = elegir(idioma, {
     </figure>
   </div>
 </section>
+)}
 
 <script>
   import { gsap, SplitText, reducido } from '../../scripts/movimiento';

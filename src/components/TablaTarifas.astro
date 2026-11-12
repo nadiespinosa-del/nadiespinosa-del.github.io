@@ -28,7 +28,7 @@ const T = elegir(idioma, {
             {item.nombre}
             {item.nota && <span class="block text-sm font-normal text-muted">{item.nota}</span>}
           </th>
-          <td class="whitespace-nowrap px-6 py-4 text-right font-display text-xl text-heading">{formatoPrecio(item.precio, idioma)}</td>
+          <td class="whitespace-nowrap px-6 py-4 text-right font-display text-xl text-heading">{formatoPrecio(item.precio, idioma, item.etiqueta)}</td>
         </tr>
       ))}
     </tbody>

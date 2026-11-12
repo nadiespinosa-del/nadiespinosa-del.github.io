@@ -35,7 +35,8 @@ export const textos = (idioma: Idioma) => textosSitio[idioma];
 export function tarifas(idioma: Idioma) {
   const tx = textosSitio[idioma];
   return site.tarifas.items.map((item) => {
-    const local = tx.tarifas[item.id as keyof typeof tx.tarifas] as { nombre: string; nota?: string };
-    return { id: item.id, precio: item.precio, nombre: local.nombre, nota: local.nota };
+    const local = tx.tarifas[item.id as keyof typeof tx.tarifas] as { nombre: string; nota?: string; etiqueta?: string };
+    // precio null = sin monto fijo (descuentos especiales o a consultar): se muestra la etiqueta
+    return { id: item.id, precio: item.precio as number | null, nombre: local.nombre, nota: local.nota, etiqueta: local.etiqueta };
   });
 }

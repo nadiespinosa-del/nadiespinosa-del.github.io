@@ -13,7 +13,7 @@
   {
     "temas": ["experiencia"],
     "pregunta": "¿Cuánto cuesta?",
-    "respuesta": "Las tarifas propuestas por persona son: $U 750 la tarifa general, $U 500 para estudiantes de educación media y $U 675 para grupos de 15 o más personas. Los menores de 5 años no pagan. Las tarifas se confirman al reservar."
+    "respuesta": "La tarifa propuesta es de $U 850 por persona. Para estudiantes de educación media hay descuentos especiales, y para grupos de 15 o más personas, un precio especial: consultanos. Los menores de 5 años no pagan. Las tarifas se confirman al reservar."
   },
   {
     "temas": ["experiencia"],
@@ -66,6 +66,6 @@
   {
     "temas": ["grupos"],
     "pregunta": "¿Cuánto cuesta para estudiantes?",
-    "respuesta": "La tarifa propuesta es de $U 500 por estudiante. Se confirma al armar la propuesta para el grupo."
+    "respuesta": "Hay descuentos especiales para estudiantes. Te pasamos el precio al armar la propuesta para el grupo."
   }
 ]

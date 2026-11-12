@@ -21,9 +21,9 @@
     "leyenda": "Tarifa propuesta, a confirmar al reservar",
     "moneda": "$U",
     "items": [
-      { "id": "general", "nombre": "General (circuito completo)", "precio": 750 },
-      { "id": "estudiante", "nombre": "Estudiantes de educación media", "precio": 500 },
-      { "id": "grupo", "nombre": "Grupos de 15 o más personas", "precio": 675, "nota": "10 % de descuento" },
+      { "id": "general", "nombre": "General (circuito completo)", "precio": 850 },
+      { "id": "estudiante", "nombre": "Estudiantes de educación media", "precio": null },
+      { "id": "grupo", "nombre": "Grupos de 15 o más personas", "precio": null },
       { "id": "menor", "nombre": "Menores de 5 años", "precio": 0 }
     ],
     "minimoParaTarifaGrupo": 15,

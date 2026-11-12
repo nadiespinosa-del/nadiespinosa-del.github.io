@@ -23,7 +23,7 @@ const T = elegir(idioma, {
     salida: 'Salida', elegiSalida: 'Elegí una fecha', errSalida: 'Elegí una salida.', lugares: 'lugares',
     fecha: 'Fecha que te interesa', errFecha: 'Elegí una fecha.', ayudaFecha: 'Te confirmamos si hay salida ese día o te ofrecemos la más cercana.', etFecha: 'Fecha de interés',
     modalidad: 'Modalidad', personas: '¿Cuántas personas vienen?', general: 'Adultos y mayores de 5', estudiante: 'Estudiantes de educación media', menor: 'Menores de 5 años', etEstudiante: 'Estudiantes',
-    total: 'Total estimado', grupo: 'Tarifa de grupo aplicada', nombre: 'Tu nombre', errNombre: 'Escribí tu nombre para saber a quién responder.', etNombre: 'Nombre',
+    total: 'Total estimado', grupo: 'Estudiantes y grupos de 15 o más: descuento especial, te pasamos el precio al confirmar', aConfirmar: 'A confirmar', nombre: 'Tu nombre', errNombre: 'Escribí tu nombre para saber a quién responder.', etNombre: 'Nombre',
     idioma: 'Idioma de la visita', ayudaIdioma: 'La guía es en español; consultanos por otros idiomas.', etIdioma: 'Idioma',
     necesidades: 'Necesidades de accesibilidad (opcional)', phNecesidades: 'Por ejemplo: viene una persona que camina con bastón', etNecesidades: 'Necesidades de accesibilidad',
     mensaje: 'Mensaje (opcional)', phMensaje: 'Contanos lo que quieras sobre tu visita', etMensaje: 'Mensaje',
@@ -39,7 +39,7 @@ const T = elegir(idioma, {
     salida: 'Saída', elegiSalida: 'Escolha uma data', errSalida: 'Escolha uma saída.', lugares: 'vagas',
     fecha: 'Data de interesse', errFecha: 'Escolha uma data.', ayudaFecha: 'Confirmamos se há saída nesse dia ou oferecemos a mais próxima.', etFecha: 'Data de interesse',
     modalidad: 'Modalidade', personas: 'Quantas pessoas vêm?', general: 'Adultos e maiores de 5 anos', estudiante: 'Estudantes do ensino médio', menor: 'Crianças menores de 5 anos', etEstudiante: 'Estudantes',
-    total: 'Total estimado', grupo: 'Tarifa de grupo aplicada', nombre: 'Seu nome', errNombre: 'Escreva seu nome para sabermos a quem responder.', etNombre: 'Nome',
+    total: 'Total estimado', grupo: 'Estudantes e grupos de 15 ou mais: desconto especial, enviamos o preço ao confirmar', aConfirmar: 'A confirmar', nombre: 'Seu nome', errNombre: 'Escreva seu nome para sabermos a quem responder.', etNombre: 'Nome',
     idioma: 'Idioma da visita', ayudaIdioma: 'A visita é guiada em espanhol; consulte-nos sobre outros idiomas.', etIdioma: 'Idioma',
     necesidades: 'Necessidades de acessibilidade (opcional)', phNecesidades: 'Por exemplo: vem uma pessoa que usa bengala', etNecesidades: 'Necessidades de acessibilidade',
     mensaje: 'Mensagem (opcional)', phMensaje: 'Conte o que quiser sobre a sua visita', etMensaje: 'Mensagem',
@@ -55,7 +55,7 @@ const T = elegir(idioma, {
     salida: 'Departure', elegiSalida: 'Choose a date', errSalida: 'Choose a departure.', lugares: 'spots',
     fecha: 'Preferred date', errFecha: 'Choose a date.', ayudaFecha: "We'll confirm whether there's a departure that day or offer the nearest one.", etFecha: 'Preferred date',
     modalidad: 'Type of visit', personas: 'How many people are coming?', general: 'Adults and children over 5', estudiante: 'Secondary school students', menor: 'Children under 5', etEstudiante: 'Students',
-    total: 'Estimated total', grupo: 'Group price applied', nombre: 'Your name', errNombre: "Enter your name so we know who we're replying to.", etNombre: 'Name',
+    total: 'Estimated total', grupo: 'Students and groups of 15 or more: special discount, we will send the price when we confirm', aConfirmar: 'To be confirmed', nombre: 'Your name', errNombre: "Enter your name so we know who we're replying to.", etNombre: 'Name',
     idioma: 'Language of the visit', ayudaIdioma: 'Visits are guided in Spanish; ask us about other languages.', etIdioma: 'Language',
     necesidades: 'Accessibility needs (optional)', phNecesidades: 'For example: one person walks with a cane', etNecesidades: 'Accessibility needs',
     mensaje: 'Message (optional)', phMensaje: 'Tell us anything about your visit', etMensaje: 'Message',
@@ -85,6 +85,7 @@ const leyenda = textos(idioma).leyenda;
   data-err-personas={T.errPersonas}
   data-err-maximo={T.errMaximo}
   data-grupo-txt={T.grupo}
+  data-a-confirmar={T.aConfirmar}
   aria-labelledby={`${id}-titulo`}
 >
   <div class="grid gap-1">
@@ -143,7 +144,7 @@ const leyenda = textos(idioma).leyenda;
     <div class="flex flex-wrap items-baseline justify-between gap-2 rounded-[var(--ca-radius)] bg-surface-2 px-5 py-4">
       <p class="font-semibold">{T.total}</p>
       <p>
-        <output data-total class="font-display text-2xl text-heading" aria-live="polite">$U 1.500</output>
+        <output data-total class="font-display text-2xl text-heading" aria-live="polite">$U 850</output>
         <span class="block text-right text-xs text-muted" data-total-nota>{leyenda}</span>
       </p>
     </div>
@@ -208,16 +209,17 @@ const leyenda = textos(idioma).leyenda;
     const leyenda = nota?.textContent || '';
     const cantidad = (tipo: string) => Math.max(0, Math.floor(Number(form.querySelector<HTMLInputElement>(`[data-personas="${tipo}"]`)?.value) || 0));
 
-    // Total estimado: con 15 o más adultos se aplica la tarifa de grupo.
+    // Total estimado con la tarifa general; los menores no pagan.
+    // Con estudiantes o con un grupo de 15 o más hay descuento especial: el total queda "a confirmar".
     const calcular = () => {
       const general = cantidad('general');
       const estudiantes = cantidad('estudiante');
       const menores = cantidad('menor');
-      const conGrupo = general >= minimoGrupo;
-      const total = general * (conGrupo ? precios.grupo : precios.general) + estudiantes * precios.estudiante + menores * precios.menor;
-      if (salida) salida.textContent = `$U ${total.toLocaleString('es-UY')}`;
-      if (nota) nota.textContent = conGrupo ? `${d.grupoTxt} · ${leyenda}` : leyenda;
-      return { personas: general + estudiantes + menores, total };
+      const aConfirmar = estudiantes > 0 || general + estudiantes >= minimoGrupo;
+      const total = general * (precios.general || 0) + menores * (precios.menor || 0);
+      if (salida) salida.textContent = aConfirmar ? d.aConfirmar || '' : `$U ${total.toLocaleString('es-UY')}`;
+      if (nota) nota.textContent = aConfirmar ? `${d.grupoTxt} · ${leyenda}` : leyenda;
+      return { personas: general + estudiantes + menores, total, aConfirmar };
     };
     form.addEventListener('input', calcular);
     calcular();
@@ -234,7 +236,7 @@ const leyenda = textos(idioma).leyenda;
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       const errores = validarCampos(form);
-      const { personas, total } = calcular();
+      const { personas, total, aConfirmar } = calcular();
       const errorPersonas = form.querySelector<HTMLElement>('[id$="-personas-error"]');
       let mensajePersonas = '';
       if (personas < 1) mensajePersonas = d.errPersonas || '';
@@ -247,7 +249,7 @@ const leyenda = textos(idioma).leyenda;
       }
       mostrarResumen(form, errores);
       if (errores.length) return;
-      const mensaje = armarMensaje(form, d.intro || '') + `\n• ${d.totalMsj}: $U ${total.toLocaleString('es-UY')} (${d.propuesta})`;
+      const mensaje = armarMensaje(form, d.intro || '') + (aConfirmar ? `\n• ${d.totalMsj}: ${d.aConfirmar} (${d.grupoTxt})` : `\n• ${d.totalMsj}: $U ${total.toLocaleString('es-UY')} (${d.propuesta})`);
       enviarPorWhatsApp(form, mensaje);
     });
   });

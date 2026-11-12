@@ -20,15 +20,18 @@ export function temporadaDelMes(mes: number): Temporada {
 
 const SIN_COSTO: Record<Idioma, string> = { es: 'Sin costo', pt: 'Grátis', en: 'Free' };
 
-/** Formatea un precio en pesos uruguayos. 0 = "Sin costo". */
-export function formatoPrecio(valor: number, idioma: Idioma = 'es'): string {
+const CONSULTAR: Record<Idioma, string> = { es: 'Consultar', pt: 'Consultar', en: 'Ask us' };
+
+/** Formatea un precio en pesos uruguayos. 0 = "Sin costo"; null = sin monto fijo (se muestra la etiqueta o "Consultar"). */
+export function formatoPrecio(valor: number | null, idioma: Idioma = 'es', etiqueta?: string): string {
+  if (valor === null || valor === undefined) return etiqueta ?? CONSULTAR[idioma];
   if (valor === 0) return SIN_COSTO[idioma];
   return `${site.tarifas.moneda} ${valor.toLocaleString('es-UY')}`;
 }
 
 /** Precio mínimo publicado (para mostrar "desde"). Ignora las tarifas sin costo. */
 export function precioDesde(): number {
-  return Math.min(...site.tarifas.items.map((t) => t.precio).filter((p) => p > 0));
+  return Math.min(...site.tarifas.items.map((t) => t.precio).filter((p): p is number => typeof p === 'number' && p > 0));
 }
 
 /** Arma un enlace de WhatsApp con mensaje prellenado. Devuelve null si no hay número cargado. */
