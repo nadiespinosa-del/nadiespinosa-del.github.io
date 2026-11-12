@@ -35,7 +35,7 @@ const bovedas = Array.from({ length: 17 }, (_, i) => {
     const tono = tonos[i];
     return (
       <article
-        class="historia-slide sticky top-0 flex min-h-[100svh] items-center overflow-hidden py-24"
+        class="historia-slide sticky top-0 flex min-h-[64svh] items-center overflow-hidden py-14 lg:py-16"
         style={`background:${tono.fondo};color:${tono.texto};z-index:${i + 1}`}
         aria-labelledby={`historia-${m.anio}`}
       >
@@ -53,14 +53,14 @@ const bovedas = Array.from({ length: 17 }, (_, i) => {
           </svg>
         )}
 
-        <div class="contenedor relative z-10 grid items-center gap-10 lg:grid-cols-[1fr_0.8fr]">
-          <div class="grid gap-5">
-            <p class="font-display text-2xl italic" style={`color:${tono.anio}`}>{m.anio === '1864' ? T.hacia : m.anio}</p>
-            <h3 id={`historia-${m.anio}`} class="max-w-[14ch] !text-[clamp(1.8rem,3.7vw,3.6rem)] !leading-[0.98]" style={`color:${tono.texto}`}>{m.titulo}</h3>
-            <p class="max-w-[44ch] text-xl leading-relaxed" style={`color:${tono.suave}`}>{m.texto}</p>
+        <div class="contenedor relative z-10 grid items-center gap-8 lg:grid-cols-[1fr_0.7fr]">
+          <div class="grid gap-4">
+            <p class="font-display text-xl italic" style={`color:${tono.anio}`}>{m.anio === '1864' ? T.hacia : m.anio}</p>
+            <h3 id={`historia-${m.anio}`} class="max-w-[16ch] !text-[clamp(1.5rem,2.8vw,2.6rem)] !leading-[1.02]" style={`color:${tono.texto}`}>{m.titulo}</h3>
+            <p class="max-w-[48ch] text-lg leading-relaxed" style={`color:${tono.suave}`}>{m.texto}</p>
             <p class="text-sm" style={`color:${tono.suave}`}>{T.fuente}: {m.fuente}</p>
           </div>
-          <figure class="mx-auto grid w-full max-w-[26rem] gap-2">
+          <figure class="mx-auto grid w-full max-w-[15rem] gap-2 sm:max-w-[22rem]">
             {fotosMomento[m.anio] ? (
               <>
                 <Imagen proporcion="3/2" toma={m.foto} {...fotoArchivo(fotosMomento[m.anio]!, idioma)} class="historia-foto" />
@@ -77,9 +77,9 @@ const bovedas = Array.from({ length: 17 }, (_, i) => {
 </section>
 
 <style>
-  .historia-anio { font-size: clamp(9rem, 34vw, 36rem); opacity: 0.16; font-variation-settings: 'opsz' 144, 'wght' 300; letter-spacing: -0.04em; }
+  .historia-anio { font-size: clamp(7rem, 24vw, 24rem); opacity: 0.16; font-variation-settings: 'opsz' 144, 'wght' 300; letter-spacing: -0.04em; }
   .historia-slide { box-shadow: 0 -40px 80px -40px rgba(16, 35, 26, 0.35); }
-  .bovedas { height: 22vh; }
+  .bovedas { height: 14vh; }
   .bovedas path { stroke-dasharray: 1; stroke-dashoffset: 0; }
   @media (prefers-reduced-motion: reduce) {
     .historia-slide { position: relative; }

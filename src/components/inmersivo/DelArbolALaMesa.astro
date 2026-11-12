@@ -4,8 +4,9 @@
 import Imagen from '../Imagen.astro';
 import { elegir, type Idioma } from '../../i18n/ui';
 import { foto, fotoArchivo, type ClaveFoto } from '../../lib/fotos';
-interface Props { idioma?: Idioma }
-const { idioma = 'es' } = Astro.props;
+// compacta: grilla de seis tarjetas chicas (página principal de la experiencia); sin compacta, tarjetas grandes apiladas
+interface Props { idioma?: Idioma; compacta?: boolean }
+const { idioma = 'es', compacta = false } = Astro.props;
 // Fotos reales de la chacra, su galpón de selección y la feria (el puerto espera su foto)
 const fotosPasos: (ClaveFoto | null)[] = ['filas-naranjos', 'mano-naranjas', 'fruta-seleccion', 'galpon-seleccion', null, 'feria-frascos']
 // La exportación: el puerto de Salto hacia 1920 (Biblioteca Nacional de Uruguay)
@@ -54,6 +55,26 @@ const T = elegir(idioma, {
   },
 });
 ---
+{compacta ? (
+<ol class="arbol-compacto grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+  {T.pasos.map((p, i) => {
+    const img = fotosPasos[i] ? foto(fotosPasos[i]!, idioma) : i === 4 ? { src: puerto.src, alt: puerto.alt } : null;
+    return (
+      <li class="revelar grid grid-cols-[5.5rem_1fr] content-start overflow-hidden rounded-[var(--ca-radius-lg)] border border-line bg-surface sm:grid-cols-1" style={`transition-delay:${(i % 3) * 80}ms`}>
+        {/* En el celular la foto va chica al costado; desde tablet, arriba */}
+        {img && <div class="max-sm:h-full"><Imagen proporcion="2/1" toma={tomas[i]} src={img.src} alt={img.alt} class="!rounded-none max-sm:h-full max-sm:!aspect-auto" /></div>}
+        <div class="grid gap-1.5 p-4 sm:gap-2 sm:p-5">
+          <h3 class="flex items-baseline gap-2 text-lg sm:gap-3 sm:text-xl">
+            <span class="font-display text-2xl leading-none text-deco sm:text-3xl" aria-hidden="true">{i + 1}</span>
+            <span><span class="solo-lectores">{T.paso} {i + 1}: </span>{p.titulo}</span>
+          </h3>
+          <p class="text-sm text-muted sm:text-base">{p.texto}</p>
+        </div>
+      </li>
+    );
+  })}
+</ol>
+) : (
 <ol class="arbol-mesa relative grid gap-6">
   {T.pasos.map((p, i) => (
     <li class="am-paso sticky grid items-center gap-8 overflow-hidden rounded-[var(--ca-radius-lg)] border border-line bg-surface p-6 shadow-card sm:p-10 lg:grid-cols-[auto_1fr_0.8fr]" style={`top:${136 + i * 18}px`}>
@@ -66,6 +87,7 @@ const T = elegir(idioma, {
     </li>
   ))}
 </ol>
+)}
 
 <style>
   @media (prefers-reduced-motion: reduce) {

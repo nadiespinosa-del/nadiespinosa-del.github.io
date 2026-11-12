@@ -11,7 +11,6 @@ import TarjetaModalidad from '../components/TarjetaModalidad.astro';
 import InfoPractica from '../components/azahar/InfoPractica.astro';
 import RuedaAnio from '../components/inmersivo/RuedaAnio.astro';
 import HistoriaApilada from '../components/inmersivo/HistoriaApilada.astro';
-import CitaGrande from '../components/inmersivo/CitaGrande.astro';
 import DelArbolALaMesa from '../components/inmersivo/DelArbolALaMesa.astro';
 import TarjetaSeguir from '../components/TarjetaSeguir.astro';
 import Imagen from '../components/Imagen.astro';
@@ -108,17 +107,17 @@ const viajeLd = {
   <HistoriaApilada idioma={idioma} />
 
   <!-- Del árbol a la mesa: antes solo estaba dentro de «La naranja en Salto» -->
-  <section class="contenedor grid gap-10 py-[clamp(5rem,12vh,8rem)]" aria-labelledby="arbol-titulo">
+  <section class="contenedor grid gap-8 pb-[clamp(3rem,7vh,4.5rem)] pt-[clamp(4rem,10vh,6rem)]" aria-labelledby="arbol-titulo">
     <div class="grid gap-3">
       <h2 id="arbol-titulo" class="text-[clamp(1.6rem,3.2vw,2.8rem)]">{T.arbol}</h2>
       <p class="max-w-[52ch] text-lg text-muted">{T.arbolTexto}</p>
     </div>
-    <DelArbolALaMesa idioma={idioma} />
+    <DelArbolALaMesa idioma={idioma} compacta />
     <TarjetaSeguir href={r.naranja} antetitulo={T.seguir} titulo={T.naranjaTitulo} texto={T.naranjaTexto} boton={T.naranjaBoton} src={dieste.src} alt={dieste.alt} />
   </section>
 
-  <!-- La feria y la comunidad: la feria, Patricia (que forma parte de ella) y el enlace a «La chacra» -->
-  <section class="contenedor grid gap-10 py-[clamp(5rem,12vh,8rem)]" aria-labelledby="feria-titulo">
+  <!-- La feria y la comunidad: la feria y el enlace a «La chacra» (la cita de Patricia está dentro de esa página) -->
+  <section class="contenedor grid gap-8 pb-[clamp(4rem,10vh,6rem)] pt-[clamp(2rem,5vh,3rem)]" aria-labelledby="feria-titulo">
     <div class="grid items-end gap-8 lg:grid-cols-[0.9fr_1.1fr]">
       <div class="grid gap-3">
         <h2 id="feria-titulo" class="text-[clamp(1.6rem,3vw,2.6rem)]">{T.feriaTitulo}</h2>
@@ -128,7 +127,6 @@ const viajeLd = {
         {fotosFeria.map((f) => <Imagen proporcion="1/1" toma={f.alt} src={f.src} alt={f.alt} revelar />)}
       </div>
     </div>
-    <CitaGrande idioma={idioma} compacta />
     <TarjetaSeguir href={r.chacra} antetitulo={T.seguir} titulo={T.chacraTitulo} texto={T.chacraTexto} boton={T.chacraBoton} src={entradaChacra.src} alt={entradaChacra.alt} />
   </section>
 

@@ -14,15 +14,15 @@ interface Props {
 }
 const { href, antetitulo, titulo, texto, boton, src, alt, credito } = Astro.props;
 ---
-<article class="tarjeta-seguir tarjeta group relative grid overflow-hidden md:grid-cols-[1fr_1.1fr]">
-  <Imagen proporcion="3/2" toma={alt} src={src} alt={alt} class="h-full !rounded-none" />
-  <div class="grid content-center gap-4 p-6 sm:p-10">
-    {antetitulo && <p class="font-display text-lg italic text-primary">{antetitulo}</p>}
-    <h3 class="text-[clamp(1.6rem,2.8vw,2.4rem)] leading-tight">
+<article class="tarjeta-seguir tarjeta group relative grid overflow-hidden md:grid-cols-[0.7fr_1.3fr]">
+  <Imagen proporcion="16/9" toma={alt} src={src} alt={alt} class="h-full max-h-64 !rounded-none md:max-h-none" />
+  <div class="grid content-center gap-3 p-6 sm:p-8">
+    {antetitulo && <p class="font-display text-base italic text-primary">{antetitulo}</p>}
+    <h3 class="text-[clamp(1.4rem,2.2vw,1.9rem)] leading-tight">
       <a href={href} class="text-heading no-underline after:absolute after:inset-0 group-hover:underline">{titulo}</a>
     </h3>
-    <p class="max-w-[46ch] text-lg text-muted">{texto}</p>
-    <span class="btn btn-primario w-max" aria-hidden="true">{boton}</span>
+    <p class="max-w-[56ch] text-muted">{texto}</p>
+    <span class="btn btn-primario btn-pequeno w-max" aria-hidden="true">{boton}</span>
     {credito && <p class="text-xs text-muted">{credito}</p>}
   </div>
 </article>
