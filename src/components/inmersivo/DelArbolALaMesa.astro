@@ -21,7 +21,7 @@ const tomas = [
 ];
 const T = elegir(idioma, {
   es: {
-    paso: 'Paso',
+    paso: 'Paso', leer: 'Tocá para leer',
     pasos: [
       { titulo: 'La quinta', texto: 'Los naranjos crecen injertados sobre un portainjerto trifoliado, que entra en reposo en invierno y ayuda a resistir el frío y algunas enfermedades del suelo. El riego por goteo y las curvas de nivel cuidan el agua y el suelo.' },
       { titulo: 'La cosecha', texto: 'La fruta se cosecha según su madurez: el índice de color y la relación entre azúcares y acidez. La zafra va aproximadamente de mayo a noviembre y genera miles de puestos de trabajo.' },
@@ -32,7 +32,7 @@ const T = elegir(idioma, {
     ],
   },
   pt: {
-    paso: 'Passo',
+    paso: 'Passo', leer: 'Toque para ler',
     pasos: [
       { titulo: 'O pomar', texto: 'As laranjeiras crescem enxertadas sobre um porta-enxerto trifoliata, que entra em repouso no inverno e ajuda a resistir ao frio e a algumas doenças do solo. A irrigação por gotejamento e as curvas de nível protegem a água e o solo.' },
       { titulo: 'A colheita', texto: 'A fruta é colhida de acordo com a maturação: o índice de cor e a relação entre açúcares e acidez. A safra vai aproximadamente de maio a novembro e gera milhares de empregos.' },
@@ -43,7 +43,7 @@ const T = elegir(idioma, {
     ],
   },
   en: {
-    paso: 'Step',
+    paso: 'Step', leer: 'Tap to read',
     pasos: [
       { titulo: 'The grove', texto: 'Orange trees are grafted onto trifoliate rootstock, which goes dormant in winter and helps the tree withstand cold and some soil diseases. Drip irrigation and contour planting protect water and soil.' },
       { titulo: 'The harvest', texto: 'Fruit is picked according to ripeness: colour and the balance between sugar and acidity. The harvest season runs roughly from May to November and creates thousands of jobs.' },
@@ -55,21 +55,39 @@ const T = elegir(idioma, {
   },
 });
 ---
+<!-- Tarjetas que se dan vuelta: adelante la foto con el título; atrás, el texto.
+     En computadora giran al pasar el mouse; al tocar (o con Enter) quedan dadas vuelta hasta volver a tocar. -->
 {compacta ? (
 <ol class="arbol-compacto grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
   {T.pasos.map((p, i) => {
     const img = fotosPasos[i] ? foto(fotosPasos[i]!, idioma) : i === 4 ? { src: puerto.src, alt: puerto.alt } : null;
     return (
-      <li class="revelar grid grid-cols-[5.5rem_1fr] content-start overflow-hidden rounded-[var(--ca-radius-lg)] border border-line bg-surface sm:grid-cols-1" style={`transition-delay:${(i % 3) * 80}ms`}>
-        {/* En el celular la foto va chica al costado; desde tablet, arriba */}
-        {img && <div class="max-sm:h-full"><Imagen proporcion="2/1" toma={tomas[i]} src={img.src} alt={img.alt} class="!rounded-none max-sm:h-full max-sm:!aspect-auto" /></div>}
-        <div class="grid gap-1.5 p-4 sm:gap-2 sm:p-5">
-          <h3 class="flex items-baseline gap-2 text-lg sm:gap-3 sm:text-xl">
-            <span class="font-display text-2xl leading-none text-deco sm:text-3xl" aria-hidden="true">{i + 1}</span>
-            <span><span class="solo-lectores">{T.paso} {i + 1}: </span>{p.titulo}</span>
-          </h3>
-          <p class="text-sm text-muted sm:text-base">{p.texto}</p>
-        </div>
+      <li class="revelar" style={`transition-delay:${(i % 3) * 80}ms`}>
+        <button type="button" class="carta block h-full w-full text-left" aria-pressed="false">
+          <span class="carta-interior relative block min-h-[16.5rem] w-full sm:min-h-[17rem]">
+            <span class="carta-frente absolute inset-0 overflow-hidden rounded-[var(--ca-radius-lg)] bg-deep">
+              {img && <img src={img.src} alt="" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover" />}
+              <span class="absolute inset-0 bg-gradient-to-t from-[#1b2414]/85 via-[#1b2414]/25 to-transparent" aria-hidden="true"></span>
+              <span class="absolute inset-x-0 bottom-0 grid gap-1 p-5 text-[#fbf2e1]">
+                <span class="flex items-baseline gap-3">
+                  <span class="font-display text-4xl leading-none text-[#f2c14e]" aria-hidden="true">{i + 1}</span>
+                  <span class="font-display text-2xl leading-tight"><span class="solo-lectores">{T.paso} {i + 1}: </span>{p.titulo}</span>
+                </span>
+                <span class="flex items-center gap-1.5 text-xs font-semibold opacity-85" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8" /><path d="M21 3v5h-5" /></svg>
+                  {T.leer}
+                </span>
+              </span>
+            </span>
+            <span class="carta-dorso absolute inset-0 grid content-center gap-2 overflow-hidden rounded-[var(--ca-radius-lg)] border border-line bg-surface p-5 sm:p-6">
+              <span class="flex items-baseline gap-2.5 text-heading" aria-hidden="true">
+                <span class="font-display text-2xl leading-none text-deco">{i + 1}</span>
+                <span class="font-display text-xl leading-tight">{p.titulo}</span>
+              </span>
+              <span class="text-sm leading-relaxed text-muted sm:text-[0.95rem]">{p.texto}</span>
+            </span>
+          </span>
+        </button>
       </li>
     );
   })}
@@ -93,4 +111,34 @@ const T = elegir(idioma, {
   @media (prefers-reduced-motion: reduce) {
     .am-paso { position: relative; top: auto !important; }
   }
+
+  /* Tarjetas que se dan vuelta */
+  .carta { perspective: 1200px; cursor: pointer; border-radius: var(--ca-radius-lg); }
+  .carta:focus-visible { outline: 3px solid var(--ca-primary, #b54e17); outline-offset: 3px; }
+  .carta-interior { transform-style: preserve-3d; transition: transform 650ms cubic-bezier(0.2, 0.7, 0.2, 1); }
+  .carta-frente, .carta-dorso { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+  .carta-dorso { transform: rotateY(180deg); }
+  .carta.volteada .carta-interior { transform: rotateY(180deg); }
+  @media (hover: hover) and (pointer: fine) {
+    .carta:hover .carta-interior { transform: rotateY(180deg); }
+  }
+  /* Con movimiento reducido no hay giro: el texto aparece encima, sin animación */
+  @media (prefers-reduced-motion: reduce) {
+    .carta-interior { transition: none; transform: none !important; }
+    .carta-dorso { transform: none; opacity: 0; }
+    .carta.volteada .carta-dorso { opacity: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) and (hover: hover) and (pointer: fine) {
+    .carta:hover .carta-dorso { opacity: 1; }
+  }
 </style>
+
+<script>
+  // Al tocar (o con Enter / espacio) la tarjeta queda dada vuelta hasta volver a tocarla
+  document.querySelectorAll<HTMLButtonElement>('.carta').forEach((carta) => {
+    carta.addEventListener('click', () => {
+      const volteada = carta.classList.toggle('volteada');
+      carta.setAttribute('aria-pressed', String(volteada));
+    });
+  });
+</script>

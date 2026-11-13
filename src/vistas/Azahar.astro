@@ -21,7 +21,6 @@ import FormularioReserva from '../components/FormularioReserva.astro';
 import FlujoReserva from '../components/FlujoReserva.astro';
 import PreguntasFrecuentes from '../components/PreguntasFrecuentes.astro';
 import Llamado from '../components/Llamado.astro';
-import TambienTeInteresa from '../components/TambienTeInteresa.astro';
 import DatosEstructurados from '../components/DatosEstructurados.astro';
 import salidas from '../data/salidas.json';
 import site from '../data/site.json';
@@ -148,11 +147,8 @@ const viajeLd = {
 
   <section id="reservar" class="relative bg-surface-2 py-[clamp(5rem,12vh,9rem)]" aria-labelledby="reservar-titulo">
     <div class="contenedor grid gap-12">
-      <div class="grid gap-4">
-        <h2 id="reservar-titulo" class="max-w-[14ch] text-[clamp(1.8rem,3.4vw,3.1rem)] leading-[0.98]">{T.reservar}</h2>
-        <p class="max-w-[52ch] text-lg text-muted">{T.reservarTexto}</p>
-        <p class="flex flex-wrap items-center gap-3 text-muted">{T.planificaPregunta} <a href={r.planifica} class="btn btn-secundario btn-pequeno">{T.planificaBoton}</a></p>
-      </div>
+      <!-- El título queda solo para lectores de pantalla: la sección arranca directo con salidas, tarifas y formulario -->
+      <h2 id="reservar-titulo" class="solo-lectores">{T.reservar}</h2>
       <div class="grid items-start gap-10 lg:grid-cols-[0.9fr_1.1fr]">
         <div class="grid gap-8">
           <ListaSalidas idioma={idioma} salidas={salidas} limite={4} />
@@ -167,14 +163,6 @@ const viajeLd = {
     <FlujoReserva idioma={idioma} />
     <PreguntasFrecuentes idioma={idioma} temas={['experiencia']} />
     <Llamado antetitulo={T.escuelas} titulo={T.escuelasTitulo} texto={T.escuelasTexto} boton={{ texto: T.escuelasBoton, href: r.azaharGrupos }} />
-    <TambienTeInteresa
-      idioma={idioma}
-      enlaces={[
-        { titulo: T.planificaBoton, texto: T.enlaces[0], href: r.planifica },
-        { titulo: 'VÍA Educa', texto: T.enlaces[1], href: r.grupos },
-        { titulo: T.mas, texto: T.enlaces[2], href: r.experiencias },
-      ]}
-    />
   </div>
   <DatosEstructurados datos={viajeLd} />
 </Base>
