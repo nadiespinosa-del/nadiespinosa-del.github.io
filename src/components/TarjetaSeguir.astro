@@ -1,5 +1,5 @@
 ---
-// Tarjeta grande para seguir leyendo en una página interna: foto, título, texto y botón.
+// Tarjeta compacta para seguir leyendo en una página interna: foto chica al costado, título, texto y botón.
 // Toda la tarjeta es un enlace (el título la cubre entera), así nadie tiene que apuntar al botón.
 import Imagen from './Imagen.astro';
 interface Props {
@@ -14,15 +14,15 @@ interface Props {
 }
 const { href, antetitulo, titulo, texto, boton, src, alt, credito } = Astro.props;
 ---
-<article class="tarjeta-seguir tarjeta group relative grid overflow-hidden md:grid-cols-[0.7fr_1.3fr]">
-  <Imagen proporcion="16/9" toma={alt} src={src} alt={alt} class="h-full max-h-64 !rounded-none md:max-h-none" />
-  <div class="grid content-center gap-3 p-6 sm:p-8">
-    {antetitulo && <p class="font-display text-base italic text-primary">{antetitulo}</p>}
-    <h3 class="text-[clamp(1.4rem,2.2vw,1.9rem)] leading-tight">
+<article class="tarjeta-seguir tarjeta group relative grid max-w-3xl overflow-hidden sm:grid-cols-[11rem_1fr]">
+  <div class="h-36 sm:h-full"><Imagen proporcion="4/3" toma={alt} src={src} alt={alt} class="h-full !aspect-auto !rounded-none" /></div>
+  <div class="grid content-center gap-1.5 p-5">
+    {antetitulo && <p class="font-display text-sm italic text-primary">{antetitulo}</p>}
+    <h3 class="text-xl leading-tight">
       <a href={href} class="text-heading no-underline after:absolute after:inset-0 group-hover:underline">{titulo}</a>
     </h3>
-    <p class="max-w-[56ch] text-muted">{texto}</p>
-    <span class="btn btn-primario btn-pequeno w-max" aria-hidden="true">{boton}</span>
+    <p class="text-sm text-muted">{texto}</p>
+    <span class="btn btn-primario btn-pequeno mt-1 w-max" aria-hidden="true">{boton}</span>
     {credito && <p class="text-xs text-muted">{credito}</p>}
   </div>
 </article>

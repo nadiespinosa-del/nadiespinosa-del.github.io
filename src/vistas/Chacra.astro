@@ -8,6 +8,7 @@ import MarqueeSabores from '../components/inmersivo/MarqueeSabores.astro';
 import Imagen from '../components/Imagen.astro';
 import Pendiente from '../components/Pendiente.astro';
 import Llamado from '../components/Llamado.astro';
+import VolverExperiencia from '../components/VolverExperiencia.astro';
 import PreguntasFrecuentes from '../components/PreguntasFrecuentes.astro';
 import TambienTeInteresa from '../components/TambienTeInteresa.astro';
 import DatosEstructurados from '../components/DatosEstructurados.astro';
@@ -106,10 +107,11 @@ const chacraLd = {
     imagen={{ toma: 'Vista general de la Chacra La Victoria con sus filas de naranjos, hora dorada', ...foto('entrada', idioma) }}
   />
   <NavExperiencia idioma={idioma} actual={Astro.url.pathname} />
+  <div class="contenedor pt-6"><VolverExperiencia idioma={idioma} discreto /></div>
 
   <section class="contenedor grid gap-12 py-[clamp(4rem,12vh,8rem)] lg:grid-cols-[1fr_1fr]" aria-labelledby="chacra-titulo">
     <div class="grid content-start gap-6">
-      <h2 id="chacra-titulo" class="max-w-[14ch] text-[clamp(1.6rem,3.4vw,2.9rem)] leading-[0.98]">{T.funcionamiento}</h2>
+      <h2 id="chacra-titulo" class="max-w-[16ch] text-[clamp(1.6rem,3vw,2.6rem)] leading-[1.02] [hyphens:manual]">{T.funcionamiento}</h2>
       <p class="text-lg text-muted">{T.funcionamientoTexto}</p>
       <p class="text-lg text-muted">{T.historia} <Pendiente texto="relato de la historia de la chacra" /></p>
     </div>
@@ -180,6 +182,7 @@ const chacraLd = {
   </section>
 
   <div class="contenedor grid gap-24 pb-[clamp(4rem,12vh,8rem)]">
+    <VolverExperiencia idioma={idioma} />
     <Llamado antetitulo="Camino de Azahar" titulo={T.llamado} texto={T.llamadoTexto} boton={{ texto: T.reservar, href: rutaReservar(idioma) }} />
     <PreguntasFrecuentes idioma={idioma} temas={['chacra']} />
     <TambienTeInteresa

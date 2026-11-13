@@ -1,0 +1,21 @@
+---
+// Botón para volver a la página principal de Camino de Azahar desde sus páginas internas
+// («La naranja en Salto», «La chacra y la comunidad»). Va arriba (discreto) y al final (más visible).
+import { elegir, rutas, type Idioma } from '../i18n/ui';
+interface Props { idioma?: Idioma; discreto?: boolean }
+const { idioma = 'es', discreto = false } = Astro.props;
+const T = elegir(idioma, {
+  es: { volver: 'Volver a Camino de Azahar' },
+  pt: { volver: 'Voltar ao Camino de Azahar' },
+  en: { volver: 'Back to Camino de Azahar' },
+});
+---
+<a
+  href={rutas[idioma].azahar}
+  class={discreto
+    ? 'inline-flex w-max items-center gap-2 text-sm font-semibold text-primary no-underline hover:underline'
+    : 'btn btn-secundario w-max gap-2'}
+>
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6" /></svg>
+  {T.volver}
+</a>
