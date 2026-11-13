@@ -13,6 +13,18 @@ const r = rutas[idioma];
 const camino = foto('camino-rural', idioma);
 // Retratos de las guías
 const retratos: Record<string, ClaveFoto | undefined> = { 'Nadia Espinosa': 'retrato-nadia', 'Sthefanie Machado': 'retrato-sthefanie' };
+// Cierre chico: normativa y sostenibilidad
+const N = elegir(idioma, {
+  es: { titulo: 'Cómo trabajamos', texto: 'Seguimos el enfoque del Plan Nacional de Turismo Sostenible 2030. Acá están nuestras políticas.' },
+  pt: { titulo: 'Como trabalhamos', texto: 'Seguimos a abordagem do Plano Nacional de Turismo Sustentável 2030 do Uruguai. Aqui estão nossas políticas.' },
+  en: { titulo: 'How we work', texto: "We follow the approach of Uruguay's National Sustainable Tourism Plan 2030. Here are our policies." },
+});
+const politicas = [
+  { texto: t(idioma, 'pie.sostenibilidad'), href: r.sostenibilidad },
+  { texto: t(idioma, 'pie.terminos'), href: r.terminos },
+  { texto: t(idioma, 'pie.privacidad'), href: r.privacidad },
+  { texto: t(idioma, 'pie.accesibilidad'), href: r.accesibilidad },
+];
 const collage = [
   { ...foto('atardecer-rio', idioma), celda: 'row-span-2' },
   { ...foto('sendero-chacra', idioma), celda: '' },
@@ -115,4 +127,14 @@ const T = elegir(idioma, {
     </ul>
   </section>
 
+  <!-- Cierre chico: normativa y sostenibilidad -->
+  <section class="contenedor pb-[clamp(3rem,8vh,5rem)]" aria-labelledby="como-trabajamos">
+    <div class="grid gap-2 border-t border-line pt-6">
+      <h2 id="como-trabajamos" class="!font-body !text-sm font-semibold text-heading">{N.titulo}</h2>
+      <p class="max-w-[70ch] text-sm text-muted">{N.texto}</p>
+      <ul class="flex flex-wrap gap-x-5 gap-y-1 text-sm">
+        {politicas.map((p) => <li><a href={p.href} class="text-primary underline-offset-4 hover:underline">{p.texto}</a></li>)}
+      </ul>
+    </div>
+  </section>
 </Base>
