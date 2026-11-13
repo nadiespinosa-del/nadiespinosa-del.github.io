@@ -1,7 +1,9 @@
 ---
-// Las cinco etapas como slides de pantalla completa que avanzan de costado con el scroll.
-// La luz de cada slide cambia como cambia la tarde durante la visita.
-// En pantallas angostas o con movimiento reducido, las etapas se apilan en vertical.
+// Las cinco etapas de la visita como un carrusel que avanza solo y despacio, sin botones:
+// de la etapa 1 a la 2, a la 3… y después de la última vuelve a la 1 hacia adelante (sin rebobinar).
+// No traba el scroll de la página. Se detiene mientras el mouse está encima (para terminar de leer)
+// y solo avanza mientras está a la vista. Con "movimiento reducido" las etapas se muestran una debajo de la otra.
+// La luz de cada etapa cambia como cambia la tarde durante la visita.
 import site from '../../data/site.json';
 import Imagen from '../Imagen.astro';
 import { experiencia } from '../../lib/datos';
@@ -13,9 +15,9 @@ interface Props { idioma?: Idioma }
 const { idioma = 'es' } = Astro.props;
 const { etapas } = experiencia(idioma);
 const T = elegir(idioma, {
-  es: { titulo: 'La visita, en cinco etapas', bajada: `${formatoDuracion(site.duracionMinutos)} en la Chacra La Victoria, con reserva previa, en grupos de ${site.cupo.minimo} a ${site.cupo.maximo} personas.`, sigue: 'Seguí bajando: la visita avanza de costado', minuto: (a: number, b: number) => `Minuto ${a} a ${b}`, etapa: 'Etapa', de: 'de' },
-  pt: { titulo: 'A visita, em cinco etapas', bajada: `${formatoDuracion(site.duracionMinutos)} na Chacra La Victoria, com reserva antecipada, em grupos de ${site.cupo.minimo} a ${site.cupo.maximo} pessoas.`, sigue: 'Continue rolando: a visita avança para o lado', minuto: (a: number, b: number) => `Do minuto ${a} ao ${b}`, etapa: 'Etapa', de: 'de' },
-  en: { titulo: 'The visit, in five stages', bajada: `${formatoDuracion(site.duracionMinutos)} at Chacra La Victoria, booked in advance, in groups of ${site.cupo.minimo} to ${site.cupo.maximo} people.`, sigue: 'Keep scrolling: the visit moves sideways', minuto: (a: number, b: number) => `Minutes ${a} to ${b}`, etapa: 'Stage', de: 'of' },
+  es: { titulo: 'La visita, en cinco etapas', bajada: `${formatoDuracion(site.duracionMinutos)} en la Chacra La Victoria, con reserva previa, en grupos de ${site.cupo.minimo} a ${site.cupo.maximo} personas.`, etapa: 'Etapa', de: 'de', carrusel: 'carrusel', diapositiva: 'etapa' },
+  pt: { titulo: 'A visita, em cinco etapas', bajada: `${formatoDuracion(site.duracionMinutos)} na Chacra La Victoria, com reserva antecipada, em grupos de ${site.cupo.minimo} a ${site.cupo.maximo} pessoas.`, etapa: 'Etapa', de: 'de', carrusel: 'carrossel', diapositiva: 'etapa' },
+  en: { titulo: 'The visit, in five stages', bajada: `${formatoDuracion(site.duracionMinutos)} at Chacra La Victoria, booked in advance, in groups of ${site.cupo.minimo} to ${site.cupo.maximo} people.`, etapa: 'Stage', de: 'of', carrusel: 'carousel', diapositiva: 'stage' },
 });
 const tomas = [
   'Llegada a la chacra: la encargada recibe al grupo bajo los naranjos, mañana, plano general',
@@ -34,84 +36,115 @@ const tonos = [
   { fondo: '#a8502a', texto: '#fff6e8', suave: '#fff1e2', numero: '#f6d27a' },
   { fondo: 'var(--ca-deep)', texto: '#fbf2e1', suave: 'var(--ca-on-deep-muted)', numero: '#f2c14e' },
 ];
-let acumulado = 0;
-const conInicio = etapas.map((e) => {
-  const inicio = acumulado;
-  acumulado += e.minutos;
-  return { ...e, inicio };
-});
+const total = etapas.length;
 ---
-<section id="experiencia" class="slides-etapas relative overflow-hidden" aria-labelledby="etapas-titulo">
-  <div class="slides-pista flex flex-col lg:h-[100svh] lg:w-max lg:flex-row">
-    <article class="slide flex min-h-[80svh] w-full shrink-0 flex-col justify-center gap-6 bg-bg px-[clamp(1rem,5vw,5rem)] py-20 lg:h-full lg:w-[62vw]">
-      <h2 id="etapas-titulo" class="max-w-[12ch] text-[clamp(1.8rem,4.1vw,4rem)] leading-[0.95]">{T.titulo}</h2>
-      <p class="max-w-[40ch] text-lg text-muted">{T.bajada}</p>
-      <p class="hidden items-center gap-3 text-sm text-muted lg:flex" aria-hidden="true">
-        <span class="inline-block h-px w-16 bg-line-strong"></span> {T.sigue}
-      </p>
-    </article>
-
-    {conInicio.map((etapa, i) => {
-      const tono = tonos[i];
-      return (
-        <article
-          class="slide relative grid w-full shrink-0 items-center gap-10 overflow-hidden px-[clamp(1rem,5vw,5rem)] py-20 lg:h-full lg:w-[92vw] lg:grid-cols-[1.15fr_1fr] lg:gap-16"
-          style={`background:${tono.fondo};color:${tono.texto}`}
-          aria-labelledby={`etapa-${etapa.numero}`}
-        >
-          <span class="slide-numero pointer-events-none absolute -bottom-[0.18em] left-[2vw] select-none font-display leading-none" style={`color:${tono.numero}`} aria-hidden="true">{etapa.numero}</span>
-          <div class="relative z-10 grid content-center gap-5 lg:pl-[22vw]">
-            <h3 id={`etapa-${etapa.numero}`} class="max-w-[12ch] !text-[clamp(1.8rem,3.4vw,3.5rem)] !leading-[0.98]" style={`color:${tono.texto}`}>
-              <span class="solo-lectores">{T.etapa} {etapa.numero} {T.de} 5: </span>{etapa.titulo}
-            </h3>
-            <p class="max-w-[34ch] text-xl leading-relaxed" style={`color:${tono.suave}`}>{etapa.texto}</p>
-          </div>
-          <div class="slide-foto relative z-10 w-full max-w-[20rem] lg:mx-auto lg:max-w-[30rem]">
-            <Imagen proporcion="4/5" toma={tomas[i]} {...foto(fotosEtapas[i], idioma)} />
-          </div>
-        </article>
-      );
-    })}
+<section id="experiencia" class="slides-etapas contenedor grid gap-8 py-[clamp(4rem,10vh,6rem)]" aria-labelledby="etapas-titulo">
+  <div class="grid gap-3">
+    <h2 id="etapas-titulo" class="text-[clamp(1.6rem,3.2vw,2.8rem)]">{T.titulo}</h2>
+    <p class="max-w-[52ch] text-lg text-muted">{T.bajada}</p>
   </div>
 
+  <div class="carrusel relative min-w-0" role="region" aria-roledescription={T.carrusel} aria-labelledby="etapas-titulo">
+    <div class="carrusel-ventana w-full min-w-0 overflow-hidden rounded-[var(--ca-radius-lg)]">
+      <div class="carrusel-pista flex" aria-live="off">
+        {etapas.map((etapa, i) => {
+          const tono = tonos[i];
+          return (
+            <article
+              class="carrusel-etapa relative grid w-full shrink-0 items-center gap-6 overflow-hidden px-6 py-8 sm:px-10 sm:py-10 lg:grid-cols-[1.2fr_0.8fr] lg:gap-12 lg:px-14"
+              style={`background:${tono.fondo};color:${tono.texto}`}
+              role="group"
+              aria-roledescription={T.diapositiva}
+              aria-label={`${T.etapa} ${i + 1} ${T.de} ${total}`}
+              data-indice={i}
+            >
+              <span class="etapa-numero pointer-events-none absolute -bottom-[0.2em] right-3 select-none font-display leading-none lg:left-4 lg:right-auto" style={`color:${tono.numero}`} aria-hidden="true">{etapa.numero}</span>
+              <div class="relative z-10 grid content-center gap-4 lg:pl-[12%]">
+                <h3 class="max-w-[16ch] !text-[clamp(1.5rem,2.8vw,2.6rem)] !leading-[1.02]" style={`color:${tono.texto}`}>
+                  <span class="solo-lectores">{T.etapa} {etapa.numero} {T.de} {total}: </span>{etapa.titulo}
+                </h3>
+                <p class="max-w-[42ch] text-base leading-relaxed sm:text-lg" style={`color:${tono.suave}`}>{etapa.texto}</p>
+              </div>
+              <div class="relative z-10 mx-auto w-full max-w-[13rem] sm:max-w-[16rem] lg:max-w-[20rem]">
+                <Imagen proporcion="4/5" toma={tomas[i]} {...foto(fotosEtapas[i], idioma)} />
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </div>
+
+  </div>
 </section>
 
 <style>
-  .slide-numero { font-size: clamp(14rem, 42vh, 30rem); font-variation-settings: 'opsz' 144, 'SOFT' 100; opacity: 0.9; }
-  @media (max-width: 1023px) {
-    .slide-numero { font-size: 12rem; opacity: 0.25; left: auto; right: 1rem; bottom: -2rem; }
+  .carrusel-pista { transition: transform 1600ms cubic-bezier(0.45, 0.05, 0.25, 1); }
+  .carrusel-pista.sin-transicion { transition: none; }
+  .etapa-numero { font-size: clamp(8rem, 22vw, 16rem); opacity: 0.22; }
+  @media (min-width: 1024px) { .etapa-numero { opacity: 0.85; font-size: clamp(10rem, 16vw, 15rem); } }
+  /* Movimiento reducido: sin carrusel, las cinco etapas una debajo de la otra */
+  @media (prefers-reduced-motion: reduce) {
+    .carrusel-pista { flex-direction: column; gap: 0.75rem; transform: none !important; transition: none; }
   }
 </style>
 
 <script>
-  import { gsap, ScrollTrigger, reducido } from '../../scripts/movimiento';
-  const seccion = document.querySelector<HTMLElement>('.slides-etapas');
-  const pista = seccion?.querySelector<HTMLElement>('.slides-pista');
+  document.querySelectorAll<HTMLElement>('.slides-etapas .carrusel').forEach((carrusel) => {
+    const pista = carrusel.querySelector<HTMLElement>('.carrusel-pista');
+    const etapas = [...carrusel.querySelectorAll<HTMLElement>('.carrusel-etapa')];
+    if (!pista || etapas.length < 2) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  if (seccion && pista && !reducido) {
-    const mm = gsap.matchMedia();
-    mm.add('(min-width: 1024px)', () => {
-      const distancia = () => pista.scrollWidth - window.innerWidth;
-      const avance = gsap.to(pista, {
-        x: () => -distancia(),
-        ease: 'none',
-        scrollTrigger: {
-          trigger: seccion,
-          start: 'top top',
-          end: () => `+=${distancia()}`,
-          pin: true,
-          scrub: 0.8,
-          invalidateOnRefresh: true,
-          anticipatePin: 1,
-        },
+    const ESPERA = 7000; // tiempo para leer cada etapa
+    const total = etapas.length;
+    // Copia de la primera etapa al final: así de la última se pasa a la 1 siguiendo hacia adelante
+    const copia = etapas[0].cloneNode(true) as HTMLElement;
+    copia.setAttribute('aria-hidden', 'true');
+    copia.setAttribute('inert', '');
+    copia.removeAttribute('aria-label');
+    copia.removeAttribute('role');
+    copia.removeAttribute('aria-roledescription');
+    copia.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
+    pista.append(copia);
+
+    let actual = 0;
+    let encima = false;
+    let visible = false;
+    let reloj: number | undefined;
+
+    const marcar = () => {
+      const real = actual % total;
+      etapas.forEach((e, i) => {
+        e.toggleAttribute('inert', i !== real);
+        e.setAttribute('aria-hidden', String(i !== real));
       });
-      seccion.querySelectorAll<HTMLElement>('.slide').forEach((slide) => {
-        const numero = slide.querySelector('.slide-numero');
-        const foto = slide.querySelector('.slide-foto');
-        if (numero) gsap.fromTo(numero, { xPercent: 40 }, { xPercent: -20, ease: 'none', scrollTrigger: { trigger: slide, containerAnimation: avance, start: 'left right', end: 'right left', scrub: true } });
-        if (foto) gsap.fromTo(foto, { clipPath: 'circle(8% at 50% 50%)', scale: 1.15 }, { clipPath: 'circle(75% at 50% 50%)', scale: 1, ease: 'power2.out', scrollTrigger: { trigger: slide, containerAnimation: avance, start: 'left 85%', end: 'left 25%', scrub: true } });
-      });
-      return () => ScrollTrigger.refresh();
+    };
+    const mover = () => { pista.style.transform = `translateX(-${actual * 100}%)`; };
+    const avanzar = () => {
+      actual += 1;
+      pista.classList.remove('sin-transicion');
+      mover();
+      marcar();
+    };
+    // Al llegar a la copia de la etapa 1, se vuelve en silencio a la verdadera etapa 1
+    pista.addEventListener('transitionend', (e) => {
+      if (e.target !== pista || actual < total) return;
+      pista.classList.add('sin-transicion');
+      actual = 0;
+      mover();
+      void pista.offsetWidth;
+      pista.classList.remove('sin-transicion');
     });
-  }
+
+    const programar = () => {
+      window.clearTimeout(reloj);
+      if (!encima && visible && !document.hidden) reloj = window.setTimeout(() => { avanzar(); programar(); }, ESPERA);
+    };
+    carrusel.addEventListener('mouseenter', () => { encima = true; programar(); });
+    carrusel.addEventListener('mouseleave', () => { encima = false; programar(); });
+    document.addEventListener('visibilitychange', programar);
+    new IntersectionObserver((entradas) => { visible = entradas[0].isIntersecting; programar(); }, { threshold: 0.35 }).observe(carrusel);
+
+    marcar();
+  });
 </script>
