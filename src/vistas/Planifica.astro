@@ -10,7 +10,7 @@ import AvisoAccesibilidad from '../components/AvisoAccesibilidad.astro';
 import Pendiente from '../components/Pendiente.astro';
 import Imagen from '../components/Imagen.astro';
 import PreguntasFrecuentes from '../components/PreguntasFrecuentes.astro';
-import TambienTeInteresa from '../components/TambienTeInteresa.astro';
+import VolverExperiencia from '../components/VolverExperiencia.astro';
 import { foto, fotoArchivo, type ClaveFoto } from '../lib/fotos';
 import { elegir, rutas, rutaReservar, t, type Idioma } from '../i18n/ui';
 
@@ -40,7 +40,6 @@ const T = elegir(idioma, {
     consejosLista: [['Ropa y calzado:', 'cómodos y cerrados, para caminar entre los árboles.'], ['Sol y lluvia:', 'mirá el pronóstico; si llueve, reprogramamos sin costo.'], ['Necesidades especiales:', 'contanos al reservar para adaptar lo que sea posible.']],
     recomendaciones: 'Recomendaciones de la chacra:', dormir: 'Dónde dormir y comer', dormirTexto: 'Alojamientos y restaurantes aliados de Camino de Azahar:',
     experiencia: 'La experiencia', escuelas: 'Grupos y escuelas',
-    enlaces: ['Las cinco etapas y las próximas salidas.', 'Chacra La Victoria y la feria de Colonia Osimani.', 'Propuesta para liceos, UTU y viajes de fin de año.'],
   },
   pt: {
     meta: 'Planeje sua visita · Camino de Azahar',
@@ -58,7 +57,6 @@ const T = elegir(idioma, {
     consejosLista: [['Roupa e calçado:', 'confortáveis e fechados, para caminhar entre as árvores.'], ['Sol e chuva:', 'confira a previsão; se chover, remarcamos sem custo.'], ['Necessidades especiais:', 'conte-nos na reserva para adaptarmos o que for possível.']],
     recomendaciones: 'Recomendações da chácara:', dormir: 'Onde dormir e comer', dormirTexto: 'Hospedagens e restaurantes parceiros do Camino de Azahar:',
     experiencia: 'A experiência', escuelas: 'Grupos e escolas',
-    enlaces: ['As cinco etapas e as próximas saídas.', 'A Chacra La Victoria e a feira de Colonia Osimani.', 'Proposta para escolas e viagens de formatura.'],
   },
   en: {
     meta: 'Plan your visit · Camino de Azahar',
@@ -76,7 +74,6 @@ const T = elegir(idioma, {
     consejosLista: [['Clothes and shoes:', 'comfortable and closed, for walking among the trees.'], ['Sun and rain:', 'check the forecast; if it rains, we reschedule free of charge.'], ['Special needs:', 'let us know when you book so we can adapt what we can.']],
     recomendaciones: "The farm's recommendations:", dormir: 'Where to stay and eat', dormirTexto: 'Camino de Azahar partner accommodation and restaurants:',
     experiencia: 'The experience', escuelas: 'Groups and schools',
-    enlaces: ['The five stages and upcoming departures.', 'Chacra La Victoria and the Colonia Osimani market.', 'School trips and end-of-year trips.'],
   },
 });
 ---
@@ -103,6 +100,7 @@ const T = elegir(idioma, {
     </nav>
   </CabeceraPagina>
   <NavExperiencia idioma={idioma} actual={Astro.url.pathname} />
+  <div class="contenedor pt-6"><VolverExperiencia idioma={idioma} discreto /></div>
 
   <RuedaAnio idioma={idioma} />
 
@@ -177,13 +175,6 @@ const T = elegir(idioma, {
 
   <div class="contenedor grid gap-24 pb-[clamp(4rem,12vh,8rem)]">
     <PreguntasFrecuentes idioma={idioma} temas={['planifica']} />
-    <TambienTeInteresa
-      idioma={idioma}
-      enlaces={[
-        { titulo: T.experiencia, texto: T.enlaces[0], href: r.azahar },
-        { titulo: t(idioma, 'nav.chacra'), texto: T.enlaces[1], href: r.chacra },
-        { titulo: T.escuelas, texto: T.enlaces[2], href: r.azaharGrupos },
-      ]}
-    />
+    <VolverExperiencia idioma={idioma} />
   </div>
 </Base>

@@ -10,7 +10,6 @@ import Pendiente from '../components/Pendiente.astro';
 import Llamado from '../components/Llamado.astro';
 import VolverExperiencia from '../components/VolverExperiencia.astro';
 import PreguntasFrecuentes from '../components/PreguntasFrecuentes.astro';
-import TambienTeInteresa from '../components/TambienTeInteresa.astro';
 import DatosEstructurados from '../components/DatosEstructurados.astro';
 import site from '../data/site.json';
 import { textos } from '../lib/datos';
@@ -42,7 +41,7 @@ const T = elegir(idioma, {
     oficios1: 'Productores, cosecheros, técnicos, trabajadoras y trabajadores del empaque, emprendedores. La citricultura es una cadena de saberes que se transmiten entre generaciones.',
     oficios2: 'La zafra genera miles de puestos de trabajo y es una de las principales fuentes de empleo de Salto. Reconocer ese trabajo, con sus logros y sus dificultades, también es parte de la visita.',
     llamado: 'Conocé la chacra desde adentro', llamadoTexto: 'Recorrido, jugo, degustación y la historia contada por quien la vive.', reservar: 'Reservá tu lugar',
-    experiencia: 'La experiencia', enlaces: ['Las cinco etapas de la visita.', 'La historia de la citricultura salteña.', 'Cómo llegar a Colonia Osimani y qué llevar.'],
+    experiencia: 'La experiencia',
   },
   pt: {
     meta: 'A chácara e a comunidade · Camino de Azahar',
@@ -64,7 +63,7 @@ const T = elegir(idioma, {
     oficios1: 'Produtores, colhedores, técnicos, trabalhadoras e trabalhadores das embalagens, empreendedores. A citricultura é uma cadeia de saberes transmitidos entre gerações.',
     oficios2: 'A safra gera milhares de empregos e é uma das principais fontes de trabalho de Salto. Reconhecer esse trabalho, com suas conquistas e dificuldades, também faz parte da visita.',
     llamado: 'Conheça a chácara por dentro', llamadoTexto: 'Percurso, suco, degustação e a história contada por quem a vive.', reservar: 'Reserve sua vaga',
-    experiencia: 'A experiência', enlaces: ['As cinco etapas da visita.', 'A história da citricultura de Salto.', 'Como chegar a Colonia Osimani e o que levar.'],
+    experiencia: 'A experiência',
   },
   en: {
     meta: 'The farm and community · Camino de Azahar',
@@ -86,7 +85,7 @@ const T = elegir(idioma, {
     oficios1: 'Growers, pickers, technicians, packing-house workers and local makers. Citrus farming is a chain of know-how passed down through generations.',
     oficios2: 'The harvest creates thousands of jobs and is one of the main sources of work in Salto. Recognising that work, with its achievements and its hardships, is also part of the visit.',
     llamado: 'Get to know the farm from the inside', llamadoTexto: 'A walk, juice, tasting and the story told by the people who live it.', reservar: 'Book your spot',
-    experiencia: 'The experience', enlaces: ['The five stages of the visit.', 'The history of citrus farming in Salto.', 'Getting to Colonia Osimani and what to bring.'],
+    experiencia: 'The experience',
   },
 });
 const chacraLd = {
@@ -185,14 +184,6 @@ const chacraLd = {
     <VolverExperiencia idioma={idioma} />
     <Llamado antetitulo="Camino de Azahar" titulo={T.llamado} texto={T.llamadoTexto} boton={{ texto: T.reservar, href: rutaReservar(idioma) }} />
     <PreguntasFrecuentes idioma={idioma} temas={['chacra']} />
-    <TambienTeInteresa
-      idioma={idioma}
-      enlaces={[
-        { titulo: T.experiencia, texto: T.enlaces[0], href: r.azahar },
-        { titulo: t(idioma, 'nav.naranja'), texto: T.enlaces[1], href: r.naranja },
-        { titulo: t(idioma, 'nav.planifica'), texto: T.enlaces[2], href: r.planifica },
-      ]}
-    />
   </div>
   <DatosEstructurados datos={chacraLd} />
 </Base>
