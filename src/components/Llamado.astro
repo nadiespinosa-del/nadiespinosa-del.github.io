@@ -1,5 +1,7 @@
 ---
-// Banda de llamado a la acción sobre verde profundo, con la rodaja como fondo.
+// Banda de llamado a la acción.
+// tono "verde" (por defecto): verde profundo con la rodaja de naranja de fondo (páginas de Camino de Azahar).
+// tono "calido": degradé de beige a naranja, sin rodaja (páginas generales de VÍA, para cualquier experiencia).
 import Rodaja from './Rodaja.astro';
 interface Props {
   antetitulo?: string;
@@ -7,18 +9,43 @@ interface Props {
   texto?: string;
   boton: { texto: string; href: string };
   secundario?: { texto: string; href: string };
+  tono?: 'verde' | 'calido';
 }
-const { antetitulo, titulo, texto, boton, secundario } = Astro.props;
+const { antetitulo, titulo, texto, boton, secundario, tono = 'verde' } = Astro.props;
+const calido = tono === 'calido';
 ---
-<section class="on-deep relative overflow-hidden rounded-[var(--ca-radius-lg)] bg-deep px-6 py-14 text-on-deep sm:px-12">
-  <Rodaja tamano={420} grosor={1} class="pointer-events-none absolute -bottom-40 -left-24 text-highlight opacity-15" />
-  <div class="relative grid max-w-3xl gap-4">
-    {antetitulo && <p class="antetitulo !text-highlight">{antetitulo}</p>}
-    <h2 class="text-3xl !text-on-deep">{titulo}</h2>
-    {texto && <p class="text-lg text-on-deep-muted">{texto}</p>}
-    <div class="mt-2 flex flex-wrap gap-3">
-      <a href={boton.href} class="btn btn-luz">{boton.texto}</a>
-      {secundario && <a href={secundario.href} class="btn btn-contorno-claro">{secundario.texto}</a>}
+{calido ? (
+  <section class="llamado-calido relative overflow-hidden rounded-[var(--ca-radius-lg)] px-6 py-14 sm:px-12">
+    <div class="relative grid max-w-3xl gap-4">
+      {antetitulo && <p class="font-display text-lg italic text-primary">{antetitulo}</p>}
+      <h2 class="text-3xl text-heading">{titulo}</h2>
+      {texto && <p class="max-w-[52ch] text-lg text-ink">{texto}</p>}
+      <div class="mt-2 flex flex-wrap gap-3">
+        <a href={boton.href} class="btn btn-primario">{boton.texto}</a>
+        {secundario && <a href={secundario.href} class="btn btn-secundario">{secundario.texto}</a>}
+      </div>
     </div>
-  </div>
-</section>
+  </section>
+) : (
+  <section class="on-deep relative overflow-hidden rounded-[var(--ca-radius-lg)] bg-deep px-6 py-14 text-on-deep sm:px-12">
+    <Rodaja tamano={420} grosor={1} class="pointer-events-none absolute -bottom-40 -left-24 text-highlight opacity-15" />
+    <div class="relative grid max-w-3xl gap-4">
+      {antetitulo && <p class="antetitulo !text-highlight">{antetitulo}</p>}
+      <h2 class="text-3xl !text-on-deep">{titulo}</h2>
+      {texto && <p class="text-lg text-on-deep-muted">{texto}</p>}
+      <div class="mt-2 flex flex-wrap gap-3">
+        <a href={boton.href} class="btn btn-luz">{boton.texto}</a>
+        {secundario && <a href={secundario.href} class="btn btn-contorno-claro">{secundario.texto}</a>}
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  /* Beige cálido que se va encendiendo hacia el naranja, como un atardecer; el texto queda sobre la parte clara */
+  .llamado-calido {
+    background:
+      radial-gradient(ellipse 60% 90% at 100% 100%, rgba(224, 122, 46, 0.55), transparent 70%),
+      linear-gradient(110deg, #f4e9d5 0%, #f6dfbd 45%, #f2b77a 80%, #e9934a 100%);
+  }
+</style>

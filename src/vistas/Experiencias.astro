@@ -6,6 +6,7 @@ import Base from '../layouts/Base.astro';
 import CabeceraPagina from '../components/CabeceraPagina.astro';
 import TarjetaExperiencia from '../components/TarjetaExperiencia.astro';
 import ProximamenteExperiencias from '../components/ProximamenteExperiencias.astro';
+import Llamado from '../components/Llamado.astro';
 import { catalogo, textos } from '../lib/datos';
 import { elegir, rutas, t, type Idioma } from '../i18n/ui';
 
@@ -17,18 +18,21 @@ const T = elegir(idioma, {
   es: {
     desc: 'Experiencias turísticas participativas de VÍA en Uruguay: naturaleza, producción local, gastronomía e identidad. Empezamos por Camino de Azahar, en Salto.',
     seccion: 'Experiencias para vivir',
+    medidaTitulo: '¿Buscás otra cosa? Armamos tu viaje a medida', medidaTexto: 'Contanos a dónde querés ir, con quién y qué te gustaría vivir. Nosotros diseñamos la experiencia y nos ocupamos del resto.',
     comienza: ['VÍA comienza su recorrido con su primera experiencia en ', '.'],
     titulo: 'Elegí cómo vivir Uruguay', intro: 'Cada propuesta es una forma distinta de conocer un lugar: sus paisajes, su producción y las personas que lo hacen único.',
   },
   pt: {
     desc: 'Experiências turísticas participativas da VÍA no Uruguai: natureza, produção local, gastronomia e identidade. Começamos pelo Camino de Azahar, em Salto.',
     seccion: 'Experiências para viver',
+    medidaTitulo: 'Procura outra coisa? Montamos sua viagem sob medida', medidaTexto: 'Conte para onde quer ir, com quem e o que gostaria de viver. Nós desenhamos a experiência e cuidamos do resto.',
     comienza: ['A VÍA começa seu percurso com a primeira experiência em ', ', no Uruguai.'],
     titulo: 'Escolha como viver o Uruguai', intro: 'Cada proposta é uma forma diferente de conhecer um lugar: suas paisagens, sua produção e as pessoas que o tornam único.',
   },
   en: {
     desc: "VÍA's hands-on travel experiences in Uruguay: nature, local produce, food and identity. We start with Camino de Azahar, in Salto.",
     seccion: 'Experiences worth living',
+    medidaTitulo: "Looking for something else? We'll plan a trip just for you", medidaTexto: "Tell us where you want to go, who with and what you'd like to experience. We design the trip and take care of the rest.",
     comienza: ['VÍA starts its journey with its first experience in ', ', Uruguay.'],
     titulo: 'Choose how to experience Uruguay', intro: 'Each experience is a different way to get to know a place: its landscapes, its produce and the people who make it unique.',
   },
@@ -58,4 +62,8 @@ const T = elegir(idioma, {
     <p class="text-xs text-muted">* {textos(idioma).leyenda}.</p>
   </section>
 
+  <!-- Cierre: para quien busca otro destino u otro tipo de viaje -->
+  <div class="contenedor pb-[clamp(4rem,10vh,7rem)]">
+    <Llamado tono="calido" titulo={T.medidaTitulo} texto={T.medidaTexto} boton={{ texto: t(idioma, 'nav.disena'), href: r.disena }} />
+  </div>
 </Base>
