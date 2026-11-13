@@ -3,8 +3,6 @@
 import Base from '../layouts/Base.astro';
 import CabeceraPagina from '../components/CabeceraPagina.astro';
 import Imagen from '../components/Imagen.astro';
-import Llamado from '../components/Llamado.astro';
-import TambienTeInteresa from '../components/TambienTeInteresa.astro';
 import { elegir, rutas, t, type Idioma } from '../i18n/ui';
 import { foto, type ClaveFoto } from '../lib/fotos';
 
@@ -33,9 +31,6 @@ const T = elegir(idioma, {
     modeloTexto: 'Nosotros nos ocupamos de crear, coordinar y resolver; cada lugar aporta sus recursos, sus saberes y su gente. Así, una parte de lo que genera el turismo queda en la comunidad.',
     arranque: ['Arrancamos en Salto con ', '. Las próximas experiencias llegarán desde otros puntos de Uruguay.'],
     modeloAlt: 'Visitantes y emprendedores locales conversando', equipo: 'Un grupo de amigos', equipoTexto: 'Somos un grupo de amigos que lleva adelante VÍA, una agencia de turismo. En las experiencias nos vas a encontrar como guías, y una de nosotras también forma parte de la empresa.', personas: [['Nadia Espinosa', 'Guía y coordinadora de Camino de Azahar', 'Socia fundadora de VÍA'], ['Sthefanie Machado', 'Guía de Camino de Azahar']], retrato: (n: string) => `Retrato de ${n}`,
-    llamadoTitulo: 'Conocé nuestra primera propuesta', llamadoTexto: 'Camino de Azahar: la naranja, la gastronomía y la identidad de Salto, desde adentro.',
-    llamadoBoton: 'Ver Camino de Azahar', llamadoSec: 'Todas las experiencias',
-    enlaces: ['Cómo cuidamos cada lugar que visitamos.', 'Experiencias educativas para instituciones.', 'Escribinos para armar tu visita.'],
   },
   pt: {
     titulo: 'Viajar para conhecer de perto', fotoAlt: 'A equipe da VÍA com produtores locais', queHacemos: 'O que fazemos',
@@ -49,9 +44,6 @@ const T = elegir(idioma, {
     modeloTexto: 'Nós cuidamos de criar, coordenar e resolver; cada lugar contribui com seus recursos, seus saberes e sua gente. Assim, parte do que o turismo gera fica na comunidade.',
     arranque: ['Começamos em Salto com o ', '. As próximas experiências virão de outros lugares do Uruguai.'],
     modeloAlt: 'Visitantes e empreendedores locais conversando', equipo: 'Um grupo de amigos', equipoTexto: 'Somos um grupo de amigos que toca a VÍA, uma agência de turismo. Nas experiências, você vai nos encontrar como guias, e uma de nós também faz parte da empresa.', personas: [['Nadia Espinosa', 'Guia e coordenadora do Camino de Azahar', 'Sócia fundadora da VÍA'], ['Sthefanie Machado', 'Guia do Camino de Azahar']], retrato: (n: string) => `Retrato de ${n}`,
-    llamadoTitulo: 'Conheça nossa primeira proposta', llamadoTexto: 'Camino de Azahar: a laranja, a gastronomia e a identidade de Salto, por dentro.',
-    llamadoBoton: 'Ver o Camino de Azahar', llamadoSec: 'Todas as experiências',
-    enlaces: ['Como cuidamos de cada lugar que visitamos.', 'Experiências educativas para instituições.', 'Escreva para nós e montamos sua visita.'],
   },
   en: {
     titulo: 'Travel to get to know places up close', fotoAlt: 'The VÍA team with local growers', queHacemos: 'What we do',
@@ -65,9 +57,6 @@ const T = elegir(idioma, {
     modeloTexto: 'We take care of creating, coordinating and sorting things out; each place brings its resources, its know-how and its people. That way, part of what tourism generates stays in the community.',
     arranque: ['We start in Salto with ', '. The next experiences will come from other parts of Uruguay.'],
     modeloAlt: 'Visitors and local makers talking', equipo: 'A group of friends', equipoTexto: 'We are a group of friends who run VÍA, a travel agency. On the experiences you will meet us as guides, and one of us is also part of the company.', personas: [['Nadia Espinosa', 'Guide and coordinator of Camino de Azahar', 'Co-founder of VÍA'], ['Sthefanie Machado', 'Guide on Camino de Azahar']], retrato: (n: string) => `Portrait of ${n}`,
-    llamadoTitulo: 'Discover our first experience', llamadoTexto: 'Camino de Azahar: oranges, food and the identity of Salto, from the inside.',
-    llamadoBoton: 'See Camino de Azahar', llamadoSec: 'All experiences',
-    enlaces: ['How we look after every place we visit.', 'School trips for institutions.', 'Write to us to plan your visit.'],
   },
 });
 ---
@@ -113,28 +102,17 @@ const T = elegir(idioma, {
   <section class="contenedor grid gap-6 py-[clamp(4rem,12vh,8rem)]" aria-labelledby="equipo-titulo">
     <h2 id="equipo-titulo" class="text-[clamp(1.7rem,3.2vw,2.7rem)]">{T.equipo}</h2>
     <p class="max-w-[60ch] text-lg text-muted">{T.equipoTexto}</p>
-    <ul class="grid max-w-2xl gap-6 sm:grid-cols-2">
+    <ul class="grid grid-cols-2 gap-4 sm:flex sm:flex-wrap sm:gap-5">
       {T.personas.map(([nombre, ...roles]) => (
-        <li class="tarjeta grid max-w-[20rem] content-start overflow-hidden">
+        <li class="tarjeta grid w-full content-start overflow-hidden sm:w-[13.5rem]">
           <Imagen proporcion="1/1" toma={`Retrato de ${nombre}`} src={retratos[nombre] ? foto(retratos[nombre]!, idioma).src : undefined} alt={T.retrato(nombre)} class="!rounded-none" />
-          <div class="grid gap-1 p-6">
-            <h3 class="text-2xl">{nombre}</h3>
-            {roles.map((rol) => <p class="text-muted">{rol}</p>)}
+          <div class="grid gap-0.5 p-4">
+            <h3 class="text-lg leading-tight">{nombre}</h3>
+            {roles.map((rol) => <p class="text-sm leading-snug text-muted">{rol}</p>)}
           </div>
         </li>
       ))}
     </ul>
   </section>
 
-  <div class="contenedor grid gap-20 pb-[clamp(4rem,12vh,8rem)]">
-    <Llamado antetitulo={t(idioma, 'nav.experiencias')} titulo={T.llamadoTitulo} texto={T.llamadoTexto} boton={{ texto: T.llamadoBoton, href: r.azahar }} secundario={{ texto: T.llamadoSec, href: r.experiencias }} />
-    <TambienTeInteresa
-      idioma={idioma}
-      enlaces={[
-        { titulo: t(idioma, 'pie.sostenibilidad'), texto: T.enlaces[0], href: r.sostenibilidad },
-        { titulo: t(idioma, 'nav.grupos'), texto: T.enlaces[1], href: r.grupos },
-        { titulo: t(idioma, 'nav.contacto'), texto: T.enlaces[2], href: r.contacto },
-      ]}
-    />
-  </div>
 </Base>
