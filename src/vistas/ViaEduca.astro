@@ -6,7 +6,6 @@ import Base from '../layouts/Base.astro';
 import CabeceraPagina from '../components/CabeceraPagina.astro';
 import Imagen from '../components/Imagen.astro';
 import FormularioGrupos from '../components/FormularioGrupos.astro';
-import TambienTeInteresa from '../components/TambienTeInteresa.astro';
 import { catalogo } from '../lib/datos';
 import { foto } from '../lib/fotos';
 import { elegir, rutas, t, type Idioma } from '../i18n/ui';
@@ -29,7 +28,6 @@ const T = elegir(idioma, {
     propuestas: 'Propuestas para empezar', propuestasTexto: 'Experiencias que ya tienen su versión educativa. También armamos propuestas en otros destinos.',
     paraEscuelas: 'para escuelas', escuelasAlt: (n: string) => `${n} para escuelas`,
     escuelasTexto: 'Ciencias, historia, geografía, economía y ambiente en una chacra citrícola. De 11 a 15 años.', ver: 'Ver la propuesta',
-    enlaces: ['Todas las propuestas de VÍA.', 'Un viaje a medida para tu grupo.', 'Escribinos y lo coordinamos.'],
   },
   pt: {
     titulo: 'Aprender também é sair, conhecer e viver novas experiências.',
@@ -44,7 +42,6 @@ const T = elegir(idioma, {
     propuestas: 'Propostas para começar', propuestasTexto: 'Experiências que já têm sua versão educativa. Também montamos propostas em outros destinos.',
     paraEscuelas: 'para escolas', escuelasAlt: (n: string) => `${n} para escolas`,
     escuelasTexto: 'Ciências, história, geografia, economia e meio ambiente em uma chácara de citros. De 11 a 15 anos.', ver: 'Ver a proposta',
-    enlaces: ['Todas as propostas da VÍA.', 'Uma viagem sob medida para o seu grupo.', 'Escreva para nós e combinamos tudo.'],
   },
   en: {
     titulo: 'Learning also means getting out, discovering and living new experiences.',
@@ -59,7 +56,6 @@ const T = elegir(idioma, {
     propuestas: 'Trips to start with', propuestasTexto: 'Experiences that already have a school version. We also plan trips to other destinations.',
     paraEscuelas: 'for schools', escuelasAlt: (n: string) => `${n} for schools`,
     escuelasTexto: 'Science, history, geography, economics and the environment on a citrus farm. Ages 11 to 15.', ver: 'See the school visit',
-    enlaces: ['All VÍA experiences.', 'A tailor-made trip for your group.', "Write to us and we'll arrange it."],
   },
 });
 ---
@@ -114,17 +110,6 @@ const T = elegir(idioma, {
   <section id="propuesta" class="bg-surface-2 py-[clamp(5rem,12vh,9rem)]" aria-label={T.boton}>
     <div class="contenedor max-w-4xl"><FormularioGrupos idioma={idioma} general id="educa" /></div>
   </section>
-
-  <div class="contenedor py-[clamp(4rem,12vh,8rem)]">
-    <TambienTeInteresa
-      idioma={idioma}
-      enlaces={[
-        { titulo: t(idioma, 'nav.experiencias'), texto: T.enlaces[0], href: r.experiencias },
-        { titulo: t(idioma, 'nav.disena'), texto: T.enlaces[1], href: r.disena },
-        { titulo: t(idioma, 'nav.contacto'), texto: T.enlaces[2], href: r.contacto },
-      ]}
-    />
-  </div>
 </Base>
 
 <script>
