@@ -6,7 +6,6 @@ import Base from '../layouts/Base.astro';
 import CabeceraPagina from '../components/CabeceraPagina.astro';
 import TarjetaExperiencia from '../components/TarjetaExperiencia.astro';
 import ProximamenteExperiencias from '../components/ProximamenteExperiencias.astro';
-import TambienTeInteresa from '../components/TambienTeInteresa.astro';
 import { catalogo, textos } from '../lib/datos';
 import { elegir, rutas, t, type Idioma } from '../i18n/ui';
 
@@ -20,21 +19,18 @@ const T = elegir(idioma, {
     seccion: 'Experiencias para vivir',
     comienza: ['VÍA comienza su recorrido con su primera experiencia en ', '.'],
     titulo: 'Elegí cómo vivir Uruguay', intro: 'Cada propuesta es una forma distinta de conocer un lugar: sus paisajes, su producción y las personas que lo hacen único.',
-    enlaces: [['Experiencias educativas para instituciones.'], ['Quiénes somos y cómo trabajamos con cada comunidad.'], ['Escribinos para armar tu visita.']],
   },
   pt: {
     desc: 'Experiências turísticas participativas da VÍA no Uruguai: natureza, produção local, gastronomia e identidade. Começamos pelo Camino de Azahar, em Salto.',
     seccion: 'Experiências para viver',
     comienza: ['A VÍA começa seu percurso com a primeira experiência em ', ', no Uruguai.'],
     titulo: 'Escolha como viver o Uruguai', intro: 'Cada proposta é uma forma diferente de conhecer um lugar: suas paisagens, sua produção e as pessoas que o tornam único.',
-    enlaces: [['Experiências educativas para instituições.'], ['Quem somos e como trabalhamos com cada comunidade.'], ['Escreva para nós e montamos sua visita.']],
   },
   en: {
     desc: "VÍA's hands-on travel experiences in Uruguay: nature, local produce, food and identity. We start with Camino de Azahar, in Salto.",
     seccion: 'Experiences worth living',
     comienza: ['VÍA starts its journey with its first experience in ', ', Uruguay.'],
     titulo: 'Choose how to experience Uruguay', intro: 'Each experience is a different way to get to know a place: its landscapes, its produce and the people who make it unique.',
-    enlaces: [['School trips for institutions.'], ['Who we are and how we work with each community.'], ['Write to us to plan your visit.']],
   },
 });
 ---
@@ -62,14 +58,4 @@ const T = elegir(idioma, {
     <p class="text-xs text-muted">* {textos(idioma).leyenda}.</p>
   </section>
 
-  <div class="contenedor py-[clamp(4rem,10vh,7rem)]">
-    <TambienTeInteresa
-      idioma={idioma}
-      enlaces={[
-        { titulo: t(idioma, 'nav.grupos'), texto: T.enlaces[0][0], href: r.grupos },
-        { titulo: t(idioma, 'nav.nosotros'), texto: T.enlaces[1][0], href: r.nosotros },
-        { titulo: t(idioma, 'nav.contacto'), texto: T.enlaces[2][0], href: r.contacto },
-      ]}
-    />
-  </div>
 </Base>
