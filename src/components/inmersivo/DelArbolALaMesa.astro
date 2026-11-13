@@ -2,6 +2,7 @@
 // Del árbol a la mesa: seis pasos en tarjetas que se apilan con el scroll (sticky).
 // Se detienen debajo del encabezado (72 px) y de la barra de Camino de Azahar.
 import Imagen from '../Imagen.astro';
+import CartaGiro from '../CartaGiro.astro';
 import { elegir, type Idioma } from '../../i18n/ui';
 import { foto, fotoArchivo, type ClaveFoto } from '../../lib/fotos';
 // compacta: grilla de seis tarjetas chicas (página principal de la experiencia); sin compacta, tarjetas grandes apiladas
@@ -63,27 +64,25 @@ const T = elegir(idioma, {
     const img = fotosPasos[i] ? foto(fotosPasos[i]!, idioma) : i === 4 ? { src: puerto.src, alt: puerto.alt } : null;
     return (
       <li class="revelar" style={`transition-delay:${(i % 3) * 80}ms`}>
-        <button type="button" class="carta block h-full w-full text-left" aria-pressed="false">
-          <span class="carta-interior relative block min-h-[16.5rem] w-full sm:min-h-[17rem]">
-            <span class="carta-frente absolute inset-0 overflow-hidden rounded-[var(--ca-radius-lg)] bg-deep">
-              {img && <img src={img.src} alt="" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover" />}
-              <span class="absolute inset-0 bg-gradient-to-t from-[#1b2414]/85 via-[#1b2414]/25 to-transparent" aria-hidden="true"></span>
-              <span class="absolute inset-x-0 bottom-0 grid gap-1 p-5 text-[#fbf2e1]">
-                <span class="flex items-baseline gap-3">
-                  <span class="font-display text-4xl leading-none text-[#f2c14e]" aria-hidden="true">{i + 1}</span>
-                  <span class="font-display text-2xl leading-tight"><span class="solo-lectores">{T.paso} {i + 1}: </span>{p.titulo}</span>
-                </span>
+        <CartaGiro>
+          <Fragment slot="frente">
+            {img && <img src={img.src} alt="" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover" />}
+            <span class="absolute inset-0 bg-gradient-to-t from-[#1b2414]/85 via-[#1b2414]/25 to-transparent" aria-hidden="true"></span>
+            <span class="absolute inset-x-0 bottom-0 grid gap-1 p-5 text-[#fbf2e1]">
+              <span class="flex items-baseline gap-3">
+                <span class="font-display text-4xl leading-none text-[#f2c14e]" aria-hidden="true">{i + 1}</span>
+                <span class="font-display text-2xl leading-tight"><span class="solo-lectores">{T.paso} {i + 1}: </span>{p.titulo}</span>
               </span>
             </span>
-            <span class="carta-dorso absolute inset-0 grid content-center gap-2 overflow-hidden rounded-[var(--ca-radius-lg)] border border-line bg-surface p-5 sm:p-6">
-              <span class="flex items-baseline gap-2.5 text-heading" aria-hidden="true">
-                <span class="font-display text-2xl leading-none text-deco">{i + 1}</span>
-                <span class="font-display text-xl leading-tight">{p.titulo}</span>
-              </span>
-              <span class="text-sm leading-relaxed text-muted sm:text-[0.95rem]">{p.texto}</span>
+          </Fragment>
+          <Fragment slot="dorso">
+            <span class="flex items-baseline gap-2.5 text-heading" aria-hidden="true">
+              <span class="font-display text-2xl leading-none text-deco">{i + 1}</span>
+              <span class="font-display text-xl leading-tight">{p.titulo}</span>
             </span>
-          </span>
-        </button>
+            <span class="text-sm leading-relaxed text-muted sm:text-[0.95rem]">{p.texto}</span>
+          </Fragment>
+        </CartaGiro>
       </li>
     );
   })}
@@ -108,33 +107,5 @@ const T = elegir(idioma, {
     .am-paso { position: relative; top: auto !important; }
   }
 
-  /* Tarjetas que se dan vuelta */
-  .carta { perspective: 1200px; cursor: pointer; border-radius: var(--ca-radius-lg); }
-  .carta:focus-visible { outline: 3px solid var(--ca-primary, #b54e17); outline-offset: 3px; }
-  .carta-interior { transform-style: preserve-3d; transition: transform 1100ms cubic-bezier(0.45, 0.05, 0.25, 1); }
-  .carta-frente, .carta-dorso { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
-  .carta-dorso { transform: rotateY(180deg); }
-  .carta.volteada .carta-interior { transform: rotateY(180deg); }
-  @media (hover: hover) and (pointer: fine) {
-    .carta:hover .carta-interior { transform: rotateY(180deg); }
-  }
-  /* Con movimiento reducido no hay giro: el texto aparece encima, sin animación */
-  @media (prefers-reduced-motion: reduce) {
-    .carta-interior { transition: none; transform: none !important; }
-    .carta-dorso { transform: none; opacity: 0; }
-    .carta.volteada .carta-dorso { opacity: 1; }
-  }
-  @media (prefers-reduced-motion: reduce) and (hover: hover) and (pointer: fine) {
-    .carta:hover .carta-dorso { opacity: 1; }
-  }
 </style>
 
-<script>
-  // Al tocar (o con Enter / espacio) la tarjeta queda dada vuelta hasta volver a tocarla
-  document.querySelectorAll<HTMLButtonElement>('.carta').forEach((carta) => {
-    carta.addEventListener('click', () => {
-      const volteada = carta.classList.toggle('volteada');
-      carta.setAttribute('aria-pressed', String(volteada));
-    });
-  });
-</script>

@@ -8,7 +8,6 @@ import DelArbolALaMesa from '../components/inmersivo/DelArbolALaMesa.astro';
 import Imagen from '../components/Imagen.astro';
 import Llamado from '../components/Llamado.astro';
 import VolverExperiencia from '../components/VolverExperiencia.astro';
-import TambienTeInteresa from '../components/TambienTeInteresa.astro';
 import { elegir, rutas, rutaReservar, t, type Idioma } from '../i18n/ui';
 import { fotoArchivo, creditosArchivo, type ClaveArchivo } from '../lib/fotos';
 // La ciudad, la cosecha y la industria: fotos de época de la Biblioteca Nacional
@@ -60,7 +59,6 @@ const T = elegir(idioma, {
     ],
     llamado: 'Escuchá esta historia entre los naranjos', llamadoTexto: 'En la visita, la historia de la citricultura salteña se cuenta en el lugar donde sucede.', verExp: 'Ver la experiencia', escuelas: 'Grupos y escuelas',
     fuentes: 'Fuentes', experiencia: 'La experiencia',
-    enlaces: ['Patricia Real, la Chacra La Victoria y la feria de Colonia Osimani.', 'Cinco etapas en un naranjal en funcionamiento.', 'Esta historia, contada para estudiantes de 11 a 15 años.'],
   },
   pt: {
     meta: 'A laranja em Salto · História e patrimônio',
@@ -87,7 +85,6 @@ const T = elegir(idioma, {
     ],
     llamado: 'Ouça esta história entre as laranjeiras', llamadoTexto: 'Na visita, a história da citricultura de Salto é contada no lugar onde ela acontece.', verExp: 'Ver a experiência', escuelas: 'Grupos e escolas',
     fuentes: 'Fontes', experiencia: 'A experiência',
-    enlaces: ['Patricia Real, a Chacra La Victoria e a feira de Colonia Osimani.', 'Cinco etapas em um laranjal em funcionamento.', 'Esta história, contada para estudantes de 11 a 15 anos.'],
   },
   en: {
     meta: 'Oranges in Salto · History and heritage',
@@ -114,7 +111,6 @@ const T = elegir(idioma, {
     ],
     llamado: 'Hear this story among the orange trees', llamadoTexto: 'On the visit, the story of citrus farming in Salto is told where it happens.', verExp: 'See the experience', escuelas: 'Groups and schools',
     fuentes: 'Sources', experiencia: 'The experience',
-    enlaces: ['Patricia Real, Chacra La Victoria and the Colonia Osimani market.', 'Five stages in a working orange grove.', 'This story, told for students aged 11 to 15.'],
   },
 });
 ---
@@ -220,14 +216,6 @@ const T = elegir(idioma, {
         {creditosArchivo.map((c) => <li>Fotografía: {c}.</li>)}
       </ul>
     </section>
-    <TambienTeInteresa
-      idioma={idioma}
-      enlaces={[
-        { titulo: t(idioma, 'nav.chacra'), texto: T.enlaces[0], href: r.chacra },
-        { titulo: T.experiencia, texto: T.enlaces[1], href: r.azahar },
-        { titulo: T.escuelas, texto: T.enlaces[2], href: r.azaharGrupos },
-      ]}
-    />
   </div>
 </Base>
 

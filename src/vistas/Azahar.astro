@@ -13,6 +13,7 @@ import RuedaAnio from '../components/inmersivo/RuedaAnio.astro';
 import HistoriaApilada from '../components/inmersivo/HistoriaApilada.astro';
 import DelArbolALaMesa from '../components/inmersivo/DelArbolALaMesa.astro';
 import TarjetaSeguir from '../components/TarjetaSeguir.astro';
+import CartaGiro from '../components/CartaGiro.astro';
 import Imagen from '../components/Imagen.astro';
 import { foto, fotoArchivo } from '../lib/fotos';
 import ListaSalidas from '../components/ListaSalidas.astro';
@@ -117,14 +118,20 @@ const viajeLd = {
 
   <!-- La feria y la comunidad: la feria y el enlace a «La chacra» (la cita de Patricia está dentro de esa página) -->
   <section class="contenedor grid gap-8 pb-[clamp(4rem,10vh,6rem)] pt-[clamp(2rem,5vh,3rem)]" aria-labelledby="feria-titulo">
-    <div class="grid items-end gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-      <div class="grid gap-3">
-        <h2 id="feria-titulo" class="text-[clamp(1.6rem,3vw,2.6rem)]">{T.feriaTitulo}</h2>
-        <p class="max-w-[48ch] text-lg text-muted">{T.feriaTexto}</p>
-      </div>
-      <div class="grid grid-cols-3 gap-3">
-        {fotosFeria.map((f) => <Imagen proporcion="1/1" toma={f.alt} src={f.src} alt={f.alt} revelar />)}
-      </div>
+    <h2 id="feria-titulo" class="text-[clamp(1.6rem,3vw,2.6rem)]">{T.feriaTitulo}</h2>
+    <!-- Un cuadro con las tres fotos de la feria; al darlo vuelta, el texto -->
+    <div class="revelar max-w-4xl">
+      <CartaGiro alto="min-h-[17rem] sm:min-h-[18rem]" dorso="p-6 sm:p-10">
+        <Fragment slot="frente">
+          <span class="absolute inset-0 grid grid-cols-3 gap-1 bg-surface">
+            {fotosFeria.map((foto) => <img src={foto.src} alt="" loading="lazy" decoding="async" class="h-full w-full object-cover" />)}
+          </span>
+          <span class="solo-lectores">{fotosFeria.map((foto) => foto.alt).join('. ')}</span>
+        </Fragment>
+        <Fragment slot="dorso">
+          <span class="max-w-[52ch] font-display text-lg leading-snug text-heading sm:text-2xl">{T.feriaTexto}</span>
+        </Fragment>
+      </CartaGiro>
     </div>
     <TarjetaSeguir href={r.chacra} antetitulo={T.seguir} titulo={T.chacraTitulo} texto={T.chacraTexto} boton={T.chacraBoton} src={entradaChacra.src} alt={entradaChacra.alt} />
   </section>
