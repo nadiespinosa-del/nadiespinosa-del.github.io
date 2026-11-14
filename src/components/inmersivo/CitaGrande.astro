@@ -2,10 +2,13 @@
 // Cita grande de Patricia Real, encargada de la Chacra La Victoria. Las líneas se revelan con el scroll.
 // En portugués e inglés se muestra la traducción y, debajo, la cita original en español.
 import Imagen from '../Imagen.astro';
+import { foto } from '../../lib/fotos';
 import { elegir, type Idioma } from '../../i18n/ui';
 // compacta: versión breve para ir dentro de otra sección (la feria y la comunidad), sin retrato ni sección propia.
 interface Props { idioma?: Idioma; compacta?: boolean }
 const { idioma = 'es', compacta = false } = Astro.props;
+// Foto propia de Patricia en su puesto de la feria
+const retrato = foto('retrato-patricia', idioma);
 const original = '«…tocar, arrancar, oler (…) y apreciar el aroma del azahar (…) es muy importante…»';
 const T = elegir(idioma, {
   es: { titulo: 'Las personas detrás de la naranja', cita: original, rol: 'Encargada de la Chacra La Victoria, Colonia Osimani', texto: 'Al final de la visita, Patricia cuenta la historia de la chacra y los cambios en la forma de producir. Detrás de cada fruto hay personas, saberes y trayectorias.', alt: 'Retrato de Patricia Real, encargada de la Chacra La Victoria', original: '' },
@@ -30,7 +33,7 @@ const T = elegir(idioma, {
 ) : (
 <section id="personas" class="cita-grande relative bg-bg py-[clamp(6rem,16vh,12rem)]" aria-labelledby="personas-titulo">
   <div class="contenedor grid items-center gap-12 lg:grid-cols-[0.75fr_1.25fr] lg:gap-20">
-    <Imagen proporcion="4/5" toma="Patricia Real entre los naranjos, mirada a cámara, hora dorada" alt={T.alt} encuadre="Plano medio" revelar />
+    <Imagen proporcion="4/5" toma="Retrato de Patricia Real" src={retrato.src} alt={retrato.alt} revelar class="mx-auto w-full max-w-[22rem] lg:max-w-none" />
     <figure class="grid gap-8">
       <h2 id="personas-titulo" class="solo-lectores">{T.titulo}</h2>
       <blockquote>

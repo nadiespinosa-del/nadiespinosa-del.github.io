@@ -46,6 +46,7 @@ const registro = {
   'hojas-citricos': { es: 'Brotes y hojas nuevas de un cítrico al sol', pt: 'Brotos e folhas novas de um cítrico ao sol', en: 'New shoots and leaves on a citrus tree in the sun' },
   'viaje-institucional': { es: 'Estudiantes caminando en fila por un sendero durante un viaje institucional', pt: 'Estudantes caminhando em fila por uma trilha durante uma viagem institucional', en: 'Students walking single file along a path on a school trip' },
   'retrato-nadia': { es: 'Retrato de Nadia Espinosa', pt: 'Retrato de Nadia Espinosa', en: 'Portrait of Nadia Espinosa' },
+  'retrato-patricia': { es: 'Patricia Real sonriendo detrás de su mesa de la feria, con frascos y botellas de sus productos', pt: 'Patricia Real sorrindo atrás da sua mesa na feira, com potes e garrafas dos seus produtos', en: 'Patricia Real smiling behind her market table, with jars and bottles of her products' },
   'retrato-sthefanie': { es: 'Retrato de Sthefanie Machado', pt: 'Retrato de Sthefanie Machado', en: 'Portrait of Sthefanie Machado' },
   'feria-mesa': { es: 'Mesa de la feria con frascos, panes, huevos y jugo de naranja', pt: 'Mesa da feira com potes, pães, ovos e suco de laranja', en: 'A market table with jars, bread, eggs and orange juice' },
 } satisfies Record<string, Textos>;

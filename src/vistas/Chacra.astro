@@ -4,7 +4,6 @@ import Base from '../layouts/Base.astro';
 import CabeceraPagina from '../components/CabeceraPagina.astro';
 import NavExperiencia from '../components/NavExperiencia.astro';
 import CitaGrande from '../components/inmersivo/CitaGrande.astro';
-import MarqueeSabores from '../components/inmersivo/MarqueeSabores.astro';
 import Imagen from '../components/Imagen.astro';
 import Pendiente from '../components/Pendiente.astro';
 import Llamado from '../components/Llamado.astro';
@@ -88,6 +87,26 @@ const T = elegir(idioma, {
     experiencia: 'The experience',
   },
 });
+// Quienes elaboran: un video propio de la feria por cuadro (sin sonido). Sin nombre todavía → Pendiente.
+type Emprendedor = { video: string; alt: string; nombre?: string; texto?: string };
+const V = elegir(idioma, {
+  es: { pausar: 'Pausar video', reproducir: 'Reproducir video', lista: [
+    { video: 'emprendedora-1', alt: 'Emprendedora de la feria con sus frascos de mermelada' },
+    { video: 'patricia-feria', alt: 'Patricia Real en su puesto de la feria, con frascos y botellas', nombre: 'Patricia Real', texto: 'Encargada de la Chacra La Victoria. También elabora y vende sus productos en la feria.' },
+    { video: 'emprendedora-3', alt: 'Puesto de la feria con frascos de dulces sobre la mesa' },
+  ] as Emprendedor[] },
+  pt: { pausar: 'Pausar vídeo', reproducir: 'Reproduzir vídeo', lista: [
+    { video: 'emprendedora-1', alt: 'Empreendedora da feira com seus potes de geleia' },
+    { video: 'patricia-feria', alt: 'Patricia Real na sua barraca da feira, com potes e garrafas', nombre: 'Patricia Real', texto: 'Responsável pela Chacra La Victoria. Também produz e vende seus produtos na feira.' },
+    { video: 'emprendedora-3', alt: 'Barraca da feira com potes de doces sobre a mesa' },
+  ] as Emprendedor[] },
+  en: { pausar: 'Pause video', reproducir: 'Play video', lista: [
+    { video: 'emprendedora-1', alt: 'A market maker with her jars of marmalade' },
+    { video: 'patricia-feria', alt: 'Patricia Real at her market stall, with jars and bottles', nombre: 'Patricia Real', texto: 'Runs Chacra La Victoria. She also makes and sells her own products at the market.' },
+    { video: 'emprendedora-3', alt: 'A market stall with jars of preserves on the table' },
+  ] as Emprendedor[] },
+});
+const emprendedores = V.lista;
 const chacraLd = {
   '@context': 'https://schema.org',
   '@type': 'Place',
@@ -114,16 +133,16 @@ const chacraLd = {
       <p class="text-lg text-muted">{T.funcionamientoTexto}</p>
       <p class="text-lg text-muted">{T.historia} <Pendiente texto="relato de la historia de la chacra" /></p>
     </div>
-    <dl class="tarjeta grid content-start gap-0 self-start p-2">
+    <dl class="tarjeta grid w-full max-w-md content-start gap-0 self-start p-1 lg:justify-self-end">
       {T.ficha.map(([dt, dd], i) => (
-        <div class="grid gap-0.5 border-b border-line px-5 py-4 last:border-0">
-          <dt class="text-sm text-muted">{dt}</dt>
-          <dd class="font-display text-2xl text-heading">{i === 4 ? `${site.agencia}, ${dd}` : dd}</dd>
+        <div class="grid gap-0 border-b border-line px-4 py-2.5 last:border-0">
+          <dt class="text-xs text-muted">{dt}</dt>
+          <dd class="font-display text-lg leading-snug text-heading">{i === 4 ? `${site.agencia}, ${dd}` : dd}</dd>
         </div>
       ))}
-      <div class="grid gap-0.5 px-5 py-4">
-        <dt class="text-sm text-muted">{T.variedades}</dt>
-        <dd><Pendiente texto="variedades plantadas en la chacra" /></dd>
+      <div class="grid gap-0 px-4 py-2.5">
+        <dt class="text-xs text-muted">{T.variedades}</dt>
+        <dd class="text-sm"><Pendiente texto="variedades plantadas en la chacra" /></dd>
       </div>
     </dl>
   </section>
@@ -155,18 +174,24 @@ const chacraLd = {
       <h2 id="emprendedores-titulo" class="max-w-[16ch] text-[clamp(1.6rem,3.4vw,2.9rem)] leading-[0.98]">{T.emprendedores}</h2>
       <p class="max-w-[58ch] text-lg text-muted">{T.emprendedoresTexto}</p>
     </div>
+    <!-- Videos propios de la feria, sin sonido (el archivo no tiene pista de audio). Se reproducen solos mientras están a la vista; al tocarlos se pausan. -->
     <ul class="grid gap-6 md:grid-cols-3">
-      {[1, 2, 3].map((n) => (
-        <li class="grid gap-4">
-          <Imagen proporcion="4/5" toma={`Retrato de emprendedor/a ${n} de la feria con sus productos, plano medio, luz natural`} alt={T.emprendedorAlt(n)} />
-          <p class="font-display text-xl text-heading"><Pendiente texto={`nombre y emprendimiento ${n}`} /></p>
-          <p class="text-muted"><Pendiente texto="qué elabora y una frase en primera persona" /></p>
+      {emprendedores.map((e, n) => (
+        <li class="grid content-start gap-4">
+          <button type="button" class="video-feria group relative block overflow-hidden rounded-[var(--ca-radius-lg)] bg-surface-2" aria-label={V.pausar} data-pausar={V.pausar} data-reproducir={V.reproducir}>
+            <video class="aspect-[4/5] w-full object-cover" src={`/videos/camino-de-azahar/${e.video}.mp4`} poster={`/videos/camino-de-azahar/${e.video}.jpg`} muted loop playsinline preload="none" aria-label={e.alt}></video>
+          </button>
+          {e.nombre ? (
+            <p class="font-display text-xl text-heading">{e.nombre}</p>
+          ) : (
+            <p class="font-display text-xl text-heading"><Pendiente texto={`nombre y emprendimiento ${n + 1}`} /></p>
+          )}
+          {e.texto ? <p class="text-muted">{e.texto}</p> : <p class="text-muted"><Pendiente texto="qué elabora y una frase en primera persona" /></p>}
         </li>
       ))}
     </ul>
   </section>
 
-  <MarqueeSabores idioma={idioma} />
 
   <section class="contenedor grid gap-10 py-[clamp(4rem,12vh,8rem)] lg:grid-cols-[0.9fr_1.1fr] lg:items-center" aria-labelledby="oficios-titulo">
     <figure class="grid gap-2">
@@ -204,4 +229,25 @@ const chacraLd = {
     const texto = fecha.toLocaleDateString(destino.dataset.locale || 'es-UY', { weekday: 'long', day: 'numeric', month: 'long' });
     destino.textContent = texto.charAt(0).toUpperCase() + texto.slice(1);
   }
+
+  // Videos de la feria: se reproducen solos (sin sonido) mientras están a la vista y se pausan al salir.
+  // Al tocarlos se pausan o se vuelven a reproducir. Con "movimiento reducido" quedan quietos en su primera imagen.
+  const reducir = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll<HTMLButtonElement>('.video-feria').forEach((boton) => {
+    const video = boton.querySelector('video');
+    if (!video) return;
+    let pausadoAMano = reducir;
+    const etiqueta = () => boton.setAttribute('aria-label', (video.paused ? boton.dataset.reproducir : boton.dataset.pausar) || '');
+    video.addEventListener('play', etiqueta);
+    video.addEventListener('pause', etiqueta);
+    etiqueta();
+    boton.addEventListener('click', () => {
+      if (video.paused) { pausadoAMano = false; video.play().catch(() => {}); }
+      else { pausadoAMano = true; video.pause(); }
+    });
+    new IntersectionObserver(([entrada]) => {
+      if (entrada.isIntersecting && !pausadoAMano) video.play().catch(() => {});
+      else if (!entrada.isIntersecting) video.pause();
+    }, { threshold: 0.4 }).observe(boton);
+  });
 </script>
