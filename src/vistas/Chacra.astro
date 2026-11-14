@@ -34,8 +34,7 @@ const T = elegir(idioma, {
     feriaTexto: (n: string) => `La ${n} se hace en la sede de la Sociedad de Fomento Rural. Es un espacio de encuentro donde la comunidad pone en valor sus productos, sus saberes y sus emprendimientos. Fue declarada de interés departamental por la Junta Departamental de Salto (Decreto N.º 7.423/2022).`,
     proxima: 'Próxima feria', proximaValor: 'El segundo sábado del mes',
     feriaNota: 'No hace falta ir el día de la feria: en cada visita de Camino de Azahar hay una muestra de productos de sus emprendedores.',
-    emprendedores: 'Quienes elaboran lo que probás', emprendedoresTexto: 'Jugos, mermeladas, budines, tortas de naranja, dulces y licores: en la degustación y la muestra participan emprendedores de la zona.',
-    emprendedorAlt: (n: number) => `Emprendedor o emprendedora ${n} de la feria`,
+    emprendedores: 'Productoras y emprendedoras locales', emprendedoresTexto: 'Jugos, mermeladas, budines, tortas de naranja, dulces y licores que se prueban en la degustación y la muestra.',
     oficios: 'Personas y oficios',
     oficios1: 'Productores, cosecheros, técnicos, trabajadoras y trabajadores del empaque, emprendedores. La citricultura es una cadena de saberes que se transmiten entre generaciones.',
     oficios2: 'La zafra genera miles de puestos de trabajo y es una de las principales fuentes de empleo de Salto. Reconocer ese trabajo, con sus logros y sus dificultades, también es parte de la visita.',
@@ -56,8 +55,7 @@ const T = elegir(idioma, {
     feriaTexto: (n: string) => `A ${n} acontece na sede da Sociedad de Fomento Rural. É um espaço de encontro onde a comunidade valoriza seus produtos, seus saberes e seus empreendimentos. Foi declarada de interesse departamental pela Junta Departamental de Salto (Decreto n.º 7.423/2022).`,
     proxima: 'Próxima feira', proximaValor: 'O segundo sábado do mês',
     feriaNota: 'Não é preciso ir no dia da feira: em cada visita do Camino de Azahar há uma mostra de produtos dos seus empreendedores.',
-    emprendedores: 'Quem prepara o que você prova', emprendedoresTexto: 'Sucos, geleias, bolos, tortas de laranja, doces e licores: empreendedores da região participam da degustação e da mostra.',
-    emprendedorAlt: (n: number) => `Empreendedor ou empreendedora ${n} da feira`,
+    emprendedores: 'Produtoras e empreendedoras locais', emprendedoresTexto: 'Sucos, geleias, bolos, tortas de laranja, doces e licores que se provam na degustação e na mostra.',
     oficios: 'Pessoas e ofícios',
     oficios1: 'Produtores, colhedores, técnicos, trabalhadoras e trabalhadores das embalagens, empreendedores. A citricultura é uma cadeia de saberes transmitidos entre gerações.',
     oficios2: 'A safra gera milhares de empregos e é uma das principais fontes de trabalho de Salto. Reconhecer esse trabalho, com suas conquistas e dificuldades, também faz parte da visita.',
@@ -78,8 +76,7 @@ const T = elegir(idioma, {
     feriaTexto: (n: string) => `The ${n} is held at the Sociedad de Fomento Rural, the local rural association. It is a meeting place where the community showcases its produce, know-how and small businesses. The Salto departmental council declared it of departmental interest (Decree No. 7,423/2022).`,
     proxima: 'Next market', proximaValor: 'The second Saturday of the month',
     feriaNota: 'You don\'t need to come on market day: every Camino de Azahar visit includes a display of its makers\' products.',
-    emprendedores: 'The people who make what you taste', emprendedoresTexto: 'Juices, marmalades, cakes, orange tarts, sweets and liqueurs: local makers take part in the tasting and the display.',
-    emprendedorAlt: (n: number) => `Market maker ${n}`,
+    emprendedores: 'Local growers and makers', emprendedoresTexto: 'Juices, marmalades, cakes, orange tarts, sweets and liqueurs to taste at the tasting and the display.',
     oficios: 'People and trades',
     oficios1: 'Growers, pickers, technicians, packing-house workers and local makers. Citrus farming is a chain of know-how passed down through generations.',
     oficios2: 'The harvest creates thousands of jobs and is one of the main sources of work in Salto. Recognising that work, with its achievements and its hardships, is also part of the visit.',
@@ -87,22 +84,22 @@ const T = elegir(idioma, {
     experiencia: 'The experience',
   },
 });
-// Quienes elaboran: un video propio de la feria por cuadro (sin sonido). Sin nombre todavía → Pendiente.
-type Emprendedor = { video: string; alt: string; nombre?: string; texto?: string };
+// Productoras y emprendedoras locales: un video propio de la feria por cuadro (sin sonido), sin nombres debajo.
+type Emprendedor = { video: string; alt: string };
 const V = elegir(idioma, {
   es: { pausar: 'Pausar video', reproducir: 'Reproducir video', lista: [
     { video: 'emprendedora-1', alt: 'Emprendedora de la feria con sus frascos de mermelada' },
-    { video: 'patricia-feria', alt: 'Patricia Real en su puesto de la feria, con frascos y botellas', nombre: 'Patricia Real', texto: 'Encargada de la Chacra La Victoria. También elabora y vende sus productos en la feria.' },
+    { video: 'patricia-feria', alt: 'Patricia Real en su puesto de la feria, con frascos y botellas' },
     { video: 'emprendedora-3', alt: 'Puesto de la feria con frascos de dulces sobre la mesa' },
   ] as Emprendedor[] },
   pt: { pausar: 'Pausar vídeo', reproducir: 'Reproduzir vídeo', lista: [
     { video: 'emprendedora-1', alt: 'Empreendedora da feira com seus potes de geleia' },
-    { video: 'patricia-feria', alt: 'Patricia Real na sua barraca da feira, com potes e garrafas', nombre: 'Patricia Real', texto: 'Responsável pela Chacra La Victoria. Também produz e vende seus produtos na feira.' },
+    { video: 'patricia-feria', alt: 'Patricia Real na sua barraca da feira, com potes e garrafas' },
     { video: 'emprendedora-3', alt: 'Barraca da feira com potes de doces sobre a mesa' },
   ] as Emprendedor[] },
   en: { pausar: 'Pause video', reproducir: 'Play video', lista: [
     { video: 'emprendedora-1', alt: 'A market maker with her jars of marmalade' },
-    { video: 'patricia-feria', alt: 'Patricia Real at her market stall, with jars and bottles', nombre: 'Patricia Real', texto: 'Runs Chacra La Victoria. She also makes and sells her own products at the market.' },
+    { video: 'patricia-feria', alt: 'Patricia Real at her market stall, with jars and bottles' },
     { video: 'emprendedora-3', alt: 'A market stall with jars of preserves on the table' },
   ] as Emprendedor[] },
 });
@@ -169,24 +166,18 @@ const chacraLd = {
     </div>
   </section>
 
-  <section class="contenedor grid gap-10 py-[clamp(4rem,12vh,8rem)]" aria-labelledby="emprendedores-titulo">
+  <section class="contenedor grid gap-8 py-[clamp(3.5rem,9vh,6rem)]" aria-labelledby="emprendedores-titulo">
     <div class="grid gap-3">
-      <h2 id="emprendedores-titulo" class="max-w-[16ch] text-[clamp(1.6rem,3.4vw,2.9rem)] leading-[0.98]">{T.emprendedores}</h2>
-      <p class="max-w-[58ch] text-lg text-muted">{T.emprendedoresTexto}</p>
+      <h2 id="emprendedores-titulo" class="max-w-[30ch] text-[clamp(1.5rem,2.6vw,2.2rem)] leading-[1.02]">{T.emprendedores}</h2>
+      <p class="max-w-[58ch] text-muted">{T.emprendedoresTexto}</p>
     </div>
     <!-- Videos propios de la feria, sin sonido (el archivo no tiene pista de audio). Se reproducen solos mientras están a la vista; al tocarlos se pausan. -->
-    <ul class="grid gap-6 md:grid-cols-3">
-      {emprendedores.map((e, n) => (
-        <li class="grid content-start gap-4">
+    <ul class="grid max-w-[17rem] gap-6 sm:max-w-3xl sm:grid-cols-3 sm:gap-5">
+      {emprendedores.map((e) => (
+        <li>
           <button type="button" class="video-feria group relative block overflow-hidden rounded-[var(--ca-radius-lg)] bg-surface-2" aria-label={V.pausar} data-pausar={V.pausar} data-reproducir={V.reproducir}>
             <video class="aspect-[4/5] w-full object-cover" src={`/videos/camino-de-azahar/${e.video}.mp4`} poster={`/videos/camino-de-azahar/${e.video}.jpg`} muted loop playsinline preload="none" aria-label={e.alt}></video>
           </button>
-          {e.nombre ? (
-            <p class="font-display text-xl text-heading">{e.nombre}</p>
-          ) : (
-            <p class="font-display text-xl text-heading"><Pendiente texto={`nombre y emprendimiento ${n + 1}`} /></p>
-          )}
-          {e.texto ? <p class="text-muted">{e.texto}</p> : <p class="text-muted"><Pendiente texto="qué elabora y una frase en primera persona" /></p>}
         </li>
       ))}
     </ul>

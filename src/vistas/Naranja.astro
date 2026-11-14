@@ -4,7 +4,6 @@ import Base from '../layouts/Base.astro';
 import CabeceraPagina from '../components/CabeceraPagina.astro';
 import NavExperiencia from '../components/NavExperiencia.astro';
 import LineaTiempo from '../components/inmersivo/LineaTiempo.astro';
-import DelArbolALaMesa from '../components/inmersivo/DelArbolALaMesa.astro';
 import Imagen from '../components/Imagen.astro';
 import Llamado from '../components/Llamado.astro';
 import VolverExperiencia from '../components/VolverExperiencia.astro';
@@ -50,7 +49,6 @@ const T = elegir(idioma, {
     datos: [['Bóvedas de doble curvatura', '17'], ['Luz libre entre apoyos', '45 m'], ['Superficie cubierta', '4.200 m²'], ['Columnas intermedias', 'Ninguna']],
     diesteNota: 'Mortero blanco que refleja el sol y lucernarios en cada bóveda para iluminar con luz natural. Fuente: FADU, Universidad de la República.',
     diesteAlt: 'Bóvedas de cerámica armada del edificio de Citrícola Salteña',
-    arbol: 'Del árbol a la mesa', arbolTexto: 'Detrás de cada naranja hay una cadena de trabajo y conocimiento. Estos son sus pasos.',
     cultura: 'Más que un cultivo',
     culturas: [
       ['Naranjos en la ciudad', 'Desde 1926, los naranjos forman parte del arbolado de Salto, Belén y Constitución: la producción se volvió paisaje cotidiano.'],
@@ -76,7 +74,6 @@ const T = elegir(idioma, {
     datos: [['Abóbadas de dupla curvatura', '17'], ['Vão livre entre apoios', '45 m'], ['Área coberta', '4.200 m²'], ['Colunas intermediárias', 'Nenhuma']],
     diesteNota: 'Argamassa branca que reflete o sol e claraboias em cada abóbada para iluminar com luz natural. Fonte: FADU, Universidad de la República.',
     diesteAlt: 'Abóbadas de cerâmica armada do edifício da Citrícola Salteña',
-    arbol: 'Da árvore à mesa', arbolTexto: 'Por trás de cada laranja há uma cadeia de trabalho e conhecimento. Estes são os seus passos.',
     cultura: 'Mais que um cultivo',
     culturas: [
       ['Laranjeiras na cidade', 'Desde 1926, as laranjeiras fazem parte da arborização de Salto, Belén e Constitución: a produção virou paisagem do dia a dia.'],
@@ -102,7 +99,6 @@ const T = elegir(idioma, {
     datos: [['Double-curvature vaults', '17'], ['Clear span between supports', '45 m'], ['Covered area', '4,200 m²'], ['Intermediate columns', 'None']],
     diesteNota: 'White mortar that reflects the sun, and skylights in every vault for natural light. Source: FADU, Universidad de la República.',
     diesteAlt: 'Reinforced-brick vaults of the Citrícola Salteña building',
-    arbol: 'From tree to table', arbolTexto: 'Behind every orange there is a chain of work and knowledge. These are its steps.',
     cultura: 'More than a crop',
     culturas: [
       ['Orange trees in town', 'Since 1926, orange trees have lined the streets of Salto, Belén and Constitución: farming became part of everyday scenery.'],
@@ -167,14 +163,6 @@ const T = elegir(idioma, {
         <figcaption class="text-xs text-[#5e5248]">{fotoArchivo('dieste-bovedas-vertical', idioma).credito}.</figcaption>
       </figure>
     </div>
-  </section>
-
-  <section class="contenedor grid gap-12 py-[clamp(4rem,12vh,8rem)]" aria-labelledby="arbol-titulo">
-    <div class="grid gap-3">
-      <h2 id="arbol-titulo" class="max-w-[14ch] text-[clamp(1.6rem,3.4vw,3.1rem)] leading-[0.98]">{T.arbol}</h2>
-      <p class="max-w-[56ch] text-lg text-muted">{T.arbolTexto}</p>
-    </div>
-    <DelArbolALaMesa idioma={idioma} />
   </section>
 
   <section class="bg-surface-2 py-[clamp(4rem,12vh,8rem)]" aria-labelledby="cultura-titulo">
