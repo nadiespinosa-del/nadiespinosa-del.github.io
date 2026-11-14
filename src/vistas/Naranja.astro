@@ -125,7 +125,7 @@ const T = elegir(idioma, {
     imagen={{ toma: 'Fotografía de archivo de una quinta citrícola salteña', ...fotoArchivo('recolectando-1960', idioma) }}
   />
   <NavExperiencia idioma={idioma} actual={Astro.url.pathname} />
-  <div class="contenedor pt-6"><VolverExperiencia idioma={idioma} discreto /></div>
+  <div class="contenedor pt-6"><VolverExperiencia idioma={idioma} discreto ancla="del-arbol" /></div>
 
   <section class="contenedor grid gap-6 py-[clamp(4rem,12vh,8rem)] lg:grid-cols-[1fr_1fr] lg:items-end" aria-labelledby="lugar-titulo">
     <h2 id="lugar-titulo" class="max-w-[14ch] text-[clamp(1.6rem,3.4vw,3.1rem)] leading-[0.98]">{T.lugar}</h2>
@@ -189,7 +189,7 @@ const T = elegir(idioma, {
   </section>
 
   <div class="contenedor grid gap-20 py-[clamp(4rem,12vh,8rem)]">
-    <VolverExperiencia idioma={idioma} />
+    <VolverExperiencia idioma={idioma} ancla="del-arbol" />
     <Llamado
       antetitulo="Camino de Azahar"
       titulo={T.llamado}

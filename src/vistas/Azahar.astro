@@ -107,7 +107,7 @@ const viajeLd = {
   <HistoriaApilada idioma={idioma} />
 
   <!-- Del árbol a la mesa: antes solo estaba dentro de «La naranja en Salto» -->
-  <section class="contenedor grid gap-8 pb-[clamp(3rem,7vh,4.5rem)] pt-[clamp(4rem,10vh,6rem)]" aria-labelledby="arbol-titulo">
+  <section id="del-arbol" class="contenedor grid gap-8 pb-[clamp(3rem,7vh,4.5rem)] pt-[clamp(4rem,10vh,6rem)]" aria-labelledby="arbol-titulo">
     <div class="grid gap-3">
       <h2 id="arbol-titulo" class="text-[clamp(1.6rem,3.2vw,2.8rem)]">{T.arbol}</h2>
       <p class="max-w-[52ch] text-lg text-muted">{T.arbolTexto}</p>
@@ -117,7 +117,7 @@ const viajeLd = {
   </section>
 
   <!-- La feria y la comunidad: la feria y el enlace a «La chacra» (la cita de Patricia está dentro de esa página) -->
-  <section class="contenedor grid gap-8 pb-[clamp(4rem,10vh,6rem)] pt-[clamp(2rem,5vh,3rem)]" aria-labelledby="feria-titulo">
+  <section id="feria" class="contenedor grid gap-8 pb-[clamp(4rem,10vh,6rem)] pt-[clamp(2rem,5vh,3rem)]" aria-labelledby="feria-titulo">
     <h2 id="feria-titulo" class="text-[clamp(1.6rem,3vw,2.6rem)]">{T.feriaTitulo}</h2>
     <!-- Un cuadro con las tres fotos de la feria; al darlo vuelta, el texto -->
     <div class="revelar max-w-4xl">

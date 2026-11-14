@@ -100,7 +100,7 @@ const T = elegir(idioma, {
     </nav>
   </CabeceraPagina>
   <NavExperiencia idioma={idioma} actual={Astro.url.pathname} />
-  <div class="contenedor pt-6"><VolverExperiencia idioma={idioma} discreto /></div>
+  <div class="contenedor pt-6"><VolverExperiencia idioma={idioma} discreto ancla="info" /></div>
 
   <RuedaAnio idioma={idioma} />
 
@@ -175,6 +175,6 @@ const T = elegir(idioma, {
 
   <div class="contenedor grid gap-24 pb-[clamp(4rem,12vh,8rem)]">
     <PreguntasFrecuentes idioma={idioma} temas={['planifica']} />
-    <VolverExperiencia idioma={idioma} />
+    <VolverExperiencia idioma={idioma} ancla="info" />
   </div>
 </Base>

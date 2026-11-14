@@ -78,10 +78,11 @@ const total = etapas.length;
 </section>
 
 <style>
-  .carrusel-pista { transition: transform 1600ms cubic-bezier(0.45, 0.05, 0.25, 1); }
+  .carrusel-pista { transition: transform 1300ms cubic-bezier(0.45, 0.05, 0.25, 1); }
   .carrusel-pista.sin-transicion { transition: none; }
-  .etapa-numero { font-size: clamp(8rem, 22vw, 16rem); opacity: 0.22; }
-  @media (min-width: 1024px) { .etapa-numero { opacity: 0.85; font-size: clamp(10rem, 16vw, 15rem); } }
+  /* Números grandes pero tenues, de fondo */
+  .etapa-numero { font-size: clamp(6rem, 17vw, 10rem); opacity: 0.14; }
+  @media (min-width: 1024px) { .etapa-numero { opacity: 0.28; font-size: clamp(7rem, 10vw, 10.5rem); } }
   /* Movimiento reducido: sin carrusel, las cinco etapas una debajo de la otra */
   @media (prefers-reduced-motion: reduce) {
     .carrusel-pista { flex-direction: column; gap: 0.75rem; transform: none !important; transition: none; }
@@ -95,7 +96,7 @@ const total = etapas.length;
     if (!pista || etapas.length < 2) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    const ESPERA = 7000; // tiempo para leer cada etapa
+    const ESPERA = 5000; // tiempo para leer cada etapa (los textos son cortos)
     const total = etapas.length;
     // Copia de la primera etapa al final: así de la última se pasa a la 1 siguiendo hacia adelante
     const copia = etapas[0].cloneNode(true) as HTMLElement;
