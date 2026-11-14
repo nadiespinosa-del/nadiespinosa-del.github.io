@@ -50,7 +50,7 @@ const T = elegir(idioma, {
     ],
   },
 });
-const icono = (d: string) => `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+const icono = (d: string) => `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
 const iconos = [
   '<path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>',
   '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
@@ -65,18 +65,18 @@ const pendientes: Record<number, string> = { 0: 'dirección y cómo llegar', 4: 
 const enlaces: Record<number, string> = { 0: r.planifica, 6: r.accesibilidad };
 const fichas = T.fichas.map(([titulo, valor, enlace], i) => ({ icono: iconos[i], titulo, valor, pendiente: pendientes[i], enlace: enlace ? { texto: enlace, href: enlaces[i] } : undefined }));
 ---
-<section id="info" class="info-practica bg-surface-2 py-[clamp(5rem,14vh,9rem)]" aria-labelledby="info-titulo">
-  <div class="contenedor grid gap-12">
+<section id="info" class="info-practica bg-surface-2 py-[clamp(3.5rem,10vh,6rem)]" aria-labelledby="info-titulo">
+  <div class="contenedor grid gap-8">
     <div class="flex flex-wrap items-end justify-between gap-6">
-      <h2 id="info-titulo" class="max-w-[14ch] text-[clamp(1.8rem,3.4vw,3.1rem)] leading-[0.98]">{T.titulo}</h2>
+      <h2 id="info-titulo" class="max-w-[16ch] text-[clamp(1.6rem,2.8vw,2.5rem)] leading-[1]">{T.titulo}</h2>
       <BotonWhatsApp idioma={idioma} variante="primario" texto={T.boton} mensaje={T.mensaje} />
     </div>
-    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
       {fichas.map((f, i) => (
-        <li class={`revelar grid content-start gap-3 rounded-[var(--ca-radius-lg)] border border-line bg-surface p-6 ${i === 2 ? 'border-2 border-deco' : ''}`} style={`transition-delay:${i * 60}ms`}>
+        <li class={`revelar grid content-start gap-1.5 rounded-[var(--ca-radius-lg)] border border-line bg-surface p-4 ${i === 2 ? 'border-2 border-deco' : ''}`} style={`transition-delay:${i * 60}ms`}>
           <span class="text-primary" set:html={icono(f.icono)} />
-          <h3 class="font-body text-sm font-semibold uppercase tracking-[0.1em] text-muted">{f.titulo}</h3>
-          <p class="text-lg leading-snug">{f.valor}</p>
+          <h3 class="font-body text-xs font-semibold uppercase tracking-[0.1em] text-muted">{f.titulo}</h3>
+          <p class="text-[0.95rem] leading-snug">{f.valor}</p>
           {f.pendiente && <p class="text-sm"><Pendiente texto={f.pendiente} /></p>}
           {f.enlace && <a href={f.enlace.href} class="text-sm font-semibold">{f.enlace.texto}</a>}
         </li>
