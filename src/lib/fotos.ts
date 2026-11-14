@@ -48,6 +48,8 @@ const registro = {
   'retrato-nadia': { es: 'Retrato de Nadia Espinosa', pt: 'Retrato de Nadia Espinosa', en: 'Portrait of Nadia Espinosa' },
   'retrato-patricia': { es: 'Patricia Real sonriendo detrás de su mesa de la feria, con frascos y botellas de sus productos', pt: 'Patricia Real sorrindo atrás da sua mesa na feira, com potes e garrafas dos seus produtos', en: 'Patricia Real smiling behind her market table, with jars and bottles of her products' },
   'retrato-sthefanie': { es: 'Retrato de Sthefanie Machado', pt: 'Retrato de Sthefanie Machado', en: 'Portrait of Sthefanie Machado' },
+  'feria-gente': { es: 'Vecinos y visitantes recorriendo los puestos de la feria bajo la media sombra', pt: 'Moradores e visitantes percorrendo as barracas da feira sob o sombrite', en: 'Locals and visitors browsing the market stalls under the shade cloth' },
+  'feria-ceibo': { es: 'Flores de ceibo junto a frascos de mermelada en una mesa de la feria', pt: 'Flores de corticeira junto a potes de geleia em uma mesa da feira', en: 'Ceibo flowers beside jars of jam on a market table' },
   'feria-mesa': { es: 'Mesa de la feria con frascos, panes, huevos y jugo de naranja', pt: 'Mesa da feira com potes, pães, ovos e suco de laranja', en: 'A market table with jars, bread, eggs and orange juice' },
 } satisfies Record<string, Textos>;
 

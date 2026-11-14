@@ -31,20 +31,20 @@ const T = elegir(idioma, {
     </div>
   </figure>
 ) : (
-<section id="personas" class="cita-grande relative bg-bg py-[clamp(6rem,16vh,12rem)]" aria-labelledby="personas-titulo">
-  <div class="contenedor grid items-center gap-12 lg:grid-cols-[0.75fr_1.25fr] lg:gap-20">
-    <Imagen proporcion="4/5" toma="Retrato de Patricia Real" src={retrato.src} alt={retrato.alt} revelar class="mx-auto w-full max-w-[22rem] lg:max-w-none" />
-    <figure class="grid gap-8">
+<section id="personas" class="cita-grande relative bg-bg py-[clamp(3.5rem,9vh,6rem)]" aria-labelledby="personas-titulo">
+  <div class="contenedor grid items-center gap-8 lg:grid-cols-[0.6fr_1.4fr] lg:gap-14">
+    <Imagen proporcion="4/5" toma="Retrato de Patricia Real" src={retrato.src} alt={retrato.alt} revelar class="mx-auto w-full max-w-[16rem] lg:max-w-[19rem]" />
+    <figure class="grid gap-5">
       <h2 id="personas-titulo" class="solo-lectores">{T.titulo}</h2>
       <blockquote>
-        <p class="cita-texto font-display text-[clamp(1.6rem,3.1vw,2.9rem)] italic leading-[1.08] text-heading">{T.cita}</p>
-        {T.original && <p class="mt-4 text-sm text-muted">{T.original}: <span lang="es">{original}</span></p>}
+        <p class="cita-texto font-display text-[clamp(1.35rem,2.3vw,2.1rem)] italic leading-[1.1] text-heading">{T.cita}</p>
+        {T.original && <p class="mt-3 text-sm text-muted">{T.original}: <span lang="es">{original}</span></p>}
       </blockquote>
       <figcaption class="grid gap-1 border-l-2 border-deco pl-5">
-        <span class="text-lg font-semibold">Patricia Real</span>
-        <span class="text-muted">{T.rol}</span>
+        <span class="font-semibold">Patricia Real</span>
+        <span class="text-sm text-muted">{T.rol}</span>
       </figcaption>
-      <p class="max-w-[46ch] text-lg text-muted">{T.texto}</p>
+      <p class="max-w-[50ch] text-muted">{T.texto}</p>
     </figure>
   </div>
 </section>

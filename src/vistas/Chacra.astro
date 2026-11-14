@@ -146,22 +146,24 @@ const chacraLd = {
 
   <CitaGrande idioma={idioma} />
 
-  <section id="feria" class="feria relative overflow-hidden bg-deep py-[clamp(5rem,14vh,10rem)] text-[#fbf2e1]" aria-labelledby="feria-titulo">
-    <div class="contenedor grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-      <div class="grid gap-6">
-        <p class="font-display text-xl italic text-[#f2c14e]">{T.feriaAnte}</p>
-        <h2 id="feria-titulo" class="max-w-[14ch] !text-[clamp(1.8rem,3.7vw,3.3rem)] !leading-[0.98] !text-[#fbf2e1]">{T.feriaTitulo}</h2>
-        <p class="max-w-[52ch] text-lg text-on-deep-muted">{T.feriaTexto(feria.nombre)}</p>
-        <div class="flex flex-wrap items-center gap-4 rounded-[var(--ca-radius-lg)] border border-white/15 p-5">
-          <p class="text-on-deep-muted">{T.proxima}</p>
-          <p class="proxima-feria font-display text-2xl text-[#fbf2e1]" data-locale={idiomas[idioma].locale}>{T.proximaValor}</p>
+  <section id="feria" class="feria relative overflow-hidden bg-deep py-[clamp(3.5rem,9vh,6rem)] text-[#fbf2e1]" aria-labelledby="feria-titulo">
+    <div class="contenedor grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
+      <div class="grid gap-4">
+        <p class="font-display text-base italic text-[#f2c14e]">{T.feriaAnte}</p>
+        <h2 id="feria-titulo" class="max-w-[18ch] !text-[clamp(1.5rem,2.6vw,2.3rem)] !leading-[1.02] !text-[#fbf2e1]">{T.feriaTitulo}</h2>
+        <p class="max-w-[52ch] text-on-deep-muted">{T.feriaTexto(feria.nombre)}</p>
+        <div class="flex flex-wrap items-center gap-4 rounded-[var(--ca-radius-lg)] border border-white/15 px-4 py-3">
+          <p class="text-sm text-on-deep-muted">{T.proxima}</p>
+          <p class="proxima-feria font-display text-xl text-[#fbf2e1]" data-locale={idiomas[idioma].locale}>{T.proximaValor}</p>
         </div>
-        <p class="text-on-deep-muted">{T.feriaNota}</p>
+        <p class="text-sm text-on-deep-muted">{T.feriaNota}</p>
       </div>
-      <div class="grid grid-cols-2 gap-3">
-        <div class="col-span-2"><Imagen proporcion="3/2" toma="Puestos de la feria" {...foto('feria-visitantes', idioma)} revelar /></div>
+      <div class="grid w-full max-w-[25rem] grid-cols-2 gap-2 lg:justify-self-end">
+        <div class="col-span-2"><Imagen proporcion="16/9" toma="Puestos de la feria" {...foto('feria-visitantes', idioma)} revelar /></div>
         <Imagen proporcion="1/1" toma="Productos de la feria" {...foto('feria-miel-huevos', idioma)} revelar />
         <Imagen proporcion="1/1" toma="Mesa de la feria" {...foto('feria-mesa', idioma)} revelar />
+        <Imagen proporcion="1/1" toma="Gente en la feria" {...foto('feria-gente', idioma)} revelar />
+        <Imagen proporcion="1/1" toma="Flores de ceibo y mermeladas" {...foto('feria-ceibo', idioma)} revelar />
       </div>
     </div>
   </section>
