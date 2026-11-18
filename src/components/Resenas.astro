@@ -1,0 +1,57 @@
+---
+// Reseñas de quienes vivieron una experiencia de VÍA.
+// Las reseñas reales se cargan en src/data/resenas.json, una por objeto, por ejemplo:
+//   { "texto": "…", "nombre": "Ana", "lugar": "Montevideo", "experiencia": "Camino de Azahar", "fecha": "2026-10", "idioma": "es" }
+// Mientras no haya reseñas, se muestran tres lugares marcados como pendientes (no se inventan opiniones).
+// Debajo, un botón para que quien ya vino deje la suya por WhatsApp.
+import BotonWhatsApp from './BotonWhatsApp.astro';
+import Pendiente from './Pendiente.astro';
+import resenas from '../data/resenas.json';
+import { elegir, idiomas, type Idioma } from '../i18n/ui';
+
+type Resena = { texto: string; nombre: string; lugar?: string; experiencia: string; fecha?: string; idioma?: Idioma };
+interface Props { idioma?: Idioma }
+const { idioma = 'es' } = Astro.props;
+const lista = resenas as Resena[];
+const T = elegir(idioma, {
+  es: { titulo: 'Lo que cuentan quienes vinieron', bajada: 'Reseñas de personas, familias y grupos que ya vivieron una experiencia con VÍA.', dejar: '¿Ya viniste? Contanos cómo te fue', mensaje: 'Hola, quiero dejar mi reseña sobre la experiencia:', original: 'Reseña original en español' },
+  pt: { titulo: 'O que contam os que vieram', bajada: 'Avaliações de pessoas, famílias e grupos que já viveram uma experiência com a VÍA.', dejar: 'Já veio? Conte como foi', mensaje: 'Olá, quero deixar minha avaliação sobre a experiência:', original: 'Avaliação original em espanhol' },
+  en: { titulo: 'What our visitors say', bajada: 'Reviews from people, families and groups who have already been on a VÍA experience.', dejar: 'Been with us? Tell us how it went', mensaje: 'Hi, I would like to leave a review of the experience:', original: 'Original review in Spanish' },
+});
+const mes = (fecha?: string) => {
+  if (!fecha) return '';
+  const [a, m] = fecha.split('-').map(Number);
+  if (!a || !m) return fecha;
+  return new Date(a, m - 1, 1).toLocaleDateString(idiomas[idioma].locale, { month: 'long', year: 'numeric' });
+};
+---
+<section class="contenedor grid gap-6 py-[clamp(3rem,8vh,5rem)]" aria-labelledby="resenas-titulo">
+  <div class="grid gap-2">
+    <h2 id="resenas-titulo" class="text-[clamp(1.5rem,2.6vw,2.2rem)]">{T.titulo}</h2>
+    <p class="max-w-[58ch] text-muted">{T.bajada}</p>
+  </div>
+
+  <ul class="grid gap-4 md:grid-cols-3">
+    {lista.length > 0
+      ? lista.map((r) => (
+          <li class="tarjeta grid content-start gap-3 p-5 sm:p-6">
+            <span class="font-display text-4xl leading-none text-deco" aria-hidden="true">“</span>
+            <blockquote class="text-[0.95rem] leading-relaxed text-ink" lang={r.idioma}>{r.texto}</blockquote>
+            <p class="grid gap-0.5 text-sm">
+              <span class="font-semibold text-heading">{r.nombre}{r.lugar && `, ${r.lugar}`}</span>
+              <span class="text-muted">{r.experiencia}{r.fecha && ` · ${mes(r.fecha)}`}</span>
+              {r.idioma && r.idioma !== idioma && <span class="text-xs text-muted">{T.original}</span>}
+            </p>
+          </li>
+        ))
+      : [1, 2, 3].map((n) => (
+          <li class="tarjeta grid content-start gap-3 p-5 sm:p-6">
+            <span class="font-display text-4xl leading-none text-deco" aria-hidden="true">“</span>
+            <p class="text-[0.95rem]"><Pendiente tipo="CITA" texto={`reseña real ${n} de una persona que hizo la experiencia`} /></p>
+            <p class="text-sm"><Pendiente texto="nombre, lugar, experiencia y fecha" /></p>
+          </li>
+        ))}
+  </ul>
+
+  <BotonWhatsApp idioma={idioma} variante="secundario" texto={T.dejar} mensaje={T.mensaje} class="w-max self-start" />
+</section>

@@ -6,7 +6,6 @@ import NavExperiencia from '../components/NavExperiencia.astro';
 import RuedaAnio from '../components/inmersivo/RuedaAnio.astro';
 import MapaDestino from '../components/MapaDestino.astro';
 import ClimaSalto from '../components/ClimaSalto.astro';
-import AvisoAccesibilidad from '../components/AvisoAccesibilidad.astro';
 import Pendiente from '../components/Pendiente.astro';
 import Imagen from '../components/Imagen.astro';
 import PreguntasFrecuentes from '../components/PreguntasFrecuentes.astro';
@@ -121,9 +120,8 @@ const T = elegir(idioma, {
   </section>
 
   <section id="clima" class="bg-surface-2 py-[clamp(4rem,10vh,7rem)]" aria-label={T.clima}>
-    <div class="contenedor grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
+    <div class="contenedor">
       <ClimaSalto idioma={idioma} />
-      <AvisoAccesibilidad idioma={idioma} variante="completo" id="aviso-planifica" />
     </div>
   </section>
 

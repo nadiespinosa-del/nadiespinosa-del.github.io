@@ -5,6 +5,7 @@ import CabeceraPagina from '../components/CabeceraPagina.astro';
 import BotonWhatsApp from '../components/BotonWhatsApp.astro';
 import EnlaceEmail from '../components/EnlaceEmail.astro';
 import Pendiente from '../components/Pendiente.astro';
+import Resenas from '../components/Resenas.astro';
 import site from '../data/site.json';
 import { catalogo } from '../lib/datos';
 import { elegir, rutas, t, type Idioma } from '../i18n/ui';
@@ -75,6 +76,9 @@ const T = elegir(idioma, {
     </article>
    </div>
   </section>
+
+  <!-- Reseñas de quienes ya vivieron una experiencia -->
+  <Resenas idioma={idioma} />
 </Base>
 
 <style>
