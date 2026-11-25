@@ -21,7 +21,7 @@ const T = elegir(idioma, {
     formas: 'Formas de contacto', waTexto: 'La forma más rápida para consultas y reservas.', waBoton: 'Escribir por WhatsApp',
     consultar: (n: string) => `Consultar por ${n}`, mensajeExp: (n: string) => `Hola, quiero consultar por ${n}.`,
     emailTexto: 'Para propuestas de grupos, prensa y alianzas.', emailBoton: 'Escribir un email', verDireccion: 'Ver dirección', asunto: 'Consulta VÍA',
-    redes: 'Redes y atención', horario: 'Horario de atención',
+    redes: 'Redes y atención', horario: 'Atención', horarioV: 'Te atendemos por WhatsApp y email. Por ahora no tenemos oficina de atención al público.',
     pie: ['¿Querés un viaje a medida? ', '. ¿Sos de una institución educativa? ', 'Conocé VÍA Educa', '.'],
   },
   pt: {
@@ -30,7 +30,7 @@ const T = elegir(idioma, {
     formas: 'Formas de contato', waTexto: 'O jeito mais rápido para dúvidas e reservas.', waBoton: 'Escrever pelo WhatsApp',
     consultar: (n: string) => `Perguntar sobre ${n}`, mensajeExp: (n: string) => `Olá, quero informações sobre ${n}.`,
     emailTexto: 'Para propostas de grupos, imprensa e parcerias.', emailBoton: 'Escrever um e-mail', verDireccion: 'Ver endereço', asunto: 'Contato VÍA',
-    redes: 'Redes e atendimento', horario: 'Horário de atendimento',
+    redes: 'Redes e atendimento', horario: 'Atendimento', horarioV: 'Atendemos pelo WhatsApp e por e-mail. Por enquanto não temos escritório de atendimento ao público.',
     pie: ['Quer uma viagem sob medida? ', '. Você é de uma instituição de ensino? ', 'Conheça a VÍA Educa', '.'],
   },
   en: {
@@ -39,7 +39,7 @@ const T = elegir(idioma, {
     formas: 'Ways to get in touch', waTexto: 'The quickest way to ask questions and book.', waBoton: 'Message us on WhatsApp',
     consultar: (n: string) => `Ask about ${n}`, mensajeExp: (n: string) => `Hi, I would like to know more about ${n}.`,
     emailTexto: 'For group proposals, press and partnerships.', emailBoton: 'Send an email', verDireccion: 'Show address', asunto: 'VÍA enquiry',
-    redes: 'Social media and opening hours', horario: 'Opening hours',
+    redes: 'Social media and contact', horario: 'How we work', horarioV: 'We are available on WhatsApp and by email. For now we do not have a public office.',
     pie: ['Want a tailor-made trip? ', '. Are you from a school? ', 'Discover VÍA Educa', '.'],
   },
 });
@@ -68,9 +68,9 @@ const T = elegir(idioma, {
     <article class="tarjeta !bg-surface/90 grid content-start gap-2 p-5 sm:p-6 md:col-span-3">
       <h2 class="text-xl">{T.redes}</h2>
       <ul class="grid gap-1 text-[0.95rem]">
-        <li>Instagram: {instagram ? <a href={`https://instagram.com/${instagram}`} target="_blank" rel="noopener">@{instagram}</a> : <Pendiente texto="usuario de Instagram" />}</li>
-        <li>Facebook: {facebook ? <a href={facebook} target="_blank" rel="noopener">Facebook</a> : <Pendiente texto="página de Facebook" />}</li>
-        <li>{T.horario}: <Pendiente texto="días y horarios de atención de VÍA" /></li>
+        {instagram && <li>Instagram: <a href={`https://instagram.com/${instagram}`} target="_blank" rel="noopener">@{instagram}</a></li>}
+        {facebook && <li>Facebook: <a href={facebook} target="_blank" rel="noopener">Facebook</a></li>}
+        <li>{T.horarioV}</li>
       </ul>
       <p class="text-sm text-muted">{T.pie[0]}<a href={r.disena}>{t(idioma, 'nav.disena')}</a>{T.pie[1]}<a href={r.grupos}>{T.pie[2]}</a>{T.pie[3]}</p>
     </article>

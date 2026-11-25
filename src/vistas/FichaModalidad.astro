@@ -3,12 +3,9 @@
 import Base from '../layouts/Base.astro';
 import CabeceraPagina from '../components/CabeceraPagina.astro';
 import Imagen from '../components/Imagen.astro';
-import Pendiente from '../components/Pendiente.astro';
 import TablaTarifas from '../components/TablaTarifas.astro';
-import AvisoAccesibilidad from '../components/AvisoAccesibilidad.astro';
 import ListaSalidas from '../components/ListaSalidas.astro';
 import FormularioReserva from '../components/FormularioReserva.astro';
-import PreguntasFrecuentes from '../components/PreguntasFrecuentes.astro';
 import TambienTeInteresa from '../components/TambienTeInteresa.astro';
 import NavExperiencia from '../components/NavExperiencia.astro';
 import IndicadorTemporada from '../components/IndicadorTemporada.astro';
@@ -53,16 +50,16 @@ const contenido = {
 }[id];
 
 const T = elegir(idioma, {
-  es: { meta: 'La experiencia', reservarMod: 'Reservá esta modalidad', galeria: 'Galería', queHaces: 'Qué vas a hacer', datosTitulo: 'Datos de la visita', duracion: 'Duración', temporada: 'Temporada', grupo: 'Grupo', grupoV: `De ${site.cupo.minimo} a ${site.cupo.maximo} personas (salidas programadas)`, idiomaG: 'Idioma de la guía', idiomaV: 'Español', encuentro: 'Punto de encuentro', exigencia: 'Exigencia física', exigenciaV: 'Básica: caminar durante parte del recorrido', lluvia: 'Con lluvia', lluviaV: 'Se reprograma sin costo o se hace la parte interpretativa bajo techo', cancelacion: 'Política de cancelación', llevar: 'Qué llevar', llevarV: 'Ropa cómoda y calzado cerrado para caminar por la chacra.', reservar: 'Reservá tu lugar', otra: id === 'con-fruto' ? { titulo: 'Modalidad interpretativa', texto: 'De diciembre a abril: el ciclo del naranjo, su historia y sus sabores.', href: r.interpretativa } : { titulo: 'Circuito con fruto', texto: 'De mayo a noviembre: el naranjal en plena zafra.', href: r.conFruto }, chacra: { titulo: 'La chacra y la comunidad', texto: 'Patricia Real, la Chacra La Victoria y la feria de Colonia Osimani.', href: r.chacra }, planifica: { titulo: 'Planificá tu visita', texto: 'Cómo llegar, clima, temporada y qué llevar.', href: r.planifica }, wa: 'Hola, quiero reservar Camino de Azahar' },
-  pt: { meta: 'A experiência', reservarMod: 'Reserve esta modalidade', galeria: 'Galeria', queHaces: 'O que você vai fazer', datosTitulo: 'Dados da visita', duracion: 'Duração', temporada: 'Temporada', grupo: 'Grupo', grupoV: `De ${site.cupo.minimo} a ${site.cupo.maximo} pessoas (saídas programadas)`, idiomaG: 'Idioma do guia', idiomaV: 'Espanhol', encuentro: 'Ponto de encontro', exigencia: 'Exigência física', exigenciaV: 'Básica: caminhar durante parte do percurso', lluvia: 'Com chuva', lluviaV: 'A visita é remarcada sem custo ou a parte interpretativa é feita em local coberto', cancelacion: 'Política de cancelamento', llevar: 'O que levar', llevarV: 'Roupa confortável e calçado fechado para caminhar pela chácara.', reservar: 'Reserve sua vaga', otra: id === 'con-fruto' ? { titulo: 'Modalidade interpretativa', texto: 'De dezembro a abril: o ciclo da laranjeira, sua história e seus sabores.', href: r.interpretativa } : { titulo: 'Circuito com fruta', texto: 'De maio a novembro: o laranjal em plena safra.', href: r.conFruto }, chacra: { titulo: 'A chácara e a comunidade', texto: 'Patricia Real, a Chacra La Victoria e a feira de Colonia Osimani.', href: r.chacra }, planifica: { titulo: 'Planeje sua visita', texto: 'Como chegar, clima, temporada e o que levar.', href: r.planifica }, wa: 'Olá, quero reservar o Camino de Azahar' },
-  en: { meta: 'The experience', reservarMod: 'Book this visit', galeria: 'Gallery', queHaces: "What you'll do", datosTitulo: 'Visit details', duracion: 'Duration', temporada: 'Season', grupo: 'Group size', grupoV: `${site.cupo.minimo} to ${site.cupo.maximo} people (scheduled departures)`, idiomaG: 'Guide language', idiomaV: 'Spanish', encuentro: 'Meeting point', exigencia: 'Physical effort', exigenciaV: 'Light: walking for part of the visit', lluvia: 'If it rains', lluviaV: 'Rescheduled free of charge, or the interpretive part takes place indoors', cancelacion: 'Cancellation policy', llevar: 'What to bring', llevarV: 'Comfortable clothes and closed shoes for walking around the farm.', reservar: 'Book your spot', otra: id === 'con-fruto' ? { titulo: 'Interpretive visit', texto: "December to April: the orange tree's life cycle, its history and its flavours.", href: r.interpretativa } : { titulo: 'Harvest season visit', texto: 'May to November: the grove at the height of the harvest.', href: r.conFruto }, chacra: { titulo: 'The farm and community', texto: 'Patricia Real, Chacra La Victoria and the Colonia Osimani market.', href: r.chacra }, planifica: { titulo: 'Plan your visit', texto: 'Getting there, weather, season and what to bring.', href: r.planifica }, wa: 'Hi, I would like to book Camino de Azahar' },
+  es: { meta: 'La experiencia', encuentroV: 'Salto Shopping (Av. José Batlle y Ordóñez 2265)', reservarMod: 'Reservá esta modalidad', galeria: 'Galería', queHaces: 'Qué vas a hacer', datosTitulo: 'Datos de la visita', duracion: 'Duración', temporada: 'Temporada', grupo: 'Grupo', grupoV: `De ${site.cupo.minimo} a ${site.cupo.maximo} personas (salidas programadas)`, idiomaG: 'Idioma de la guía', idiomaV: 'Español', encuentro: 'Punto de encuentro', exigencia: 'Exigencia física', exigenciaV: 'Básica: caminar durante parte del recorrido', lluvia: 'Con lluvia', lluviaV: 'Se reprograma sin costo o se hace la parte interpretativa bajo techo', cancelacion: 'Política de cancelación', llevar: 'Qué llevar', llevarV: 'Gorro, agua, protector solar, repelente y calzado cerrado y cómodo para caminar por tierra y pasto.', cancelacionV: 'Si llueve o el tiempo no acompaña, reprogramamos sin costo. Las demás condiciones te las confirmamos al reservar.', reservar: 'Reservá tu lugar', otra: id === 'con-fruto' ? { titulo: 'Modalidad interpretativa', texto: 'De diciembre a abril: el ciclo del naranjo, su historia y sus sabores.', href: r.interpretativa } : { titulo: 'Circuito con fruto', texto: 'De mayo a noviembre: el naranjal en plena zafra.', href: r.conFruto }, chacra: { titulo: 'La chacra y la comunidad', texto: 'Patricia Real, la Chacra La Victoria y la feria de Colonia Osimani.', href: r.chacra }, planifica: { titulo: 'Planificá tu visita', texto: 'Cómo llegar, clima, temporada y qué llevar.', href: r.planifica }, wa: 'Hola, quiero reservar Camino de Azahar' },
+  pt: { meta: 'A experiência', encuentroV: 'Salto Shopping (Av. José Batlle y Ordóñez 2265)', reservarMod: 'Reserve esta modalidade', galeria: 'Galeria', queHaces: 'O que você vai fazer', datosTitulo: 'Dados da visita', duracion: 'Duração', temporada: 'Temporada', grupo: 'Grupo', grupoV: `De ${site.cupo.minimo} a ${site.cupo.maximo} pessoas (saídas programadas)`, idiomaG: 'Idioma do guia', idiomaV: 'Espanhol', encuentro: 'Ponto de encontro', exigencia: 'Exigência física', exigenciaV: 'Básica: caminhar durante parte do percurso', lluvia: 'Com chuva', lluviaV: 'A visita é remarcada sem custo ou a parte interpretativa é feita em local coberto', cancelacion: 'Política de cancelamento', llevar: 'O que levar', llevarV: 'Boné ou chapéu, água, protetor solar, repelente e calçado fechado e confortável para caminhar sobre terra e grama.', cancelacionV: 'Se chover ou o tempo não ajudar, reprogramamos sem custo. As demais condições confirmamos na reserva.', reservar: 'Reserve sua vaga', otra: id === 'con-fruto' ? { titulo: 'Modalidade interpretativa', texto: 'De dezembro a abril: o ciclo da laranjeira, sua história e seus sabores.', href: r.interpretativa } : { titulo: 'Circuito com fruta', texto: 'De maio a novembro: o laranjal em plena safra.', href: r.conFruto }, chacra: { titulo: 'A chácara e a comunidade', texto: 'Patricia Real, a Chacra La Victoria e a feira de Colonia Osimani.', href: r.chacra }, planifica: { titulo: 'Planeje sua visita', texto: 'Como chegar, clima, temporada e o que levar.', href: r.planifica }, wa: 'Olá, quero reservar o Camino de Azahar' },
+  en: { meta: 'The experience', encuentroV: 'Salto Shopping (Av. José Batlle y Ordóñez 2265)', reservarMod: 'Book this visit', galeria: 'Gallery', queHaces: "What you'll do", datosTitulo: 'Visit details', duracion: 'Duration', temporada: 'Season', grupo: 'Group size', grupoV: `${site.cupo.minimo} to ${site.cupo.maximo} people (scheduled departures)`, idiomaG: 'Guide language', idiomaV: 'Spanish', encuentro: 'Meeting point', exigencia: 'Physical effort', exigenciaV: 'Light: walking for part of the visit', lluvia: 'If it rains', lluviaV: 'Rescheduled free of charge, or the interpretive part takes place indoors', cancelacion: 'Cancellation policy', llevar: 'What to bring', llevarV: 'A hat, water, sunscreen, insect repellent and comfortable closed shoes for walking on dirt and grass.', cancelacionV: 'If it rains or the weather is bad, we reschedule at no cost. We confirm the other conditions when you book.', reservar: 'Book your spot', otra: id === 'con-fruto' ? { titulo: 'Interpretive visit', texto: "December to April: the orange tree's life cycle, its history and its flavours.", href: r.interpretativa } : { titulo: 'Harvest season visit', texto: 'May to November: the grove at the height of the harvest.', href: r.conFruto }, chacra: { titulo: 'The farm and community', texto: 'Patricia Real, Chacra La Victoria and the Colonia Osimani market.', href: r.chacra }, planifica: { titulo: 'Plan your visit', texto: 'Getting there, weather, season and what to bring.', href: r.planifica }, wa: 'Hi, I would like to book Camino de Azahar' },
 });
 const datos = [
   { etiqueta: T.duracion, valor: dur },
   { etiqueta: T.temporada, valor: modalidad.meses },
   { etiqueta: T.grupo, valor: T.grupoV },
   { etiqueta: T.idiomaG, valor: T.idiomaV },
-  { etiqueta: T.encuentro, valor: 'Chacra La Victoria, Colonia Osimani (Salto)' },
+  { etiqueta: T.encuentro, valor: T.encuentroV },
   { etiqueta: T.exigencia, valor: T.exigenciaV },
   { etiqueta: T.lluvia, valor: T.lluviaV },
 ];
@@ -107,21 +104,16 @@ const datos = [
             <dd class="font-semibold">{d.valor}</dd>
           </div>
         ))}
-        <div class="grid gap-0.5 border-b border-line pb-3">
-          <dt class="text-sm text-muted">{T.cancelacion}</dt>
-          <dd><Pendiente texto="política de cancelación" /></dd>
-        </div>
         <div class="grid gap-0.5">
           <dt class="text-sm text-muted">{T.llevar}</dt>
-          <dd>{T.llevarV} <Pendiente texto="recomendaciones de la chacra" /></dd>
+          <dd>{T.llevarV}</dd>
         </div>
       </dl>
     </aside>
   </section>
 
-  <section class="contenedor grid gap-10 pb-[clamp(4rem,10vh,7rem)] lg:grid-cols-2">
+  <section class="contenedor grid max-w-3xl gap-10 pb-[clamp(4rem,10vh,7rem)]">
     <TablaTarifas idioma={idioma} />
-    <AvisoAccesibilidad idioma={idioma} id={`aviso-${id}`} />
   </section>
 
   <section id="reservar" class="bg-surface-2 py-[clamp(5rem,12vh,9rem)]" aria-labelledby="reservar-titulo">
@@ -135,7 +127,6 @@ const datos = [
   </section>
 
   <div class="contenedor grid gap-24 py-[clamp(4rem,12vh,8rem)]">
-    <PreguntasFrecuentes idioma={idioma} temas={['experiencia']} />
     <TambienTeInteresa idioma={idioma} enlaces={[T.otra, T.chacra, T.planifica]} />
   </div>
 </Base>

@@ -1,7 +1,12 @@
 {
-  "_nota": "Coordenadas aproximadas de lugares públicos conocidos (escala regional). La ubicación exacta de la Chacra La Victoria se agrega cuando el equipo la confirme: completar 'chacra' con lat y lng.",
+  "_nota": "Coordenadas aproximadas de lugares públicos conocidos (escala regional). La ubicación exacta de la Chacra La Victoria es privada: se envía al reservar. El encuentro es en Salto Shopping (coordenadas de OpenStreetMap).",
   "chacra": null,
   "lugares": [
+    {
+      "id": "encuentro", "tipo": "destino", "lat": -31.3843, "lng": -57.9441,
+      "nombre": { "es": "Salto Shopping (punto de encuentro)", "pt": "Salto Shopping (ponto de encontro)", "en": "Salto Shopping (meeting point)" },
+      "texto": { "es": "Desde acá salimos juntos hacia la chacra.", "pt": "Daqui saímos juntos para a chácara.", "en": "We leave together from here for the farm." }
+    },
     {
       "id": "salto", "tipo": "destino", "lat": -31.388, "lng": -57.961,
       "nombre": { "es": "Ciudad de Salto", "pt": "Cidade de Salto", "en": "Salto city" },

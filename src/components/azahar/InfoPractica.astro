@@ -16,11 +16,11 @@ const T = elegir(idioma, {
   es: {
     titulo: 'Información práctica', boton: 'Coordinar mi visita', mensaje: 'Hola, quiero coordinar una fecha para Camino de Azahar.',
     fichas: [
-      ['Ubicación', 'Chacra La Victoria, Colonia Osimani, Salto', 'Cómo llegar'],
+      ['Ubicación', 'Chacra La Victoria, Colonia Osimani, Salto. Encuentro en Salto Shopping, con traslado incluido.', 'Cómo llegar'],
       ['Duración', `${dur}, en cinco etapas`],
-      ['Fechas y horarios', 'Coordinables: se acuerdan al reservar, según la organización de la experiencia y la actividad productiva de la chacra.'],
       ['Reserva', `Previa, por la web o por WhatsApp. Grupos de ${minimo} a ${maximo} personas: si venís en familia, te sumás a un grupo.`],
-      ['Qué llevar', 'Ropa cómoda y calzado cerrado para caminar por la chacra.'],
+      ['Qué llevar', 'Gorro, agua, protector solar, repelente y calzado cerrado y cómodo para caminar por tierra y pasto.'],
+      ['Con lluvia', 'Se reprograma sin costo o se hace la parte interpretativa bajo techo.'],
       ['Idioma', 'Español. Consultanos por otros idiomas.'],
       ['Accesibilidad', 'Entorno rural con caminos irregulares; sin accesibilidad universal en todo el recorrido. Exigencia física básica.', 'Más información'],
     ],
@@ -28,11 +28,11 @@ const T = elegir(idioma, {
   pt: {
     titulo: 'Informações práticas', boton: 'Combinar minha visita', mensaje: 'Olá, quero combinar uma data para o Camino de Azahar.',
     fichas: [
-      ['Localização', 'Chacra La Victoria, Colonia Osimani, Salto (Uruguai)', 'Como chegar'],
+      ['Localização', 'Chacra La Victoria, Colonia Osimani, Salto (Uruguai). Encontro no Salto Shopping, com traslado incluído.', 'Como chegar'],
       ['Duração', `${dur}, em cinco etapas`],
-      ['Datas e horários', 'A combinar: definidos na reserva, de acordo com a organização da experiência e a atividade produtiva da chácara.'],
       ['Reserva', `Antecipada, pelo site ou pelo WhatsApp. Grupos de ${minimo} a ${maximo} pessoas: se você vier em família, entra em um grupo.`],
-      ['O que levar', 'Roupa confortável e calçado fechado para caminhar pela chácara.'],
+      ['O que levar', 'Boné ou chapéu, água, protetor solar, repelente e calçado fechado e confortável para caminhar sobre terra e grama.'],
+      ['Com chuva', 'Reprogramamos sem custo ou fazemos a parte interpretativa sob teto.'],
       ['Idioma', 'Espanhol. Pergunte-nos sobre outros idiomas.'],
       ['Acessibilidade', 'Ambiente rural com caminhos irregulares; sem acessibilidade universal em todo o percurso. Exigência física básica.', 'Mais informações'],
     ],
@@ -40,11 +40,11 @@ const T = elegir(idioma, {
   en: {
     titulo: 'Practical information', boton: 'Arrange my visit', mensaje: 'Hi, I would like to arrange a date for Camino de Azahar.',
     fichas: [
-      ['Location', 'Chacra La Victoria, Colonia Osimani, Salto, Uruguay', 'Getting there'],
+      ['Location', 'Chacra La Victoria, Colonia Osimani, Salto, Uruguay. We meet at Salto Shopping, transfer included.', 'Getting there'],
       ['Duration', `${dur}, in five stages`],
-      ['Dates and times', "Flexible: agreed when you book, depending on how the visit is organised and the farm's work schedule."],
       ['Booking', `In advance, online or on WhatsApp. Groups of ${minimo} to ${maximo} people: families and couples join a group.`],
-      ['What to bring', 'Comfortable clothes and closed shoes for walking around the farm.'],
+      ['What to bring', 'A hat, water, sunscreen, insect repellent and comfortable closed shoes for walking on dirt and grass.'],
+      ['If it rains', 'We reschedule at no cost or do the interpretive part indoors.'],
       ['Language', 'Spanish. Ask us about other languages.'],
       ['Accessibility', 'Rural setting with uneven paths; the route is not fully accessible. Light physical effort.', 'More information'],
     ],
@@ -54,14 +54,14 @@ const icono = (d: string) => `<svg width="22" height="22" viewBox="0 0 24 24" fi
 const iconos = [
   '<path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>',
   '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
-  '<rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
   '<path d="M4 6h16v10H8l-4 4z"/><path d="M8 10h8M8 13h5"/>',
   '<path d="M6 8h12l-1 12H7z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/>',
+  '<path d="M7 15a4 4 0 1 1 1-7.9A5 5 0 0 1 17.6 9 3.5 3.5 0 0 1 17 16H7z"/><path d="M9 19l-1 2M13 19l-1 2M17 19l-1 2"/>',
   '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/>',
   '<circle cx="12" cy="4.5" r="1.8"/><path d="M7 9h10M12 9v5l-3 6M12 14l3 6"/>',
 ];
 // Notas de datos pendientes (para el equipo, en español)
-const pendientes: Record<number, string> = { 0: 'dirección y cómo llegar', 4: 'recomendaciones de la chacra según la época' };
+const pendientes: Record<number, string> = {};
 const enlaces: Record<number, string> = { 0: r.planifica, 6: r.accesibilidad };
 const fichas = T.fichas.map(([titulo, valor, enlace], i) => ({ icono: iconos[i], titulo, valor, pendiente: pendientes[i], enlace: enlace ? { texto: enlace, href: enlaces[i] } : undefined }));
 ---

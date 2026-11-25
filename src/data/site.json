@@ -10,12 +10,12 @@
       "numero": "59891453608"
     },
     "email": {
-      "usuario": "nadiespinosa",
+      "usuario": "experienciasviaturismo",
       "dominio": "gmail.com"
     },
-    "instagram": null,
+    "instagram": "experienciasviaturismo",
     "facebook": null,
-    "_pendiente": "Instagram y Facebook: cuando existan, escribir el usuario o la URL en lugar de null. Mientras sean null, los íconos no se muestran."
+    "_pendiente": "Facebook: cuando exista, escribir la URL en lugar de null. Mientras sea null, no se muestra."
   },
   "tarifas": {
     "leyenda": "Tarifa propuesta, a confirmar al reservar",
@@ -33,8 +33,8 @@
   "duracionMinutos": 170,
   "temporada": {
     "mesesConFruto": [5, 6, 7, 8, 9, 10, 11],
-    "floracion": null,
-    "_pendiente": "floracion: meses de floración del azahar a confirmar con la chacra (por ejemplo [9, 10])."
+    "floracion": [9, 10],
+    "_fuente_floracion": "INIA (Revista INIA N.º 69, 2022): en Salto, la flor abierta va de la primera semana de setiembre a mediados de octubre."
   },
   "feria": {
     "nombre": "Feria de Productos Locales de Colonia Osimani y Llerena",
@@ -46,7 +46,7 @@
   "creditos": {
     "contenido": "Nadia Espinosa y Sthefanie Machado",
     "programa": "Proyecto de egreso, Tecnólogo en Diseño de Itinerarios Turísticos Sostenibles Culturales, Polo Educativo Tecnológico de Salto (DGETP-UTU), 2026",
-    "diseno": null,
-    "fotografia": null
+    "diseno": { "es": "equipo de VÍA", "pt": "equipe da VÍA", "en": "the VÍA team" },
+    "fotografia": { "es": "equipo de VÍA; las fotos de archivo llevan su crédito (Biblioteca Nacional de Uruguay y FADU, Udelar)", "pt": "equipe da VÍA; as fotos de arquivo levam seu crédito (Biblioteca Nacional do Uruguai e FADU, Udelar)", "en": "the VÍA team; archive photos carry their own credit (National Library of Uruguay and FADU, Udelar)" }
   }
 }

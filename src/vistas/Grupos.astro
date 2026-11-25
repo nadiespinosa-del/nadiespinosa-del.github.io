@@ -36,7 +36,7 @@ const T = elegir(idioma, {
       { nombre: 'Ambiente', temas: ['Riego por goteo y curvas de nivel para cuidar el agua y el suelo.', 'Residuos de la visita: separación, compost con la cáscara y cero plásticos descartables.', 'El uso responsable de productos fitosanitarios.'] },
     ],
     visitaTitulo: 'La visita, adaptada a cada curso', visitaTexto: 'Las mismas cinco etapas, con lenguaje y tiempos ajustados a la edad del grupo. La duración puede acortarse según la planificación del centro.',
-    segTitulo: 'Seguridad y materiales', seg1: 'Los grupos van acompañados por sus docentes. Proporción de adultos por estudiante:', seg2: 'Recorrido con protocolos de seguridad e higiene, y respeto por los espacios productivos.', seg3: 'Ficha para docentes con contenidos y actividades antes y después de la visita:', seg4: 'Transporte:', altFoto: 'Estudiantes elaborando jugo de naranja', propuesta: 'Pedí una propuesta', preguntas: 'Preguntas de docentes',
+    segTitulo: 'Seguridad y materiales', seg1: 'Los grupos van acompañados por sus docentes y por los adultos responsables que pida la institución, según su normativa de salidas didácticas.', seg2: 'Recorrido con protocolos de seguridad e higiene, y respeto por los espacios productivos.', seg3: 'Cada etapa se vincula con ciencias naturales, geografía, historia, economía y ambiente; con el docente acordamos los contenidos para trabajar antes y después de la visita.', seg4: 'Transporte:', seg4V: 'podemos combinar a saída a partir da instituição; o orçamento é à parte, conforme a distância e o tamanho do grupo.', seg4V: 'podemos coordinar la salida desde la institución; se cotiza aparte, según la distancia y el tamaño del grupo.', altFoto: 'Estudiantes elaborando jugo de naranja', propuesta: 'Pedí una propuesta', preguntas: 'Preguntas de docentes',
     tambien: [
       { titulo: 'La naranja en Salto', texto: 'La historia completa, de 1864 a hoy, para preparar la visita.', href: r.naranja },
       { titulo: 'La experiencia', texto: 'Las cinco etapas de la visita y las modalidades según la época.', href: r.azahar },
@@ -61,7 +61,7 @@ const T = elegir(idioma, {
       { nombre: 'Meio ambiente', temas: ['Irrigação por gotejamento e curvas de nível para cuidar da água e do solo.', 'Resíduos da visita: separação, compostagem com a casca e zero plástico descartável.', 'O uso responsável de defensivos agrícolas.'] },
     ],
     visitaTitulo: 'A visita, adaptada a cada turma', visitaTexto: 'As mesmas cinco etapas, com linguagem e tempos ajustados à idade do grupo. A duração pode ser reduzida conforme o planejamento da escola.',
-    segTitulo: 'Segurança e materiais', seg1: 'Os grupos vêm acompanhados pelos professores. Proporção de adultos por estudante:', seg2: 'Percurso com protocolos de segurança e higiene, e respeito pelos espaços produtivos.', seg3: 'Ficha para professores com conteúdos e atividades antes e depois da visita:', seg4: 'Transporte:', altFoto: 'Estudantes preparando suco de laranja', propuesta: 'Peça uma proposta', preguntas: 'Perguntas de professores',
+    segTitulo: 'Segurança e materiais', seg1: 'Os grupos vêm acompanhados pelos professores e pelos adultos responsáveis que a instituição exigir, conforme suas normas de saídas didáticas.', seg2: 'Percurso com protocolos de segurança e higiene, e respeito pelos espaços produtivos.', seg3: 'Cada etapa se conecta com ciências naturais, geografia, história, economia e meio ambiente; com o professor combinamos os conteúdos para trabalhar antes e depois da visita.', seg4: 'Transporte:', altFoto: 'Estudantes preparando suco de laranja', propuesta: 'Peça uma proposta', preguntas: 'Perguntas de professores',
     tambien: [
       { titulo: 'A laranja em Salto', texto: 'A história completa, de 1864 até hoje, para preparar a visita.', href: r.naranja },
       { titulo: 'A experiência', texto: 'As cinco etapas da visita e as modalidades conforme a época.', href: r.azahar },
@@ -86,7 +86,7 @@ const T = elegir(idioma, {
       { nombre: 'Environment', temas: ['Drip irrigation and contour planting to protect water and soil.', 'Waste on the visit: sorting, composting the peel and no single-use plastics.', 'Responsible use of crop protection products.'] },
     ],
     visitaTitulo: 'The visit, adapted to each class', visitaTexto: "The same five stages, with language and timing adjusted to the group's age. The visit can be shortened to fit the school's schedule.",
-    segTitulo: 'Safety and materials', seg1: 'Groups are accompanied by their teachers. Required adult-to-student ratio:', seg2: 'Safety and hygiene protocols throughout, and respect for the working farm.', seg3: 'Teacher sheet with content and activities for before and after the visit:', seg4: 'Transport:', altFoto: 'Students making orange juice', propuesta: 'Request a proposal', preguntas: 'Questions from teachers',
+    segTitulo: 'Safety and materials', seg1: 'Groups are accompanied by their teachers and by as many responsible adults as the school requires under its own field-trip rules.', seg2: 'Safety and hygiene protocols throughout, and respect for the working farm.', seg3: 'Each stage links to natural sciences, geography, history, economics and the environment; we agree with the teacher on what to work on before and after the visit.', seg4: 'Transport:', seg4V: 'we can arrange departure from the school; it is quoted separately, depending on distance and group size.', altFoto: 'Students making orange juice', propuesta: 'Request a proposal', preguntas: 'Questions from teachers',
     tambien: [
       { titulo: 'Oranges in Salto', texto: 'The full story, from 1864 to today, to prepare the visit.', href: r.naranja },
       { titulo: 'The experience', texto: 'The five stages of the visit and the options by season.', href: r.azahar },
@@ -145,10 +145,10 @@ const T = elegir(idioma, {
     <div class="grid content-start gap-6">
       <h2 id="seguridad-titulo" class="text-[clamp(1.7rem,3.2vw,2.7rem)]">{T.segTitulo}</h2>
       <ul class="grid gap-4 text-lg">
-        <li class="border-b border-line pb-4">{T.seg1} <Pendiente texto="proporción mínima requerida" /></li>
+        <li class="border-b border-line pb-4">{T.seg1}</li>
         <li class="border-b border-line pb-4">{T.seg2}</li>
-        <li class="border-b border-line pb-4">{T.seg3} <Pendiente tipo="ARCHIVO" texto="ficha para docentes en PDF" /></li>
-        <li>{T.seg4} <Pendiente texto="si se coordina traslado para grupos y su costo" /></li>
+        <li class="border-b border-line pb-4">{T.seg3}</li>
+        <li>{T.seg4} {T.seg4V}</li>
       </ul>
     </div>
     <div class="grid content-start gap-6">

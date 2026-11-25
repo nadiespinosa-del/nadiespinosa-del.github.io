@@ -6,7 +6,6 @@
 import site from '../../data/site.json';
 import Imagen from '../Imagen.astro';
 import { experiencia } from '../../lib/datos';
-import { formatoDuracion } from '../../lib/util';
 import { elegir, type Idioma } from '../../i18n/ui';
 import { foto, type ClaveFoto } from '../../lib/fotos';
 
@@ -14,9 +13,9 @@ interface Props { idioma?: Idioma }
 const { idioma = 'es' } = Astro.props;
 const { etapas } = experiencia(idioma);
 const T = elegir(idioma, {
-  es: { titulo: 'La visita, en cinco etapas', bajada: `${formatoDuracion(site.duracionMinutos)} en la Chacra La Victoria, con reserva previa, en grupos de ${site.cupo.minimo} a ${site.cupo.maximo} personas.`, etapa: 'Etapa', de: 'de', carrusel: 'carrusel', diapositiva: 'etapa' },
-  pt: { titulo: 'A visita, em cinco etapas', bajada: `${formatoDuracion(site.duracionMinutos)} na Chacra La Victoria, com reserva antecipada, em grupos de ${site.cupo.minimo} a ${site.cupo.maximo} pessoas.`, etapa: 'Etapa', de: 'de', carrusel: 'carrossel', diapositiva: 'etapa' },
-  en: { titulo: 'The visit, in five stages', bajada: `${formatoDuracion(site.duracionMinutos)} at Chacra La Victoria, booked in advance, in groups of ${site.cupo.minimo} to ${site.cupo.maximo} people.`, etapa: 'Stage', de: 'of', carrusel: 'carousel', diapositiva: 'stage' },
+  es: { titulo: 'La visita, en cinco etapas', bajada: 'De la llegada a la chacra a la despedida, paso a paso.', etapa: 'Etapa', de: 'de', carrusel: 'carrusel', diapositiva: 'etapa' },
+  pt: { titulo: 'A visita, em cinco etapas', bajada: 'Da chegada à chácara até a despedida, passo a passo.', etapa: 'Etapa', de: 'de', carrusel: 'carrossel', diapositiva: 'etapa' },
+  en: { titulo: 'The visit, in five stages', bajada: 'From arriving at the farm to saying goodbye, step by step.', etapa: 'Stage', de: 'of', carrusel: 'carousel', diapositiva: 'stage' },
 });
 const tomas = [
   'Llegada a la chacra: la encargada recibe al grupo bajo los naranjos, mañana, plano general',

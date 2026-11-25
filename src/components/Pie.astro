@@ -3,7 +3,6 @@
 import MarcaVia from './MarcaVia.astro';
 import SelectorIdioma from './SelectorIdioma.astro';
 import EnlaceEmail from './EnlaceEmail.astro';
-import Pendiente from './Pendiente.astro';
 import site from '../data/site.json';
 import { catalogo } from '../lib/datos';
 import { t, rutas, type Idioma } from '../i18n/ui';
@@ -62,9 +61,8 @@ const titulo = 'mb-4 font-body text-sm font-semibold uppercase tracking-[0.14em]
   <div class="border-t border-white/15">
     <div class="contenedor grid gap-4 py-8 text-sm text-on-deep-muted">
       <p>
-        {t(idioma, 'pie.diseno')}: {site.creditos.diseno ?? <Pendiente texto="crédito de diseño y desarrollo" />}.
-        {t(idioma, 'pie.fotografia')}: {site.creditos.fotografia ?? <Pendiente texto="créditos fotográficos" />}.
-        Logo de VÍA: <Pendiente tipo="ARCHIVO" texto="logo oficial de VÍA" />
+        {t(idioma, 'pie.diseno')}: {site.creditos.diseno[idioma]}.
+        {t(idioma, 'pie.fotografia')}: {site.creditos.fotografia[idioma]}.
       </p>
       <ul class="flex flex-wrap gap-x-5 gap-y-2">
         <li><a class="text-on-deep-muted" href={r.privacidad}>{t(idioma, 'pie.privacidad')}</a></li>

@@ -22,6 +22,13 @@ const fotosCombinar: (ClaveFoto | null)[] = [null, 'plaza-33', 'rio-uruguay-atar
 // Las termas, con una foto de época de las Termas del Arapey (Biblioteca Nacional de Uruguay)
 const termas = fotoArchivo('termas-arapey-1960', idioma);
 const tomas = ['Piscina termal al atardecer con vapor, plano general', 'Calle de Salto con naranjos en la vereda, mañana, plano general', 'Represa de Salto Grande sobre el río Uruguay, plano general, atardecer'];
+// Datos verificados: informe del proyecto (encuentro en Salto Shopping y traslado), sitio oficial de Salto Shopping,
+// MINTUR (Daymán a 10 km del centro), guías de turismo (Arapey a unos 80 km) e INIA (floración en Salto).
+const D = elegir(idioma, {
+  es: { desdeSalto: 'El encuentro es en Salto Shopping (Av. José Batlle y Ordóñez 2265). Desde ahí vamos juntos por la avenida Garibaldi hasta Colonia Osimani y Llerena, a menos de 20 km del centro.', desdeTermas: 'Termas del Daymán está a unos 10 km del centro de Salto y Termas del Arapey a unos 80 km; desde las dos se llega al punto de encuentro por la ruta 3.', traslado: 'incluido, ida y vuelta en micro desde el punto de encuentro.', floracion: 'En Salto, de principios de setiembre a mediados de octubre.' },
+  pt: { desdeSalto: 'O encontro é no Salto Shopping (Av. José Batlle y Ordóñez 2265). De lá seguimos juntos pela avenida Garibaldi até Colonia Osimani y Llerena, a menos de 20 km do centro.', desdeTermas: 'As Termas del Daymán ficam a cerca de 10 km do centro de Salto e as Termas del Arapey a cerca de 80 km; das duas se chega ao ponto de encontro pela ruta 3.', traslado: 'incluído, ida e volta de micro-ônibus a partir do ponto de encontro.', floracion: 'Em Salto, do início de setembro a meados de outubro.' },
+  en: { desdeSalto: 'We meet at Salto Shopping (Av. José Batlle y Ordóñez 2265). From there we travel together along Avenida Garibaldi to Colonia Osimani y Llerena, less than 20 km from the city centre.', desdeTermas: 'Termas del Daymán is about 10 km from central Salto and Termas del Arapey about 80 km; from either, Route 3 takes you to the meeting point.', traslado: 'included, there and back by minibus from the meeting point.', floracion: 'In Salto, from early September to mid-October.' },
+});
 const T = elegir(idioma, {
   es: {
     meta: 'Planificá tu visita · Camino de Azahar',
@@ -98,7 +105,7 @@ const T = elegir(idioma, {
     {T.momentos.map(([titulo, texto], i) => (
       <article class="revelar grid content-start gap-3 border-t-2 border-deco pt-6">
         <h2 class="font-display text-2xl">{titulo}</h2>
-        <p class="text-lg text-muted">{texto} {i === 2 && <Pendiente tipo="CALENDARIO_A_CONFIRMAR" texto="meses de floración en la chacra" />}</p>
+        <p class="text-lg text-muted">{texto} {i === 2 && D.floracion}</p>
       </article>
     ))}
   </section>
@@ -109,10 +116,10 @@ const T = elegir(idioma, {
       <div class="grid gap-4 text-lg text-muted">
         <p>{T.llegarTexto}</p>
         <ul class="grid gap-3">
-          <li><strong class="text-ink">{T.desdeSalto}</strong> <Pendiente texto="distancia, ruta y tiempo de viaje hasta la chacra" /></li>
-          <li><strong class="text-ink">{T.desdeTermas}</strong> <Pendiente texto="tiempo de viaje desde Daymán y Arapey" /></li>
+          <li><strong class="text-ink">{T.desdeSalto}</strong> {D.desdeSalto}</li>
+          <li><strong class="text-ink">{T.desdeTermas}</strong> {D.desdeTermas}</li>
           <li><strong class="text-ink">{T.desdeConcordia}</strong> {T.concordia}</li>
-          <li><strong class="text-ink">{T.traslado}</strong> <Pendiente texto="si la visita incluye traslado y desde dónde" /></li>
+          <li><strong class="text-ink">{T.traslado}</strong> {D.traslado}</li>
         </ul>
       </div>
     </div>

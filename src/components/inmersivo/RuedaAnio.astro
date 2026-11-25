@@ -1,7 +1,6 @@
 ---
 // Rueda 3D de los doce meses (CSS 3D): gira con el scroll hasta dejar al frente el mes actual.
 // Mayo a noviembre: con fruto. Diciembre a abril: modalidad interpretativa.
-import Pendiente from '../Pendiente.astro';
 import { textos } from '../../lib/datos';
 import { meses as nombresMeses, temporadaDelMes } from '../../lib/util';
 import { elegir, type Idioma } from '../../i18n/ui';
@@ -11,9 +10,9 @@ const { idioma = 'es' } = Astro.props;
 const meses = nombresMeses(idioma).map((nombre, i) => ({ nombre, numero: i + 1, temporada: temporadaDelMes(i + 1) }));
 const feria = textos(idioma).feria;
 const T = elegir(idioma, {
-  es: { titulo: 'Cada mes, otra quinta', texto: 'De mayo a noviembre es zafra: la visita es con fruto, con cosecha cuando las condiciones lo permiten. De diciembre a abril, la modalidad interpretativa recorre el ciclo del naranjo, su historia y sus sabores.', fruto: 'Con fruto, mayo a noviembre', interp: 'Interpretativa, diciembre a abril', feria: `La Feria de Colonia Osimani y Llerena se hace el ${feria.cuando}.`, floracion: 'Floración del azahar', aria: 'Meses del año y su modalidad', conFruto: 'Con fruto', interpretativa: 'Interpretativa', hoy: 'Este mes', anterior: 'Mes anterior', siguiente: 'Mes siguiente', mostrando: 'Mostrando' },
-  pt: { titulo: 'A cada mês, outro pomar', texto: 'De maio a novembro é safra: a visita é com fruta, com colheita quando as condições permitem. De dezembro a abril, a modalidade interpretativa percorre o ciclo da laranjeira, sua história e seus sabores.', fruto: 'Com fruta, de maio a novembro', interp: 'Interpretativa, de dezembro a abril', feria: `A Feira de Colonia Osimani e Llerena acontece no ${feria.cuando}.`, floracion: 'Floração da laranjeira', aria: 'Meses do ano e sua modalidade', conFruto: 'Com fruta', interpretativa: 'Interpretativa', hoy: 'Este mês', anterior: 'Mês anterior', siguiente: 'Próximo mês', mostrando: 'Mostrando' },
-  en: { titulo: 'Every month, a different grove', texto: 'May to November is harvest season: visits include fruit on the trees and picking when conditions allow. From December to April, the interpretive visit explores the life cycle of the orange tree, its history and its flavours.', fruto: 'With fruit, May to November', interp: 'Interpretive, December to April', feria: `The Colonia Osimani and Llerena market takes place on the ${feria.cuando}.`, floracion: 'Orange blossom season', aria: 'Months of the year and type of visit', conFruto: 'With fruit', interpretativa: 'Interpretive', hoy: 'This month', anterior: 'Previous month', siguiente: 'Next month', mostrando: 'Showing' },
+  es: { titulo: 'Cada mes, otra quinta', floracionV: 'de principios de setiembre a mediados de octubre', texto: 'De mayo a noviembre es zafra: la visita es con fruto, con cosecha cuando las condiciones lo permiten. De diciembre a abril, la modalidad interpretativa recorre el ciclo del naranjo, su historia y sus sabores.', fruto: 'Con fruto, mayo a noviembre', interp: 'Interpretativa, diciembre a abril', feria: `La Feria de Colonia Osimani y Llerena se hace el ${feria.cuando}.`, floracion: 'Floración del azahar', aria: 'Meses del año y su modalidad', conFruto: 'Con fruto', interpretativa: 'Interpretativa', hoy: 'Este mes', anterior: 'Mes anterior', siguiente: 'Mes siguiente', mostrando: 'Mostrando' },
+  pt: { titulo: 'A cada mês, outro pomar', floracionV: 'do início de setembro a meados de outubro', texto: 'De maio a novembro é safra: a visita é com fruta, com colheita quando as condições permitem. De dezembro a abril, a modalidade interpretativa percorre o ciclo da laranjeira, sua história e seus sabores.', fruto: 'Com fruta, de maio a novembro', interp: 'Interpretativa, de dezembro a abril', feria: `A Feira de Colonia Osimani e Llerena acontece no ${feria.cuando}.`, floracion: 'Floração da laranjeira', aria: 'Meses do ano e sua modalidade', conFruto: 'Com fruta', interpretativa: 'Interpretativa', hoy: 'Este mês', anterior: 'Mês anterior', siguiente: 'Próximo mês', mostrando: 'Mostrando' },
+  en: { titulo: 'Every month, a different grove', floracionV: 'early September to mid-October', texto: 'May to November is harvest season: visits include fruit on the trees and picking when conditions allow. From December to April, the interpretive visit explores the life cycle of the orange tree, its history and its flavours.', fruto: 'With fruit, May to November', interp: 'Interpretive, December to April', feria: `The Colonia Osimani and Llerena market takes place on the ${feria.cuando}.`, floracion: 'Orange blossom season', aria: 'Months of the year and type of visit', conFruto: 'With fruit', interpretativa: 'Interpretive', hoy: 'This month', anterior: 'Previous month', siguiente: 'Next month', mostrando: 'Showing' },
 });
 ---
 <section id="temporada" class="rueda-anio relative overflow-hidden bg-surface-2 py-[clamp(5rem,14vh,10rem)]" aria-labelledby="temporada-titulo">
@@ -25,7 +24,7 @@ const T = elegir(idioma, {
         <li class="flex items-center gap-3"><span class="h-4 w-4 rounded-full bg-[#e07a2e]" aria-hidden="true"></span>{T.fruto}</li>
         <li class="flex items-center gap-3"><span class="h-4 w-4 rounded-full bg-deep" aria-hidden="true"></span>{T.interp}</li>
         <li class="text-muted">{T.feria}</li>
-        <li class="text-muted">{T.floracion}: <Pendiente tipo="CALENDARIO_A_CONFIRMAR" texto="meses de floración en la chacra" /></li>
+        <li class="text-muted">{T.floracion}: {T.floracionV}</li>
       </ul>
     </div>
 

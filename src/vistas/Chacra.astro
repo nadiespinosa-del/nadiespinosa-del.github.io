@@ -5,10 +5,8 @@ import CabeceraPagina from '../components/CabeceraPagina.astro';
 import NavExperiencia from '../components/NavExperiencia.astro';
 import CitaGrande from '../components/inmersivo/CitaGrande.astro';
 import Imagen from '../components/Imagen.astro';
-import Pendiente from '../components/Pendiente.astro';
 import Llamado from '../components/Llamado.astro';
 import VolverExperiencia from '../components/VolverExperiencia.astro';
-import PreguntasFrecuentes from '../components/PreguntasFrecuentes.astro';
 import DatosEstructurados from '../components/DatosEstructurados.astro';
 import site from '../data/site.json';
 import { textos } from '../lib/datos';
@@ -27,7 +25,7 @@ const T = elegir(idioma, {
     ld: 'Chacra citrícola en Colonia Osimani, Salto: 32 hectáreas, 28 de ellas plantadas con citrus. Espacio central de Camino de Azahar.',
     funcionamiento: 'Una chacra en funcionamiento',
     funcionamientoTexto: 'La Chacra La Victoria está «…en una zona citrícola…», como cuenta su encargada, Patricia Real, y dedica «…veintiocho hectáreas de las treinta y dos…» a la plantación de citrus. No es un decorado: es un espacio productivo que abre sus puertas para mostrar cómo se trabaja.',
-    historia: 'Historia de la chacra y de quienes la trabajan:',
+    historia: 'Historia de la chacra y de quienes la trabajan:', historiaV: 'la fundó hace unos 40 años el Dr. Leal. Empezó con citrus, pasó por los duraznos y después por los arándanos, y volvió a los cítricos y las hortalizas. Es una unidad productiva familiar, en una zona de parcelas citrícolas otorgadas por colonización.', variedadesV: 'Naranjas y mandarinas, además de hortalizas en invernáculos',
     ficha: [['Ubicación', 'Colonia Osimani, departamento de Salto'], ['Superficie', '32 hectáreas'], ['Plantadas con citrus', '28 hectáreas'], ['Encargada', 'Patricia Real'], ['Se visita con', 'reserva previa']],
     variedades: 'Variedades',
     feriaAnte: `Desde ${site.feria.desde}, cada segundo sábado`, feriaTitulo: 'La feria de Colonia Osimani y Llerena',
@@ -48,7 +46,7 @@ const T = elegir(idioma, {
     ld: 'Chácara de citros em Colonia Osimani, Salto (Uruguai): 32 hectares, 28 deles plantados com citros. Espaço central do Camino de Azahar.',
     funcionamiento: 'Uma chácara em funcionamento',
     funcionamientoTexto: 'A Chacra La Victoria fica "…em uma zona cítrica…", como conta sua responsável, Patricia Real, e dedica "…vinte e oito hectares dos trinta e dois…" ao plantio de citros. Não é um cenário: é um espaço produtivo que abre suas portas para mostrar como se trabalha.',
-    historia: 'História da chácara e de quem trabalha nela:',
+    historia: 'História da chácara e de quem trabalha nela:', historiaV: 'foi fundada há cerca de 40 anos pelo Dr. Leal. Começou com citros, passou pelos pêssegos e depois pelos mirtilos, e voltou aos citros e às hortaliças. É uma unidade produtiva familiar, em uma zona de lotes citrícolas concedidos pela colonização.', variedadesV: 'Laranjas e tangerinas, além de hortaliças em estufas',
     ficha: [['Localização', 'Colonia Osimani, departamento de Salto'], ['Área', '32 hectares'], ['Plantados com citros', '28 hectares'], ['Responsável', 'Patricia Real'], ['Visitas com', 'reserva antecipada']],
     variedades: 'Variedades',
     feriaAnte: `Desde ${site.feria.desde}, todo segundo sábado`, feriaTitulo: 'A feira de Colonia Osimani e Llerena',
@@ -69,7 +67,7 @@ const T = elegir(idioma, {
     ld: 'A citrus farm in Colonia Osimani, Salto, Uruguay: 32 hectares, 28 of them planted with citrus. The heart of Camino de Azahar.',
     funcionamiento: 'A working farm',
     funcionamientoTexto: 'Chacra La Victoria is "…in a citrus-growing area…", as its manager Patricia Real puts it, and devotes "…twenty-eight hectares out of thirty-two…" to citrus. It is not a stage set: it is a working farm that opens its gates to show how things are done.',
-    historia: 'The history of the farm and the people who work it:',
+    historia: 'The history of the farm and the people who work it:', historiaV: 'it was founded about 40 years ago by Dr Leal. It started with citrus, moved on to peaches and later blueberries, and returned to citrus and vegetables. It is a family-run farm in an area of citrus plots granted under land settlement.', variedadesV: 'Oranges and mandarins, plus vegetables in greenhouses',
     ficha: [['Location', 'Colonia Osimani, Salto department'], ['Size', '32 hectares'], ['Planted with citrus', '28 hectares'], ['Farm manager', 'Patricia Real'], ['Visits', 'by advance booking']],
     variedades: 'Varieties',
     feriaAnte: `Since ${site.feria.desde}, every second Saturday`, feriaTitulo: 'The Colonia Osimani and Llerena market',
@@ -128,7 +126,7 @@ const chacraLd = {
     <div class="grid content-start gap-6">
       <h2 id="chacra-titulo" class="max-w-[16ch] text-[clamp(1.6rem,3vw,2.6rem)] leading-[1.02] [hyphens:manual]">{T.funcionamiento}</h2>
       <p class="text-lg text-muted">{T.funcionamientoTexto}</p>
-      <p class="text-lg text-muted">{T.historia} <Pendiente texto="relato de la historia de la chacra" /></p>
+      <p class="text-lg text-muted">{T.historia} {T.historiaV}</p>
     </div>
     <dl class="tarjeta grid w-full max-w-md content-start gap-0 self-start p-1 lg:justify-self-end">
       {T.ficha.map(([dt, dd], i) => (
@@ -139,7 +137,7 @@ const chacraLd = {
       ))}
       <div class="grid gap-0 px-4 py-2.5">
         <dt class="text-xs text-muted">{T.variedades}</dt>
-        <dd class="text-sm"><Pendiente texto="variedades plantadas en la chacra" /></dd>
+        <dd class="font-display text-lg leading-snug text-heading">{T.variedadesV}</dd>
       </div>
     </dl>
   </section>
@@ -201,7 +199,6 @@ const chacraLd = {
   <div class="contenedor grid gap-24 pb-[clamp(4rem,12vh,8rem)]">
     <VolverExperiencia idioma={idioma} ancla="feria" />
     <Llamado antetitulo="Camino de Azahar" titulo={T.llamado} texto={T.llamadoTexto} boton={{ texto: T.reservar, href: rutaReservar(idioma) }} />
-    <PreguntasFrecuentes idioma={idioma} temas={['chacra']} />
   </div>
   <DatosEstructurados datos={chacraLd} />
 </Base>

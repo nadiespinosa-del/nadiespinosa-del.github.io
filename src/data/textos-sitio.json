@@ -8,7 +8,7 @@
       "grupo": { "nombre": "Grupos de 15 o más personas", "etiqueta": "Consultar" },
       "menor": { "nombre": "Menores de 5 años" }
     },
-    "incluye": ["Recorrido interpretativo por el naranjal", "Elaboración de jugo de naranja", "Degustación de productos derivados", "Muestra de productos de emprendedores locales"],
+    "incluye": ["Traslado en micro desde Salto Shopping, ida y vuelta", "Recorrido interpretativo por el naranjal", "Elaboración de jugo de naranja", "Degustación de productos derivados", "Muestra de productos de emprendedores locales", "Bolsita de regalo con productos de la zona"],
     "feria": { "nombre": "Feria de Productos Locales de Colonia Osimani y Llerena", "cuando": "segundo sábado de cada mes", "donde": "sede de la Sociedad de Fomento Rural" },
     "programa": "Proyecto de egreso, Tecnólogo en Diseño de Itinerarios Turísticos Sostenibles Culturales, Polo Educativo Tecnológico de Salto (DGETP-UTU), 2026"
   },
@@ -20,7 +20,7 @@
       "grupo": { "nombre": "Grupos de 15 pessoas ou mais", "etiqueta": "Consultar" },
       "menor": { "nombre": "Crianças menores de 5 anos" }
     },
-    "incluye": ["Percurso interpretativo pelo laranjal", "Preparo do suco de laranja", "Degustação de produtos derivados", "Mostra de produtos de empreendedores locais"],
+    "incluye": ["Traslado de micro-ônibus desde o Salto Shopping, ida e volta", "Percurso interpretativo pelo laranjal", "Preparo do suco de laranja", "Degustação de produtos derivados", "Mostra de produtos de empreendedores locais", "Sacolinha de presente com produtos da região"],
     "feria": { "nombre": "Feira de Produtos Locais de Colonia Osimani e Llerena", "cuando": "segundo sábado de cada mês", "donde": "sede da Sociedad de Fomento Rural" },
     "programa": "Projeto de conclusão de curso, Tecnólogo em Design de Roteiros Turísticos Sustentáveis Culturais, Polo Educativo Tecnológico de Salto (DGETP-UTU), 2026"
   },
@@ -32,7 +32,7 @@
       "grupo": { "nombre": "Groups of 15 or more", "etiqueta": "Ask us" },
       "menor": { "nombre": "Children under 5" }
     },
-    "incluye": ["Guided walk through the orange grove", "Making your own orange juice", "Tasting of orange products", "Showcase of products from local makers"],
+    "incluye": ["Minibus transfer from Salto Shopping and back", "Guided walk through the orange grove", "Making your own orange juice", "Tasting of orange products", "Showcase of products from local makers", "Small gift bag of local produce"],
     "feria": { "nombre": "Colonia Osimani and Llerena Local Products Market", "cuando": "second Saturday of each month", "donde": "at the Sociedad de Fomento Rural (rural development association) hall" },
     "programa": "Final degree project, Technologist in Sustainable Cultural Tourism Itinerary Design, Polo Educativo Tecnológico de Salto (DGETP-UTU), 2026"
   }

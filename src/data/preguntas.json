@@ -1,57 +1,53 @@
 [
   {
-    "temas": ["experiencia", "planifica"],
+    "temas": ["planifica"],
     "pregunta": "¿Cuánto dura la visita?",
     "respuesta": "La experiencia completa dura 2 horas y 50 minutos, en cinco etapas: recepción, recorrido interpretativo por el naranjal, elaboración de jugo, degustación con muestra de productos locales e intercambio final con la encargada de la chacra."
   },
   {
-    "temas": ["experiencia", "planifica"],
+    "temas": ["planifica"],
     "pregunta": "¿Puedo ir en familia o en pareja?",
-    "respuesta": "Sí. Las visitas funcionan como salidas programadas para grupos de 10 a 25 personas: si venís en familia, en pareja o solo, te sumás a una salida hasta completar el grupo. Si una salida no llega al mínimo, te avisamos y te ofrecemos otra fecha.",
-    "pendiente": "con cuánta anticipación se avisa si una salida no llega al mínimo"
+    "respuesta": "Sí. Las visitas funcionan como salidas programadas para grupos de 10 a 25 personas: si venís en familia, en pareja o solo, te sumás a una salida hasta completar el grupo. Si una salida no llega al mínimo, te avisamos y te ofrecemos otra fecha."
   },
   {
-    "temas": ["experiencia"],
+    "temas": ["planifica"],
     "pregunta": "¿Cuánto cuesta?",
     "respuesta": "La tarifa propuesta es de $U 850 por persona. Para estudiantes de educación media hay descuentos especiales, y para grupos de 15 o más personas, un precio especial: consultanos. Los menores de 5 años no pagan. Las tarifas se confirman al reservar."
   },
   {
-    "temas": ["experiencia"],
+    "temas": ["planifica"],
     "pregunta": "¿Qué incluye la tarifa?",
-    "respuesta": "Incluye el recorrido interpretativo por el naranjal, la elaboración de jugo de naranja, la degustación de productos derivados y la muestra de productos de emprendedores locales.",
-    "pendiente": "si el traslado desde Salto o desde las termas está incluido"
+    "respuesta": "Incluye el traslado en micro desde el punto de encuentro hasta la chacra y la vuelta, el recorrido interpretativo por el naranjal, la elaboración de jugo de naranja, la degustación de productos derivados, la muestra de productos de emprendedores locales y una bolsita de regalo con productos de la zona. El traslado desde las termas hasta el punto de encuentro no está incluido."
   },
   {
-    "temas": ["experiencia", "planifica", "accesibilidad"],
+    "temas": ["planifica", "accesibilidad"],
     "pregunta": "¿Es accesible para personas con movilidad reducida?",
     "respuesta": "El recorrido es en un entorno rural, con caminos y superficies irregulares, y por ahora no tiene accesibilidad universal en todo el circuito. La exigencia física es básica: hay que caminar durante parte de la visita. Contanos tus necesidades al reservar y adaptamos lo que sea posible."
   },
   {
-    "temas": ["experiencia", "planifica"],
+    "temas": [],
     "pregunta": "¿Qué pasa si llueve?",
     "respuesta": "Con lluvia o mal tiempo, la visita se reprograma sin costo o se desarrolla la parte interpretativa en un espacio cubierto. También se reprograma si hay aplicaciones en el cultivo ese día."
   },
   {
-    "temas": ["experiencia", "planifica"],
+    "temas": [],
     "pregunta": "¿Hay naranjas todo el año?",
     "respuesta": "La zafra va de mayo a noviembre: en esos meses la visita es con fruto y, cuando las condiciones lo permiten, con cosecha. De diciembre a abril se ofrece la modalidad interpretativa, centrada en el ciclo del naranjo, su historia y sus sabores, con fruta de productores locales para la elaboración y la degustación."
   },
   {
-    "temas": ["experiencia", "planifica"],
+    "temas": ["planifica"],
     "pregunta": "¿En qué idioma es la visita?",
-    "respuesta": "La guía es en español. Si necesitás otro idioma, consultanos al reservar.",
-    "pendiente": "si se puede guiar en portugués o inglés"
+    "respuesta": "La guía es en español. Si necesitás otro idioma, consultanos al reservar."
   },
   {
-    "temas": ["experiencia", "planifica"],
+    "temas": ["planifica"],
     "pregunta": "¿Cómo reservo?",
-    "respuesta": "Por esta página o por WhatsApp. Al reservar te enviamos la información de accesibilidad y exigencia física, y antes de la visita un recordatorio con indicaciones de llegada y el pronóstico del tiempo.",
-    "pendiente": "medios de pago y política de cancelación"
+    "respuesta": "Por esta página o por WhatsApp. Al reservar te enviamos la información de accesibilidad y exigencia física, y antes de la visita un recordatorio con indicaciones de llegada y el pronóstico del tiempo."
   },
   {
-    "temas": ["chacra", "planifica"],
+    "temas": ["planifica"],
     "pregunta": "¿Tengo que ir el día de la feria?",
-    "respuesta": "No. La Feria de Colonia Osimani y Llerena se hace el segundo sábado de cada mes, pero Camino de Azahar tiene su propio cronograma. En la chacra hay una muestra de productos de emprendedores de la feria en cada visita."
+    "respuesta": "No. Camino de Azahar tiene su propio cronograma. En la chacra hay una muestra de productos de emprendedores de la feria en cada visita."
   },
   {
     "temas": ["grupos"],

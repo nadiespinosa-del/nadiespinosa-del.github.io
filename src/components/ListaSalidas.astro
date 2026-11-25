@@ -19,7 +19,7 @@ const T = elegir(idioma, {
   es: {
     confirmar: 'Fecha a confirmar', completa: 'Completa', ultimos: (n: number) => `Últimos ${n} lugares`, libres: (n: number) => `${n} lugares libres`,
     proximas: 'Fechas y horarios', vacioTitulo: 'Fechas coordinables',
-    vacioTexto: `Las fechas y los horarios se coordinan al reservar, según la organización de la experiencia y la actividad productiva de la chacra. Las salidas son de ${site.cupo.minimo} a ${site.cupo.maximo} personas: si venís en familia, te sumás a un grupo.`,
+    vacioTexto: `Las fechas y los horarios se coordinan al reservar, según la organización de la experiencia y la actividad productiva de la chacra.`,
     avisame: 'Coordinar una fecha', avisameMsj: 'Hola, quiero coordinar una fecha para Camino de Azahar.',
     liberar: 'Avisame si se libera un lugar', liberarMsj: (f: string) => `Hola, la salida del ${f} está completa. ¿Me avisan si se libera un lugar?`,
     reservar: 'Reservar esta salida', hs: 'h',
@@ -27,7 +27,7 @@ const T = elegir(idioma, {
   pt: {
     confirmar: 'Data a confirmar', completa: 'Esgotada', ultimos: (n: number) => `Últimas ${n} vagas`, libres: (n: number) => `${n} vagas disponíveis`,
     proximas: 'Próximas saídas', vacioTitulo: 'Estamos montando o calendário',
-    vacioTexto: `Ainda não há datas publicadas. Escreva para nós e avisamos assim que abrirmos a próxima saída. As saídas são de ${site.cupo.minimo} a ${site.cupo.maximo} pessoas: se você vem em família, entra em um grupo.`,
+    vacioTexto: `Ainda não há datas publicadas. Escreva para nós e avisamos assim que abrirmos a próxima saída.`,
     avisame: 'Quero saber das próximas datas', avisameMsj: 'Olá, quero ser avisado quando houver datas para o Camino de Azahar.',
     liberar: 'Avise-me se abrir uma vaga', liberarMsj: (f: string) => `Olá, a saída de ${f} está esgotada. Podem me avisar se abrir uma vaga?`,
     reservar: 'Reservar esta saída', hs: 'h',
@@ -35,7 +35,7 @@ const T = elegir(idioma, {
   en: {
     confirmar: 'Date to be confirmed', completa: 'Full', ultimos: (n: number) => `Last ${n} spots`, libres: (n: number) => `${n} spots left`,
     proximas: 'Upcoming departures', vacioTitulo: "We're putting the calendar together",
-    vacioTexto: `No dates have been published yet. Message us and we'll let you know as soon as the next departure opens. Groups are ${site.cupo.minimo} to ${site.cupo.maximo} people: families and couples join a group.`,
+    vacioTexto: `No dates have been published yet. Message us and we'll let you know as soon as the next departure opens.`,
     avisame: 'Tell me about upcoming dates', avisameMsj: 'Hi, please let me know when there are dates for Camino de Azahar.',
     liberar: 'Let me know if a spot opens', liberarMsj: (f: string) => `Hi, the departure on ${f} is full. Could you let me know if a spot opens up?`,
     reservar: 'Book this departure', hs: '',

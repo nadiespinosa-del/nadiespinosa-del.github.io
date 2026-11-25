@@ -19,7 +19,6 @@ import ListaSalidas from '../components/ListaSalidas.astro';
 import TablaTarifas from '../components/TablaTarifas.astro';
 import FormularioReserva from '../components/FormularioReserva.astro';
 import FlujoReserva from '../components/FlujoReserva.astro';
-import PreguntasFrecuentes from '../components/PreguntasFrecuentes.astro';
 import Llamado from '../components/Llamado.astro';
 import DatosEstructurados from '../components/DatosEstructurados.astro';
 import salidas from '../data/salidas.json';
@@ -166,7 +165,6 @@ const viajeLd = {
 
   <div class="contenedor grid gap-24 py-[clamp(4rem,12vh,8rem)]">
     <FlujoReserva idioma={idioma} />
-    <PreguntasFrecuentes idioma={idioma} temas={['experiencia']} />
     <Llamado antetitulo={T.escuelas} titulo={T.escuelasTitulo} texto={T.escuelasTexto} boton={{ texto: T.escuelasBoton, href: r.azaharGrupos }} />
   </div>
   <DatosEstructurados datos={viajeLd} />
